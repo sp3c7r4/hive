@@ -25,7 +25,9 @@ import {
   BellIcon,
   ComputerIcon,
   Delete01Icon,
+  Link03Icon,
 } from "@hugeicons/core-free-icons";
+import { LinkedAccounts } from "@/components/settings/LinkedAccounts";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
@@ -354,6 +356,14 @@ function SettingsContent() {
               Save preferences
             </Button>
           </div>
+        </Section>
+
+        {/* ---- Linked Accounts ---- */}
+        <Section
+          title="Linked Accounts"
+          icon={<HugeiconsIcon icon={Link03Icon} size={18} />}
+        >
+          <LinkedAccounts role={role} />
         </Section>
 
         {/* ---- Danger Zone ---- */}

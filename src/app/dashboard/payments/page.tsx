@@ -16,11 +16,18 @@ type Role = "instructor" | "student" | "parent" | "admin";
 type Tab = "history" | "subscriptions";
 
 const PAYMENT_HISTORY = [
-  { id:"ph1", date:"Apr 10, 2025", desc:"React for Designers (Enrollment)", amount:"₦0", status:"success" as const, method:"—", receipt:true },
+  { id:"ph1", date:"Apr 10, 2025", desc:"React for Designers (Enrollment)", amount:"₦0", student:"Temi Adebayo", status:"success" as const, method:"—", receipt:true },
   { id:"ph2", date:"Apr 5, 2025", desc:"UI/UX Research Methods (Enrollment)", amount:"₦0", status:"success" as const, method:"—", receipt:true },
   { id:"ph3", date:"Mar 28, 2025", desc:"Data Science Lab (Subscription)", amount:"₦5,000", status:"success" as const, method:"Paystack ·••4242", receipt:true },
   { id:"ph4", date:"Mar 15, 2025", desc:"Advanced TypeScript (One-time)", amount:"₦15,000", status:"success" as const, method:"Flutterwave ·••8901", receipt:true },
   { id:"ph5", date:"Mar 1, 2025", desc:"Freelance Blueprint (Payment)", amount:"₦8,000", status:"failed" as const, method:"Paystack ·••4242", receipt:false },
+];
+
+const PARENT_PAYMENT_HISTORY = [
+  { id:"pp1", date:"Apr 10, 2025", desc:"Python for Data Science (Enrollment)", amount:"₦10,000", student:"Kunle Adebayo", status:"success" as const, method:"Paystack ·••4242", receipt:true },
+  { id:"pp2", date:"Mar 18, 2025", desc:"React for Designers (Enrollment)", amount:"₦0", student:"Temi Adebayo", status:"success" as const, method:"—", receipt:true },
+  { id:"pp3", date:"Feb 5, 2025", desc:"CSS Mastery (One-time)", amount:"₦8,000", student:"Temi Adebayo", status:"success" as const, method:"Flutterwave ·••8901", receipt:true },
+  { id:"pp4", date:"Jan 20, 2025", desc:"Mathematics Tutoring (Monthly)", amount:"₦3,000", student:"Temi Adebayo", status:"success" as const, method:"Paystack ·••4242", receipt:true },
 ];
 
 const SUBSCRIPTIONS = [
@@ -35,13 +42,19 @@ function PaymentsPage() {
   const role = (sp.get("role") as Role) || "student";
   const [tab, setTab] = useState<Tab>("history");
   const success = sp.get("success");
+  const isParent = role === "parent";
+  const history = isParent ? PARENT_PAYMENT_HISTORY : PAYMENT_HISTORY;
 
   return (
     <DashboardLayout role={role}>
       <div className="flex flex-col gap-5 min-w-0">
         <div>
           <h1 className="text-xl font-bold tracking-tight">Payments</h1>
-          <p className="text-sm text-muted-foreground mt-1">View your payment history and manage subscriptions</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {isParent
+              ? "View payments made on behalf of your children"
+              : "View your payment history and manage subscriptions"}
+          </p>
         </div>
 
         {success === "1" && (
@@ -62,12 +75,13 @@ function PaymentsPage() {
           <Card className="p-0 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="border-b bg-muted/30 text-xs text-muted-foreground"><th className="text-left pl-5 pr-3 py-3 font-medium">Date</th><th className="text-left px-3 py-3 font-medium">Description</th><th className="text-left px-3 py-3 font-medium">Amount</th><th className="text-left px-3 py-3 font-medium">Status</th><th className="text-left px-3 py-3 font-medium">Method</th><th className="text-right pl-3 pr-5 py-3 font-medium">Receipt</th></tr></thead>
+                <thead><tr className="border-b bg-muted/30 text-xs text-muted-foreground"><th className="text-left pl-5 pr-3 py-3 font-medium">Date</th><th className="text-left px-3 py-3 font-medium">Description</th>{isParent && <th className="text-left px-3 py-3 font-medium">Student</th>}<th className="text-left px-3 py-3 font-medium">Amount</th><th className="text-left px-3 py-3 font-medium">Status</th><th className="text-left px-3 py-3 font-medium">Method</th><th className="text-right pl-3 pr-5 py-3 font-medium">Receipt</th></tr></thead>
                 <tbody className="divide-y">
-                  {PAYMENT_HISTORY.map((p)=>(
+                  {history.map((p)=>(
                     <tr key={p.id} className="hover:bg-muted/20">
                       <td className="pl-5 pr-3 py-3 text-xs text-muted-foreground">{p.date}</td>
                       <td className="px-3 py-3 text-sm font-medium">{p.desc}</td>
+                      {isParent && <td className="px-3 py-3 text-xs">{(p as any).student}</td>}
                       <td className="px-3 py-3 tabular-nums">{p.amount}</td>
                       <td className="px-3 py-3"><Badge className={`rounded-full text-[10px] px-2 py-0 h-5 ${statusColors[p.status]}`}>{p.status}</Badge></td>
                       <td className="px-3 py-3 text-xs text-muted-foreground">{p.method}</td>

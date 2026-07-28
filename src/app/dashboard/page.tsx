@@ -4,6 +4,7 @@ import { Suspense, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
+import { getDashboardRole } from "@/lib/role-utils";
 import gsap from "gsap";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { DashboardLayout } from "@/components/app-sidebar";
@@ -830,6 +831,90 @@ function InstructorDashboard() {
 /*  Placeholder for other roles                                      */
 /* ---------------------------------------------------------------- */
 
+function AdminDashboard() {
+  const stats = [
+    { label:"Total Users", value:"1,847", change:"+12%" },
+    { label:"Total Communities", value:"34", change:"+3" },
+    { label:"Total Courses", value:"128", change:"+8" },
+    { label:"Revenue (All Time)", value:"₦2.4M", change:"+18%" },
+    { label:"Revenue This Month", value:"₦48K", change:"+22%" },
+    { label:"Active Users (7d)", value:"432", change:"+5%" },
+  ];
+
+  const recentSignups = [
+    { name:"Kelechi Okonkwo", role:"student", time:"10 min ago" },
+    { name:"Amara Obi", role:"instructor", time:"1 hour ago" },
+    { name:"Tunde Balogun", role:"student", time:"3 hours ago" },
+  ];
+
+  const recentPayments = [
+    { user:"Chioma Eze", amount:"₦10,000", course:"Python for Data Science", time:"2 hours ago" },
+    { user:"Ngozi Adeyemi", amount:"₦10,000", course:"Python (Kunle)", time:"5 hours ago" },
+    { user:"Emeka Nwosu", amount:"₦5,000", course:"Backend 101", time:"1 day ago" },
+  ];
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div><h1 className="text-2xl font-bold tracking-tight">Welcome back, Admin</h1><p className="text-muted-foreground mt-1">Platform-wide metrics and activity.</p></div>
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        {stats.map((s) => (
+          <Card key={s.label} className="p-4 flex flex-col justify-between">
+            <p className="text-[10px] sm:text-[11px] text-muted-foreground leading-tight">{s.label}</p>
+            <div>
+              <p className="text-lg sm:text-xl font-bold tabular-nums mt-1">{s.value}</p>
+              <p className="text-[9px] text-emerald-600 font-medium">{s.change}</p>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent signups */}
+        <Card className="p-5">
+          <div className="flex items-center justify-between mb-4"><h3 className="text-sm font-semibold">Recent Signups</h3><Link href="/dashboard/users?role=admin" className="text-xs text-primary hover:underline">View all</Link></div>
+          <div className="flex flex-col gap-3">
+            {recentSignups.map((s,i) => (
+              <div key={i} className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5"><div className="size-7 rounded-full bg-muted flex items-center justify-center text-[10px] font-semibold">{s.name.charAt(0)}</div><div><p className="text-sm font-medium">{s.name}</p><p className="text-[10px] text-muted-foreground">{s.role}</p></div></div>
+                <span className="text-[10px] text-muted-foreground">{s.time}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Recent payments */}
+        <Card className="p-5">
+          <div className="flex items-center justify-between mb-4"><h3 className="text-sm font-semibold">Recent Payments</h3><Link href="/dashboard/admin/payments?role=admin" className="text-xs text-primary hover:underline">View all</Link></div>
+          <div className="flex flex-col gap-3">
+            {recentPayments.map((p,i) => (
+              <div key={i} className="flex items-center justify-between">
+                <div><p className="text-sm font-medium">{p.user}</p><p className="text-[10px] text-muted-foreground">{p.course}</p></div>
+                <div className="text-right"><p className="text-sm font-bold tabular-nums">{p.amount}</p><p className="text-[10px] text-muted-foreground">{p.time}</p></div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      {/* Quick links */}
+      <div className="flex flex-wrap gap-2">
+        {[
+          { label:"Manage Users", href:"/dashboard/users?role=admin" },
+          { label:"All Payments", href:"/dashboard/admin/payments?role=admin" },
+          { label:"Withdrawals", href:"/dashboard/withdrawals?role=admin" },
+          { label:"Activity Logs", href:"/dashboard/logs?role=admin" },
+        ].map((q) => (
+          <Link key={q.label} href={q.href}>
+            <Button variant="outline" size="sm" className="rounded-full text-xs">{q.label} →</Button>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function PlaceholderDashboard({ role }: { role: Role }) {
   const name =
     role === "instructor"
@@ -876,7 +961,7 @@ function PlaceholderDashboard({ role }: { role: Role }) {
 
 function DashboardContent() {
   const searchParams = useSearchParams();
-  const role = (searchParams.get("role") as Role) || "student";
+  const role = getDashboardRole(searchParams.get("role"));
 
   return (
     <DashboardLayout role={role}>
@@ -886,6 +971,8 @@ function DashboardContent() {
         <StudentDashboard />
       ) : role === "parent" ? (
         <ParentDashboard />
+      ) : role === "admin" ? (
+        <AdminDashboard />
       ) : (
         <PlaceholderDashboard role={role} />
       )}
