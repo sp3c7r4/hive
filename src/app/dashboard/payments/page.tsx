@@ -80,7 +80,7 @@ function PaymentsPage() {
           </Card>
         ) : (
           <div className="flex flex-col gap-4">
-            {SUBSCRIPTIONS.filter(s=>s.status!=="cancelled").map((s)=>(
+            {SUBSCRIPTIONS.map((s)=>(
               <Card key={s.id} className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <p className="text-sm font-semibold">{s.name}</p>

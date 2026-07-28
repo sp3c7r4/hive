@@ -23,8 +23,14 @@ import {
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
-const COMMUNITY = {
-  name:"Frontend Devs", slug:"frontend-devs", category:"Development", visibility:"public" as const,
+const COMMUNITY: {
+  name:string; slug:string; category:string; visibility:string;
+  description:string; memberCount:number; courseCount:number; rating:number; reviewCount:number;
+  instructor:{ name:string; initials:string; bio:string; specialties:string[] };
+  price:string; requiresApproval:boolean;
+  courses:{ id:string; title:string; difficulty:"beginner"|"intermediate"|"advanced"; free:boolean }[];
+} = {
+  name:"Frontend Devs", slug:"frontend-devs", category:"Development", visibility:"public",
   description:"A community for frontend developers to share tips, tricks, and best practices. We cover React, Vue, CSS, Tailwind, TypeScript, and everything in between. Whether you're a beginner building your first component or a senior architect designing design systems, you'll find value here.\n\nWe host weekly code reviews, monthly workshops, and have an active chat where you can get unstuck in minutes. Members have access to exclusive courses, downloadable resources, and a network of 1,200+ developers.",
   memberCount:1248, courseCount:6, rating:4.8, reviewCount:89,
   instructor:{ name:"Ade Okafor", initials:"AO", bio:"Senior Frontend Engineer with 10+ years building for the web. Formerly at Google and Flutterwave. Passionate about teaching and making frontend accessible.", specialties:["React","TypeScript","Design Systems"] },
@@ -49,7 +55,7 @@ function CommunityLandingPage() {
   const sp = useSearchParams();
   const router = useRouter();
   const role = (sp.get("role") as Role) || "student";
-  const vm = visMeta[COMMUNITY.visibility];
+  const vm = visMeta[COMMUNITY.visibility as keyof typeof visMeta];
 
   const joinCta = (() => {
     if (COMMUNITY.visibility === "invite-only") return { label: "This community is invite-only", disabled: true, action: ()=>{} };

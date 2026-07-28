@@ -207,7 +207,7 @@ function CourseLandingPage() {
               <div className="flex items-center justify-between text-sm font-semibold"><span>Total</span><span>{COURSE.price}</span></div>
             </div>
             <div className="flex items-center gap-3 rounded-xl border p-4 bg-muted/20">
-              <div className="size-10 rounded-lg bg-muted flex items-center justify-center shrink-0"><CreditCardIcon size={18}/></div>
+              <div className="size-10 rounded-lg bg-muted flex items-center justify-center shrink-0"><HugeiconsIcon icon={CreditCardIcon} size={18}/></div>
               <div><p className="text-sm font-medium">Paystack</p><p className="text-xs text-muted-foreground">Card, Bank, USSD</p></div>
             </div>
           </div>
