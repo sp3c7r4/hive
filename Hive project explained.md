@@ -314,7 +314,7 @@ My Communities → Click community → Settings → Danger Zone → "Archive Com
 
 ## 📚 Course Building
 
-### Create a Course
+### Create a Course ✅
 ```
 My Communities → Click community → Courses tab → "Create Course" (or Dashboard → "Create Course" → Select community)
   → Course Metadata Form:
@@ -342,19 +342,19 @@ My Communities → Click community → Courses tab → "Create Course" (or Dashb
   → OR "Publish" → Confirmation: "This will make the course visible to community members" → Published
 ```
 
-### Edit Course Metadata
+### Edit Course Metadata ✅
 ```
 My Communities → Click community → Course list → Click course → Settings tab
   → Edit any field from the creation form
   → "Save Draft" or "Publish"
 ```
 
-### Build Course Structure (Modules & Lessons)
+### Build Course Structure (Modules & Lessons) ✅
 ```
 My Communities → Click community → Course list → Click course → Curriculum tab
 ```
 
-### Add Modules
+### Add Modules ✅
 ```
 Curriculum tab → "Add Module"
   → Enter: Title, Description (optional)
@@ -364,7 +364,7 @@ Curriculum tab → "Add Module"
   → Delete module (with confirmation)
 ```
 
-### Add Lessons to a Module
+### Add Lessons to a Module ✅
 ```
 Click module to expand → "Add Lesson"
   → Select lesson type: Video | PDF | Live Class | Quiz | Assignment
@@ -373,7 +373,7 @@ Click module to expand → "Add Lesson"
   → Toggle "Free Preview" per lesson (visible to non-enrolled users)
 ```
 
-### Lesson Editor — Video
+### Lesson Editor — Video ✅
 ```
 Click a Video lesson → Edit
   → Title, Description
@@ -386,7 +386,7 @@ Click a Video lesson → Edit
   → Save / Publish
 ```
 
-### Lesson Editor — PDF
+### Lesson Editor — PDF ✅
 ```
 Click a PDF lesson → Edit
   → Title, Description
@@ -397,7 +397,7 @@ Click a PDF lesson → Edit
   → Save / Publish
 ```
 
-### Lesson Editor — Live Class
+### Lesson Editor — Live Class ✅
 ```
 Click a Live Class lesson → Edit
   → Title, Description
@@ -413,7 +413,7 @@ After the class time passes → Return to lesson:
   → View attendance summary (number of attendees, average duration)
 ```
 
-### Quiz Builder
+### Quiz Builder ✅
 ```
 Add lesson → Select "Quiz" → Quiz Builder opens
   → Quiz Settings:
@@ -432,7 +432,7 @@ Add lesson → Select "Quiz" → Quiz Builder opens
   → Save Quiz
 ```
 
-### Assignment Builder
+### Assignment Builder ✅
 ```
 Add lesson → Select "Assignment" → Assignment Builder opens
   → Title, Instructions (rich text), Due Date (optional)
@@ -443,7 +443,7 @@ Add lesson → Select "Assignment" → Assignment Builder opens
   → Save / Publish
 ```
 
-### Grade Assignment Submissions
+### Grade Assignment Submissions ✅
 ```
 My Courses → Click course → Assignments tab → Click assignment → Submissions
   → List of submissions: Student name, Submitted date, Status (pending/submitted/graded/returned), Score
@@ -473,9 +473,9 @@ Course Settings → "Archive Course"
   → Course hidden. Existing students keep access. No new enrollments.
 ```
 
-## 👥 Community Feed (Social)
+## 👥 Community Feed (Social) ✅
 
-### Create a Post
+### Create a Post ✅
 ```
 Inside a community → Feed tab → "Create Post"
   → Text area (expandable)
@@ -483,7 +483,7 @@ Inside a community → Feed tab → "Create Post"
   → "Post" → Appears in feed
 ```
 
-### Manage Posts
+### Manage Posts ✅
 ```
 Feed → Own post → More menu (⋮)
   → Edit post
@@ -491,7 +491,7 @@ Feed → Own post → More menu (⋮)
   → Pin to top (owner/admin only — stays at top with "Pinned" indicator)
 ```
 
-### Interact with Posts
+### Interact with Posts ✅
 ```
 Feed → Any post
   → Like (toggle on/off, shows count)
@@ -599,9 +599,9 @@ After login → Student Dashboard shows:
   → Recent Activity: Last 5 notifications (compact feed)
 ```
 
-## 🔍 Discover & Explore
+## 🔍 Discover & Explore ✅
 
-### Browse Communities and Courses
+### Browse Communities and Courses ✅
 ```
 Sidebar → Explore / Discover
   → Toggle: Communities tab | Courses tab
@@ -612,7 +612,7 @@ Sidebar → Explore / Discover
   → Pagination or infinite scroll
 ```
 
-### View Community Landing Page
+### View Community Landing Page ✅
 ```
 Click a community card →
   → Cover image banner
@@ -629,7 +629,7 @@ Click a community card →
     - Invite-only → "This community is invite-only" (no join button)
 ```
 
-### View Course Landing (Sales) Page
+### View Course Landing (Sales) Page ✅
 ```
 Click a course card →
   → Cover image
@@ -696,9 +696,9 @@ Sidebar → Payments → Subscriptions tab
   → Expired/cancelled subscriptions section (collapsed by default)
 ```
 
-## 📖 My Courses
+## 📖 My Courses ✅
 
-### View All Enrolled Courses
+### View All Enrolled Courses ✅
 ```
 Sidebar → My Courses
   → View toggle: Grid (cards) vs. List (compact rows)
@@ -709,9 +709,9 @@ Sidebar → My Courses
   → Empty state: "Explore courses" CTA
 ```
 
-## 🎯 Learning View (Taking a Course)
+## 🎯 Learning View (Taking a Course) ✅
 
-### Enter the Learning View
+### Enter the Learning View ✅
 ```
 My Courses → Click course → Learning View opens
   → Layout:
@@ -725,7 +725,7 @@ My Courses → Click course → Learning View opens
   → "Zen/Focus mode" possible: hide sidebar entirely, just content + next/prev buttons
 ```
 
-### Video Lesson
+### Video Lesson ✅
 ```
 Learning View → Video lesson selected →
   → Video player (large, dominant):
@@ -739,7 +739,7 @@ Learning View → Video lesson selected →
   → Previous / Next lesson navigation buttons (show lesson title + type icon preview)
 ```
 
-### PDF Lesson
+### PDF Lesson ✅
 ```
 Learning View → PDF lesson selected →
   → Embedded PDF viewer (scroll or page-by-page)
@@ -749,7 +749,7 @@ Learning View → PDF lesson selected →
   → Previous / Next navigation
 ```
 
-### Live Class Lesson
+### Live Class Lesson ✅
 ```
 **Before class:**
   → Countdown timer to start time
@@ -767,7 +767,7 @@ Learning View → PDF lesson selected →
   → "Mark as Complete" button
 ```
 
-### Lesson Navigation (Next/Previous)
+### Lesson Navigation (Next/Previous) ✅
 ```
 Bottom of every lesson view →
   → "Previous Lesson" button (if not first lesson)
@@ -777,9 +777,9 @@ Bottom of every lesson view →
     → Options: View Certificate (if eligible), Leave a Review, Back to Course
 ```
 
-## 📝 Assessments
+## 📝 Assessments ✅
 
-### Take a Quiz
+### Take a Quiz ✅
 ```
 Learning View → Quiz lesson → Click "Start Quiz"
   → Quiz info bar: Title, time remaining (if timed), question count, total points
@@ -806,7 +806,7 @@ Learning View → Quiz lesson → Click "Start Quiz"
   → "Back to Lesson" button
 ```
 
-### Submit an Assignment
+### Submit an Assignment ✅
 ```
 Learning View → Assignment lesson →
   → Assignment title, instructions (rich text), due date (urgency indicator if close), max score
@@ -828,9 +828,9 @@ Quiz/Assignment page → View all attempts
   → Click attempt → View detailed results
 ```
 
-## 💬 Community Interaction (As Member)
+## 💬 Community Interaction (As Member) ✅
 
-### Community Feed
+### Community Feed ✅
 ```
 Inside a joined community → Feed tab
   → Scroll through posts (reverse chronological)
@@ -839,16 +839,16 @@ Inside a joined community → Feed tab
   → "Create Post" button at top → Text + attachments → Post
 ```
 
-### Interact
+### Interact ✅
 ```
 Feed → Like a post (toggle, shows count)
   → Comment on a post (threaded, reply to others)
   → Edit/Delete own posts
 ```
 
-## ⭐ Reviews
+## ⭐ Reviews ✅
 
-### Leave a Course Review
+### Leave a Course Review ✅
 ```
 Course landing page (enrolled students who haven't reviewed yet) →
   → Star rating input (1-5, tappable)
@@ -858,7 +858,7 @@ Course landing page (enrolled students who haven't reviewed yet) →
   → After submit: review appears in list, form replaced with "Edit" / "Delete" options
 ```
 
-### View Course Reviews
+### View Course Reviews ✅
 ```
 Course landing page → Reviews section →
   → Average rating (large number + stars + count)
@@ -870,12 +870,12 @@ Course landing page → Reviews section →
   → Pagination or "Load more"
 ```
 
-### Mark Review as Helpful
+### Mark Review as Helpful ✅
 ```
 Reviews section → Click "Helpful" button on any review → Toggle on/off, count updates
 ```
 
-## 🏆 Certificates
+## 🏆 Certificates ✅
 
 ### Claim Certificate
 ```
@@ -887,7 +887,7 @@ Course completion screen (when requirements met) →
   → "Share" button (generates public verification link)
 ```
 
-### View All Certificates
+### View All Certificates ✅
 ```
 Sidebar → Certificates
   → Grid of certificate cards: course name, completion date, thumbnail preview
@@ -895,7 +895,7 @@ Sidebar → Certificates
   → Empty state: "Complete a course to earn your first certificate"
 ```
 
-### Verify Certificate (Public)
+### Verify Certificate (Public) ✅
 ```
 Anyone visits: hive.edu/verify/{verificationCode} (no login needed)
   → Certificate holder name, Course name, Instructor/Community, Completion date, Certificate number

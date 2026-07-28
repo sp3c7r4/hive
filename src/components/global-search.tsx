@@ -8,22 +8,45 @@ import {
   UserGroupIcon,
   BookOpen01Icon,
   UserCheck01Icon,
+  Search01Icon,
   ArrowRight01Icon,
+  Building02Icon,
+  CreditCardIcon,
+  Wallet01Icon,
+  HistoryIcon,
+  Shield02Icon,
+  Settings01Icon,
 } from "@hugeicons/core-free-icons";
 
 /* ---------------------------------------------------------------- */
-/*  Mock search data                                                */
+/*  Type & Data                                                     */
 /* ---------------------------------------------------------------- */
 
 type SearchResult = {
   id: string;
-  type: "community" | "course" | "person";
+  type: "community" | "course" | "person" | "user" | "admin_page";
   label: string;
   sub: string;
   href: string;
+  role?: string;
 };
 
-const MOCK_SEARCH_DATA: SearchResult[] = [
+type Role = "instructor" | "student" | "parent" | "admin";
+
+const ADMIN_SEARCH: SearchResult[] = [
+  { id: "au1", type: "user", label: "Ade Okafor", sub: "Instructor · ade@hive.ng", href: "/dashboard/users/u1" },
+  { id: "au2", type: "user", label: "Chioma Eze", sub: "Student · chioma@hive.ng", href: "/dashboard/users/u2" },
+  { id: "au3", type: "user", label: "Emeka Nwosu", sub: "Student · Suspended", href: "/dashboard/users/u3" },
+  { id: "au4", type: "user", label: "Fatima Bello", sub: "Instructor · fatima@hive.ng", href: "/dashboard/users/u4" },
+  { id: "au5", type: "user", label: "Ngozi Adeyemi", sub: "Parent · ngozi@hive.ng", href: "/dashboard/users/u5" },
+  { id: "au6", type: "user", label: "Ibrahim Musa", sub: "Instructor · ibrahim@hive.ng", href: "/dashboard/users/u7" },
+  { id: "ap1", type: "admin_page", label: "All Payments", sub: "Monitor transactions", href: "/dashboard/admin/payments" },
+  { id: "ap2", type: "admin_page", label: "Withdrawals", sub: "Process payouts", href: "/dashboard/withdrawals" },
+  { id: "ap3", type: "admin_page", label: "Activity Logs", sub: "Audit trail", href: "/dashboard/logs" },
+  { id: "ap4", type: "admin_page", label: "All Communities", sub: "Manage communities", href: "/dashboard/admin/communities" },
+];
+
+const GENERAL_SEARCH: SearchResult[] = [
   /* Communities */
   { id: "c1", type: "community", label: "Frontend Devs", sub: "1.2k members · 48 online", href: "/dashboard/communities/frontend-devs/manage" },
   { id: "c2", type: "community", label: "UI/UX Critique Circle", sub: "860 members · 12 online", href: "/dashboard/communities/uiux-critique/manage" },
@@ -46,52 +69,68 @@ const MOCK_SEARCH_DATA: SearchResult[] = [
 ];
 
 /* ---------------------------------------------------------------- */
-/*  Section icons                                                   */
+/*  Section config                                                  */
 /* ---------------------------------------------------------------- */
 
-const sectionMeta = {
-  community: { icon: UserGroupIcon, label: "Communities", color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400" },
-  course: { icon: BookOpen01Icon, label: "Courses", color: "text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400" },
-  person: { icon: UserCheck01Icon, label: "People", color: "text-violet-600 bg-violet-100 dark:bg-violet-900/30 dark:text-violet-400" },
-} as const;
+const sectionMeta: Record<string, { icon: typeof Search01Icon; label: string; color: string }> = {
+  community:    { icon: UserGroupIcon,   label: "Communities",  color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400" },
+  course:       { icon: BookOpen01Icon,  label: "Courses",      color: "text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400" },
+  person:       { icon: UserCheck01Icon, label: "People",       color: "text-violet-600 bg-violet-100 dark:bg-violet-900/30 dark:text-violet-400" },
+  user:         { icon: Shield02Icon,    label: "Users",        color: "text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400" },
+  admin_page:   { icon: Settings01Icon,  label: "Admin Pages",  color: "text-rose-600 bg-rose-100 dark:bg-rose-900/30 dark:text-rose-400" },
+};
 
 /* ---------------------------------------------------------------- */
 /*  Global Search Bar                                               */
 /* ---------------------------------------------------------------- */
 
-export function GlobalSearchBar() {
+export function GlobalSearchBar({ role = "student" }: { role?: Role }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const isAdmin = role === "admin";
+  const dataSource = isAdmin ? [...GENERAL_SEARCH, ...ADMIN_SEARCH] : GENERAL_SEARCH;
+
   const results = useMemo(() => {
     if (!query.trim()) return null;
     const q = query.toLowerCase();
-    const filtered = MOCK_SEARCH_DATA.filter(
+    const filtered = dataSource.filter(
       (r) =>
         r.label.toLowerCase().includes(q) ||
         r.sub.toLowerCase().includes(q)
     );
+    if (isAdmin) {
+      return {
+        communities: filtered.filter((r) => r.type === "community").slice(0, 3),
+        courses:     filtered.filter((r) => r.type === "course").slice(0, 3),
+        people:      filtered.filter((r) => r.type === "person").slice(0, 3),
+        users:       filtered.filter((r) => r.type === "user").slice(0, 4),
+        admin_pages: filtered.filter((r) => r.type === "admin_page").slice(0, 4),
+      };
+    }
     return {
       communities: filtered.filter((r) => r.type === "community").slice(0, 3),
-      courses: filtered.filter((r) => r.type === "course").slice(0, 3),
-      people: filtered.filter((r) => r.type === "person").slice(0, 3),
+      courses:     filtered.filter((r) => r.type === "course").slice(0, 3),
+      people:      filtered.filter((r) => r.type === "person").slice(0, 3),
     };
-  }, [query]);
+  }, [query, dataSource, isAdmin]);
 
   const totalResults = results
-    ? results.communities.length + results.courses.length + results.people.length
+    ? Object.values(results).reduce((sum, arr) => sum + arr.length, 0)
     : 0;
 
   const handleSelect = useCallback(
     (href: string) => {
       setOpen(false);
       setQuery("");
-      router.push(href);
+      // Append role for admin navigation links that need it
+      const needsRole = isAdmin && href.startsWith("/dashboard/");
+      router.push(needsRole ? `${href}?role=admin` : href);
     },
-    [router]
+    [router, isAdmin]
   );
 
   /* Close on outside click */
@@ -119,6 +158,18 @@ export function GlobalSearchBar() {
     return () => document.removeEventListener("keydown", handler);
   }, [open]);
 
+  const sectionOrder = isAdmin
+    ? (["community", "course", "person", "user", "admin_page"] as const)
+    : (["community", "course", "person"] as const);
+
+  const sectionKeyMap: Record<string, string> = {
+    community: "communities",
+    course: "courses",
+    person: "people",
+    user: "users",
+    admin_page: "admin_pages",
+  };
+
   return (
     <div ref={containerRef} className="relative flex-1 max-w-md mx-4 hidden sm:block">
       <Input
@@ -129,23 +180,24 @@ export function GlobalSearchBar() {
           if (e.target.value.trim()) setOpen(true);
         }}
         onFocus={() => { if (query.trim()) setOpen(true); }}
-        placeholder="Search communities, courses, people..."
+        placeholder={isAdmin ? "Search users, payments, logs..." : "Search communities, courses, people..."}
         className="rounded-full h-9 text-sm bg-muted/60 border-transparent focus:bg-background focus:border-border transition-colors"
       />
 
       {/* Dropdown */}
       {open && query.trim() && (
-        <div className="absolute top-full mt-2 left-0 right-0 rounded-xl border bg-popover shadow-xl z-50 overflow-hidden">
+        <div className="absolute top-full mt-2 left-0 right-0 rounded-xl border bg-popover shadow-xl z-50 overflow-hidden max-h-[80vh] overflow-y-auto">
           {totalResults === 0 ? (
             <div className="px-4 py-8 text-center">
               <p className="text-sm text-muted-foreground">No results for &ldquo;{query}&rdquo;</p>
             </div>
           ) : (
             <>
-              {(["community", "course", "person"] as const).map((type) => {
-                const items = results?.[type === "community" ? "communities" : type === "course" ? "courses" : "people"] ?? [];
-                if (items.length === 0) return null;
-                const meta = sectionMeta[type === "community" ? "community" : type === "course" ? "course" : "person"];
+              {sectionOrder.map((type) => {
+                const key = sectionKeyMap[type];
+                const items = results?.[key as keyof typeof results] as SearchResult[] ?? [];
+                if (!items || items.length === 0) return null;
+                const meta = sectionMeta[type];
                 return (
                   <div key={type}>
                     <div className="flex items-center gap-2 px-4 pt-3 pb-1.5">
@@ -180,7 +232,7 @@ export function GlobalSearchBar() {
                   type="button"
                   onClick={() => {
                     setOpen(false);
-                    router.push(`/dashboard/search?q=${encodeURIComponent(query)}`);
+                    router.push(`/dashboard/search?q=${encodeURIComponent(query)}${isAdmin ? "&role=admin" : ""}`);
                   }}
                   className="w-full text-center text-xs text-primary hover:underline font-medium py-1 rounded-lg hover:bg-primary/5 transition-colors"
                 >

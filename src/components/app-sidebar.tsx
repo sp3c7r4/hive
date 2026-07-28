@@ -1,6 +1,6 @@
 "use client";
 
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/theme-provider";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -84,10 +84,9 @@ const navByRole: Record<Role, NavItem[]> = {
   admin: [
     { label: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
     { label: "Users", href: "/dashboard/users", icon: UserGroupIcon },
-    { label: "Communities", href: "/dashboard/communities", icon: Building02Icon },
-    { label: "Messages", href: "/dashboard/messages", icon: Message01Icon },
-    { label: "Payments", href: "/dashboard/payments", icon: CreditCardIcon },
-    { label: "Moderation", href: "/dashboard/moderation", icon: Shield02Icon },
+    { label: "Communities", href: "/dashboard/admin/communities", icon: Building02Icon },
+    { label: "Payments", href: "/dashboard/admin/payments", icon: CreditCardIcon },
+    { label: "Withdrawals", href: "/dashboard/withdrawals", icon: Wallet01Icon },
     { label: "Activity Logs", href: "/dashboard/logs", icon: HistoryIcon },
   ],
 };
@@ -218,7 +217,7 @@ export function AppSidebar({ role = "student" }: { role?: Role }) {
                   isActive={pathname === item.href}
                   tooltip={item.label}
                   className={cn(rowBg, rowSize)}
-                  render={<Link href={item.href} />}
+                  render={<Link href={`${item.href}?role=${role}`} />}
                 >
                   <HugeiconsIcon icon={item.icon} size={22} />
                   <span className="text-sm font-medium">{item.label}</span>
@@ -240,7 +239,7 @@ export function AppSidebar({ role = "student" }: { role?: Role }) {
                 isActive={pathname === "/dashboard/settings"}
                 tooltip="Settings"
                 className={cn(rowBg, rowSize)}
-                render={<Link href="/dashboard/settings" />}
+                render={<Link href={`/dashboard/settings?role=${role}`} />}
               >
                 <HugeiconsIcon icon={Settings01Icon} size={22} />
                 <span className="text-sm font-medium">Settings</span>
@@ -318,6 +317,18 @@ export function DashboardLayout({
     title ||
     (pathname.startsWith("/dashboard/communities/create")
       ? "Create Community"
+      : pathname.startsWith("/dashboard/admin/communities")
+      ? "Communities"
+      : pathname.startsWith("/dashboard/admin/payments")
+      ? "All Payments"
+      : pathname.startsWith("/dashboard/withdrawals")
+      ? "Withdrawals"
+      : pathname.startsWith("/dashboard/logs")
+      ? "Activity Logs"
+      : pathname.match(/^\/dashboard\/users\/[^/]+$/)
+      ? "User Detail"
+      : pathname.startsWith("/dashboard/users")
+      ? "Users"
       : pathname.startsWith("/dashboard/communities")
       ? "Communities"
       : pathname.startsWith("/dashboard/settings")
@@ -328,6 +339,10 @@ export function DashboardLayout({
       ? "Search"
       : pathname.startsWith("/dashboard/payments")
       ? "Payments"
+      : pathname.startsWith("/dashboard/members")
+      ? "Members"
+      : pathname.startsWith("/dashboard/earnings")
+      ? "Earnings"
       : pathname.startsWith("/dashboard/my-courses")
       ? "My Courses"
       : pathname.startsWith("/dashboard/courses/create")
@@ -358,7 +373,7 @@ export function DashboardLayout({
               <SidebarTrigger />
               <span className="text-sm font-semibold text-foreground shrink-0">{pageTitle}</span>
             </div>
-            <GlobalSearchBar />
+            <GlobalSearchBar role={role} />
             <TopbarActionCluster
               status="active"
               hasUnread
