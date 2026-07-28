@@ -33,6 +33,10 @@ import {
   CheckmarkCircle02Icon,
   CreditCardIcon,
 } from "@hugeicons/core-free-icons";
+import { RatingBreakdown } from "@/components/reviews/RatingBreakdown";
+import { ReviewForm } from "@/components/reviews/ReviewForm";
+import { ReviewList } from "@/components/reviews/ReviewList";
+import type { CourseReview } from "@/components/reviews/types";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
@@ -60,10 +64,13 @@ const COURSE = {
     ]},
   ],
   reviews:[
-    { author:"Kelechi Okonkwo", initials:"KO", rating:5, text:"This course completely changed how I approach frontend. Ade explains complex concepts simply.", time:"2 weeks ago" },
-    { author:"Amara Obi", initials:"AO", rating:5, text:"The hands-on projects are fantastic. I built a real portfolio while learning. Highly recommend!", time:"1 month ago" },
-    { author:"Tunde Balogun", initials:"TB", rating:4, text:"Great course overall. Would love more content on performance optimization.", time:"2 months ago" },
-  ],
+    { id:"r1", author:{ name:"Kelechi Okonkwo", initials:"KO" }, rating:5, title:"Game-changing course", comment:"This course completely changed how I approach frontend. Ade explains complex concepts in a way that just clicks. The projects are practical and the community support is incredible.", createdAt:new Date(Date.now()-1209600000).toISOString(), helpfulCount:42, markedHelpful:false, instructorReply:{ comment:"Thank you Kelechi! Your portfolio project was one of the best I've seen. Keep building!", createdAt:new Date(Date.now()-1036800000).toISOString() } },
+    { id:"r2", author:{ name:"Amara Obi", initials:"AO" }, rating:5, title:"Perfect for designers", comment:"The hands-on projects are fantastic. I built a real portfolio while learning. Highly recommend for designers who want to add React to their toolkit.", createdAt:new Date(Date.now()-2592000000).toISOString(), helpfulCount:28, markedHelpful:false },
+    { id:"r3", author:{ name:"Tunde Balogun", initials:"TB" }, rating:4, comment:"Great course overall. Would love more content on performance optimization and testing. The fundamentals section is solid.", createdAt:new Date(Date.now()-5184000000).toISOString(), helpfulCount:15, markedHelpful:false },
+    { id:"r4", author:{ name:"Ngozi Eze", initials:"NE" }, rating:5, title:"Best React intro out there", comment:"I tried three other React courses before this one — none of them stuck. Ade's teaching style is unmatched. I went from zero to shipping a client project in 4 weeks.", createdAt:new Date(Date.now()-7776000000).toISOString(), helpfulCount:63, markedHelpful:true, instructorReply:{ comment:"That's amazing Ngozi! Four weeks to a client project is the kind of progress we love to see.", createdAt:new Date(Date.now()-6912000000).toISOString() } },
+    { id:"r5", author:{ name:"Ibrahim Musa", initials:"IM" }, rating:3, comment:"Decent course but the later modules feel rushed. More exercises between lessons would help reinforce concepts. The certificate requirements are also a bit steep.", createdAt:new Date(Date.now()-10368000000).toISOString(), helpfulCount:9, markedHelpful:false },
+    { id:"r6", author:{ name:"Folake Adeyemi", initials:"FA" }, rating:5, comment:"The live code review sessions are worth the enrollment alone. Getting real-time feedback on my code accelerated my learning exponentially.", createdAt:new Date(Date.now()-12960000000).toISOString(), helpfulCount:31, markedHelpful:false },
+  ] as CourseReview[],
 };
 
 const LESSON_ICONS = { video:PlayIcon, pdf:File01Icon, live:LiveStreaming01Icon, quiz:CircleQuestionMarkIcon, assignment:AssignmentsIcon };
@@ -75,6 +82,10 @@ function CourseLandingPage() {
   const role = (sp.get("role") as Role) || "student";
   const [expandedMods, setExpandedMods] = useState<Set<number>>(new Set([0]));
 
+  const [reviews, setReviews] = useState<CourseReview[]>(COURSE.reviews);
+  const [hasReviewed, setHasReviewed] = useState(false);
+  const ratingDist = [5,4,3,2,1].map(stars=>({stars,count:reviews.filter(r=>r.rating===stars).length}));
+
   const toggleMod = (i:number) => { const next = new Set(expandedMods); if (next.has(i)) next.delete(i); else next.add(i); setExpandedMods(next); };
 
   const cta = COURSE.completed ? { label:"View Certificate", variant:"outline" as const }
@@ -83,6 +94,15 @@ function CourseLandingPage() {
     : { label:`Enroll for ${COURSE.price}`, variant:"default" as const };
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [enrollForStudent, setEnrollForStudent] = useState("ta");
+  const isParent = role === "parent";
+
+  const linkedStudents = isParent
+    ? [
+        { id: "ta", name: "Temi Adebayo" },
+        { id: "ka", name: "Kunle Adebayo" },
+      ]
+    : [];
 
   const handleEnroll = () => {
     if (COURSE.price === "Free") {
@@ -148,17 +168,37 @@ function CourseLandingPage() {
             <Separator />
 
             {/* Reviews */}
-            <div>
-              <div className="flex items-center justify-between mb-3"><h2 className="text-sm font-semibold">Reviews ({COURSE.reviews.length})</h2><button className="text-xs text-primary hover:underline">See all</button></div>
-              <div className="flex flex-col gap-3">
-                {COURSE.reviews.map((r,i)=>(
-                  <Card key={i} className="p-4 flex flex-col gap-2">
-                    <div className="flex items-center gap-2"><Avatar className="size-7 shrink-0"><AvatarFallback className="text-[10px]">{r.initials}</AvatarFallback></Avatar><span className="text-sm font-medium">{r.author}</span><span className="text-[10px] text-muted-foreground ml-auto">{r.time}</span></div>
-                    <div className="flex items-center gap-0.5">{[...Array(5)].map((_,j)=><HugeiconsIcon key={j} icon={StarIcon} size={12} className={j<r.rating?"text-amber-500 fill-amber-500":"text-muted-foreground/30"}/>)}</div>
-                    <p className="text-sm text-muted-foreground">{r.text}</p>
-                  </Card>
-                ))}
-              </div>
+            <div className="space-y-4">
+              <h2 className="text-sm font-semibold">Reviews &amp; Ratings</h2>
+
+              {/* Breakdown */}
+              <RatingBreakdown
+                rating={reviews.reduce((s,r)=>s+r.rating,0)/reviews.length}
+                reviewCount={reviews.length}
+                distribution={ratingDist}
+              />
+
+              {/* Review form (enrolled students who haven't reviewed) */}
+              {COURSE.enrolled && !hasReviewed && (
+                <div className="p-4 sm:p-5 rounded-xl border">
+                  <ReviewForm
+                    currentUser={{ name:"Temi Adebayo", initials:"TA" }}
+                    onSubmit={(review) => {
+                      setReviews(prev=>[review, ...prev]);
+                      setHasReviewed(true);
+                    }}
+                  />
+                </div>
+              )}
+
+              <Separator />
+
+              {/* List */}
+              <ReviewList
+                reviews={reviews}
+                onMarkHelpful={(id) => setReviews(prev=>prev.map(r=>r.id===id?{...r,markedHelpful:!r.markedHelpful,helpfulCount:r.helpfulCount+(r.markedHelpful?-1:1)}:r))}
+                onFlag={() => {}}
+              />
             </div>
 
             {/* Certificate */}
@@ -188,8 +228,16 @@ function CourseLandingPage() {
               <p className="text-xs text-muted-foreground">{COURSE.instructor.bio}</p>
               <Separator />
               <div className="text-center"><p className="text-xl font-bold">{COURSE.price==="Free"?"Free":COURSE.price}</p><p className="text-[10px] text-muted-foreground">{COURSE.price==="Free"?"Full lifetime access":COURSE.price==="Free"?"":"One-time payment"}</p></div>
-              <Button className="rounded-full w-full" variant={cta.variant} onClick={handleEnroll}>{cta.label}</Button>
-              <p className="text-[10px] text-muted-foreground text-center">{COURSE.enrolled?"You are enrolled":"Enroll now and start learning"}</p>
+              <Button className="rounded-full w-full" variant={cta.variant} onClick={handleEnroll}>
+                {isParent && !COURSE.enrolled ? `Pay for Student` : cta.label}
+              </Button>
+              <p className="text-[10px] text-muted-foreground text-center">
+                {isParent && !COURSE.enrolled
+                  ? "Select which child to enroll during checkout"
+                  : COURSE.enrolled
+                  ? "You are enrolled"
+                  : "Enroll now and start learning"}
+              </p>
             </Card>
           </div>
         </div>
@@ -199,6 +247,24 @@ function CourseLandingPage() {
         <DialogContent className="max-w-md p-0 gap-0">
           <DialogHeader className="px-5 pt-5 pb-2"><DialogTitle>Checkout</DialogTitle></DialogHeader>
           <div className="px-5 pb-5 flex flex-col gap-4">
+            {/* Student selector for parents */}
+            {isParent && (
+              <div className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-muted-foreground">Enroll for</span>
+                <select
+                  value={enrollForStudent}
+                  onChange={(e) => setEnrollForStudent(e.target.value)}
+                  className="flex h-9 w-full rounded-xl border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                >
+                  {linkedStudents.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="rounded-xl bg-muted/30 p-4 flex flex-col gap-2">
               <div className="flex items-center justify-between text-sm"><span className="font-medium">{COURSE.title}</span><span>{COURSE.price}</span></div>
               <Separator />
