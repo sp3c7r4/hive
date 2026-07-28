@@ -267,6 +267,7 @@ function LoginForm({
         return;
       }
       // Success: redirect to dashboard
+      localStorage.setItem("hive-role", role || "student");
       window.location.href = `/dashboard?role=${role || "student"}`;
     }, 1200);
   };
