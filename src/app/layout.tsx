@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Figtree, DM_Serif_Display } from "next/font/google";
+import { Geist_Mono, Figtree } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
-const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
-
-const dmSerifDisplay = DM_Serif_Display({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-dm-serif",
-});
+const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -17,8 +13,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hive — Build Your Academy, Grow Your Community",
-  description: "A community-driven learning platform where instructors build academies, students master skills, and knowledge creates opportunity.",
+  title: "Hive - Build Your Academy, Grow Your Community",
+  description:
+    "A community-driven learning platform where instructors build academies, students master skills, and knowledge creates opportunity.",
+  icons: {
+    icon: "/logo.svg",
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -29,9 +35,24 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistMono.variable, "font-sans", figtree.variable, dmSerifDisplay.variable)}
+      suppressHydrationWarning
+      className={cn(
+        "h-full antialiased",
+        geistMono.variable,
+        "font-sans",
+        figtree.variable
+      )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
