@@ -9,6 +9,7 @@ export function getStoredRole(): Role | null {
 }
 
 export function setStoredRole(role: Role) {
+  if (typeof window === "undefined") return;
   localStorage.setItem(ROLE_KEY, role);
 }
 

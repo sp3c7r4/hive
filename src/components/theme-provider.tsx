@@ -43,6 +43,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setMounted(true);
   }, []);
 
+  /* Sync data-theme to <html> so portaled content (mobile sidebar) inherits */
+  useEffect(() => {
+    if (!mounted) return;
+    document.documentElement.setAttribute("data-theme", resolved);
+    return () => {
+      document.documentElement.removeAttribute("data-theme");
+    };
+  }, [resolved, mounted]);
+
   useEffect(() => {
     if (!mounted) return;
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
