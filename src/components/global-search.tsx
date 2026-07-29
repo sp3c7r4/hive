@@ -171,7 +171,7 @@ export function GlobalSearchBar({ role = "student" }: { role?: Role }) {
   };
 
   return (
-    <div ref={containerRef} className="relative flex-1 max-w-md mx-4 hidden sm:block">
+    <div ref={containerRef} className="relative flex-1 max-w-md hidden sm:block">
       <Input
         ref={inputRef}
         value={query}

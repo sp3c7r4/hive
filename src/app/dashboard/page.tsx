@@ -35,7 +35,7 @@ import {
   Add01Icon,
   Message02Icon,
 } from "@hugeicons/core-free-icons";
-import Image from "next/image";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
@@ -197,13 +197,11 @@ function StreakBadge({ streak }: { streak: number }) {
       ref={clusterRef}
       className="relative inline-flex items-center justify-center size-9 rounded-full bg-orange-50 dark:bg-orange-950/40"
     >
-      <Image
-        src="/gif/fire.gif"
-        alt=""
-        width={24}
-        height={24}
-        unoptimized
-        className="size-6 object-contain pointer-events-none mix-blend-multiply dark:mix-blend-screen"
+      <DotLottieReact
+        src="/lotties/Fire.lottie"
+        autoplay
+        loop
+        className="size-6 pointer-events-none"
       />
       <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-orange-500 text-white text-[10px] font-bold flex items-center justify-center">
         <span ref={numberRef}>0</span>
@@ -220,11 +218,11 @@ function WelcomeBanner({
   streak: number;
 }) {
   return (
-    <div className="flex items-center gap-3 flex-wrap">
+    <div className="flex items-center gap-1 flex-wrap">
       <h1 className="text-2xl font-bold tracking-tight">
         Good morning, <span className="text-primary">{firstName}</span>
       </h1>
-      <StreakBadge streak={streak} />
+        <StreakBadge streak={streak} />
     </div>
   );
 }
@@ -315,8 +313,8 @@ function StudentDashboard() {
       {/* ---- 3. Continue Learning ---- */}
       <div className="dash-widget -mt-4 min-w-0">
         <h2 className="text-sm font-semibold mb-4">Continue Learning</h2>
-        <ScrollArea className="w-full min-w-0 whitespace-nowrap -mx-4 [&>[data-slot=scroll-area-viewport]]:scrollbar-hide">
-          <div className="flex gap-4 pb-2 px-4">
+        <ScrollArea className="w-full min-w-0 whitespace-nowrap -mx-4 overflow-y-visible [&>[data-slot=scroll-area-viewport]]:scrollbar-hide [&>[data-slot=scroll-area-viewport]]:overflow-y-visible">
+          <div className="flex gap-4 pb-2 pt-1 px-4">
             {continueLearning.map((c) => (
               <Card key={c.id} className="w-64 shrink-0 p-4">
                 <div className="h-24 rounded-lg bg-muted mb-3 flex items-center justify-center overflow-hidden">

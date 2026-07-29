@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { CreditCardIcon, Wallet01Icon, ReceiptTextIcon, CheckmarkCircle02Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
+import { CreditCardIcon, Wallet01Icon, ReceiptTextIcon, CheckmarkCircle02Icon, Cancel01Icon, Alert01Icon } from "@hugeicons/core-free-icons";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 type Tab = "history" | "subscriptions";
@@ -99,7 +99,7 @@ function PaymentsPage() {
                 <div>
                   <p className="text-sm font-semibold">{s.name}</p>
                   <p className="text-xs text-muted-foreground">{s.amount}/{s.cycle.toLowerCase()} · Next billing {s.nextBilling}</p>
-                  {s.status==="past_due" && <p className="text-xs text-red-600 mt-1">⚠ Payment failed. Update within {s.graceDays} days to keep access.</p>}
+                  {s.status==="past_due" && <p className="text-xs text-red-600 mt-1 flex items-center gap-1"><HugeiconsIcon icon={Alert01Icon} size={12} className="shrink-0" /> Payment failed. Update within {s.graceDays} days to keep access.</p>}
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <Badge className={`rounded-full text-[10px] px-2 py-0 h-5 ${s.status==="active"?"bg-emerald-100 text-emerald-700":"bg-red-100 text-red-700"}`}>{s.status==="past_due"?"Past Due":"Active"}</Badge>

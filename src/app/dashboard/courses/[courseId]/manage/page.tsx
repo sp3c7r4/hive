@@ -15,6 +15,13 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Dialog,
@@ -47,6 +54,7 @@ import {
   CircleQuestionMarkIcon,
   AssignmentsIcon,
   Copy01Icon,
+  Alert01Icon,
 } from "@hugeicons/core-free-icons";
 
 /* ---------------------------------------------------------------- */
@@ -860,8 +868,8 @@ function SettingsTab() {
         <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Title</Label><Input value={title} onChange={(e) => setTitle(e.target.value)} className="rounded-xl" /></div>
         <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Description</Label><Textarea value={description} onChange={(e) => setDescription(e.target.value)} className="rounded-xl min-h-[80px]" /></div>
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Category</Label><select value={category} onChange={(e) => setCategory(e.target.value)} className="rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"><option value="" disabled>Select</option>{CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}</select></div>
-          <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Difficulty</Label><select value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)} className="rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring">{DIFFICULTY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+          <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Category</Label><Select value={category} onValueChange={setCategory}><SelectTrigger className="rounded-xl h-10 text-sm"><SelectValue /></SelectTrigger><SelectContent>{CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select></div>
+          <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Difficulty</Label><Select value={difficulty} onValueChange={(v) => setDifficulty(v as Difficulty)}><SelectTrigger className="rounded-xl h-10 text-sm"><SelectValue /></SelectTrigger><SelectContent>{DIFFICULTY_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select></div>
         </div>
         <div><Label className="text-xs font-medium mb-2 block">Cover Image</Label>
           {coverPreview ? (<div className="relative rounded-xl overflow-hidden aspect-[2.5/1] bg-muted group"><Image src={coverPreview} alt="" fill className="object-cover" /><button onClick={() => { URL.revokeObjectURL(coverPreview); setCoverPreview(null); }} className="absolute top-3 right-3 size-8 rounded-full bg-background/80 hover:bg-background flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100"><HugeiconsIcon icon={Cancel01Icon} size={16} /></button></div>)
@@ -871,7 +879,7 @@ function SettingsTab() {
       </Card>
       <Card className="p-5 flex flex-col gap-4"><h3 className="text-sm font-semibold">Pricing</h3><div className="flex items-center justify-between"><p className="text-sm font-medium">Free course</p><Switch checked={isFree} onCheckedChange={setIsFree} /></div>{!isFree && (<div className="grid grid-cols-2 gap-4 animate-in fade-in">{[{ l:"One-time (₦)", v:oneTimePrice, s:setOneTimePrice },{ l:"Monthly (₦)", v:monthlyPrice, s:setMonthlyPrice }].map((f)=>(<div key={f.l} className="flex flex-col gap-1.5"><Label className="text-xs font-medium">{f.l}</Label><div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₦</span><Input value={f.v} onChange={(e)=>f.s(fmtPrice(e.target.value))} className="rounded-xl pl-8" /></div></div>))}</div>)}</Card>
       <Card className="p-5 flex flex-col gap-4"><h3 className="text-sm font-semibold">Course Settings</h3>{[{ l:"Sequential Access", d:"Complete lessons in order", s:sequentialAccess, t:setSequentialAccess },{ l:"Drip Content", d:"Release on a schedule", s:dripContent, t:setDripContent },{ l:"Allow Comments", d:"Students can comment", s:allowComments, t:setAllowComments },{ l:"Allow Downloads", d:"Download materials", s:allowDownloads, t:setAllowDownloads }].map((item,i)=>(<div key={item.l}>{i>0&&<Separator className="mb-4"/>}<div className="flex items-center justify-between"><div><p className="text-sm font-medium">{item.l}</p><p className="text-xs text-muted-foreground">{item.d}</p></div><Switch checked={item.s} onCheckedChange={item.t}/></div></div>))}</Card>
-      <Card className="p-5 flex flex-col gap-4"><h3 className="text-sm font-semibold">Certificate</h3><div className="flex items-center justify-between"><p className="text-sm font-medium">Offer Certificate</p><Switch checked={offerCertificate} onCheckedChange={setOfferCertificate} /></div>{offerCertificate&&(<div className="grid grid-cols-3 gap-4 animate-in fade-in">{[{ l:"Min Completion %",v:minCompletion,s:setMinCompletion },{ l:"Min Quiz Score %",v:minQuizScore,s:setMinQuizScore },{ l:"Min Attendance %",v:minAttendance,s:setMinAttendance }].map((f)=>(<div key={f.l} className="flex flex-col gap-1.5"><Label className="text-xs font-medium">{f.l}</Label><Input type="number" min={0} max={100} value={f.v} onChange={(e)=>f.s(e.target.value)} className="rounded-xl"/></div>))}</div>)}</Card>
+      <Card className="p-5 flex flex-col gap-4"><h3 className="text-sm font-semibold">Certificate</h3><div className="flex items-center justify-between"><p className="text-sm font-medium">Offer Certificate</p><Switch checked={offerCertificate} onCheckedChange={setOfferCertificate} /></div>{offerCertificate&&(<div className="grid grid-cols-1 sm:grid-cols-3 gap-4 animate-in fade-in">{[{ l:"Min Completion",v:minCompletion,s:setMinCompletion },{ l:"Min Quiz Score",v:minQuizScore,s:setMinQuizScore },{ l:"Min Attendance",v:minAttendance,s:setMinAttendance }].map((f)=>(<div key={f.l} className="flex flex-col gap-1.5"><Label className="text-xs font-medium whitespace-nowrap">{f.l} (%)</Label><Input type="number" min={0} max={100} value={f.v} onChange={(e)=>f.s(e.target.value)} className="rounded-xl"/></div>))}</div>)}</Card>
       <div className="flex flex-col gap-6">
         <div className="flex items-center gap-3"><Button variant="outline" className="rounded-full">Save Draft</Button><Button className="rounded-full" onClick={() => setPublishOpen(true)}>Save &amp; Publish</Button></div>
         {/* Danger Zone */}
@@ -882,7 +890,7 @@ function SettingsTab() {
       <Dialog open={publishOpen} onOpenChange={setPublishOpen}>
         <DialogContent className="max-w-sm"><DialogHeader><DialogTitle>Publish Course</DialogTitle><DialogDescription>Review before going live:</DialogDescription></DialogHeader>
           <div className="flex flex-col gap-2 text-sm py-2">
-            {[{ ok:true, t:"6 lessons across 2 modules" },{ ok:true, t:"Cover image uploaded" },{ ok:false, t:"1 lesson still in draft — won't be visible" },{ ok:true, t:"Certificate settings configured" }].map((item,i)=>(<div key={i} className="flex items-center gap-2"><span className={item.ok?"text-emerald-600":"text-amber-600"}>{item.ok?"✓":"⚠"}</span><span className="text-xs">{item.t}</span></div>))}
+            {[{ ok:true, t:"6 lessons across 2 modules" },{ ok:true, t:"Cover image uploaded" },{ ok:false, t:"1 lesson still in draft — won't be visible" },{ ok:true, t:"Certificate settings configured" }].map((item,i)=>(<div key={i} className="flex items-center gap-2"><span className={item.ok?"text-emerald-600":"text-amber-600"}>{item.ok ? <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-emerald-600 shrink-0" /> : <HugeiconsIcon icon={Alert01Icon} size={14} className="text-amber-600 shrink-0" />}</span><span className="text-xs">{item.t}</span></div>))}
           </div>
           <p className="text-xs text-muted-foreground">This course will be visible to community members and appear in search results.</p>
           <DialogFooter className="gap-2"><Button variant="outline" className="rounded-full" onClick={()=>setPublishOpen(false)}>Cancel</Button><Button className="rounded-full" onClick={()=>setPublishOpen(false)}>Confirm &amp; Publish</Button></DialogFooter>

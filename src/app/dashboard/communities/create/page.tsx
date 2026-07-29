@@ -12,6 +12,13 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Camera01Icon,
@@ -300,17 +307,14 @@ function CreateCommunityPage() {
                 {/* Category */}
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="category" className="text-xs font-medium">Category</Label>
-                  <select
-                    id="category"
-                    value={form.category}
-                    onChange={(e) => updateField("category", e.target.value)}
-                    className="rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring focus:border-border"
-                  >
-                    <option value="" disabled>Select a category</option>
-                    {CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                  </select>
+                  <Select value={form.category} onValueChange={(v) => updateField("category", v)}>
+                    <SelectTrigger id="category" className="rounded-xl h-10 text-sm"><SelectValue placeholder="Select a category" /></SelectTrigger>
+                    <SelectContent>
+                      {CATEGORIES.map((cat) => (
+                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>

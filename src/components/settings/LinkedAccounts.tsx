@@ -123,7 +123,7 @@ function LinkRow({
   const otherLabel = role === "student" ? "Parent" : "Student";
 
   return (
-    <div className="flex items-center justify-between rounded-xl bg-muted/60 px-4 py-3 gap-3">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-xl bg-muted/60 px-4 py-3 gap-3">
       <div className="flex items-center gap-3 min-w-0">
         <Avatar className="size-9 shrink-0">
           <AvatarFallback className="text-[11px]">
@@ -151,7 +151,7 @@ function LinkRow({
                 : "Rejected"}
             </Badge>
           </div>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-[11px] text-muted-foreground truncate">
             {link.relationship} · {link.email}
           </p>
           <p className="text-[10px] text-muted-foreground">
@@ -164,7 +164,7 @@ function LinkRow({
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5 shrink-0">
+      <div className="flex items-center gap-1.5 shrink-0 sm:self-center">
         {link.status === "pending" && (
           <>
             <Button

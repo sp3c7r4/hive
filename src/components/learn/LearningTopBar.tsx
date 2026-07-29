@@ -30,11 +30,11 @@ export function LearningTopBar({
   role,
 }: LearningTopBarProps) {
   return (
-    <header className="h-12 shrink-0 border-b border-border/60 flex items-center gap-1.5 sm:gap-3 px-2 sm:px-3 bg-background/95 backdrop-blur-sm z-20">
+    <header className="h-12 shrink-0 border-b border-border/60 flex items-center gap-1.5 sm:gap-3 bg-background/95 backdrop-blur-sm z-20">
       {/* Back */}
       <Link
         href={`/dashboard/my-courses?role=${role}`}
-        className="size-8 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+        className="size-8 flex items-center justify-center rounded-l-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0 -ml-0.5"
         aria-label="Back to My Courses"
       >
         <HugeiconsIcon icon={ArrowLeft02Icon} size={18} />
@@ -82,7 +82,7 @@ export function LearningTopBar({
         type="button"
         onClick={onToggleZen}
         className={cn(
-          "size-8 flex items-center justify-center rounded-lg transition-colors shrink-0",
+          "size-8 flex items-center justify-center rounded-r-lg transition-colors shrink-0 -mr-0.5",
           zenMode
             ? "text-primary bg-primary/10"
             : "text-muted-foreground hover:text-foreground hover:bg-muted"

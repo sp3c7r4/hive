@@ -12,6 +12,7 @@ import {
   CheckmarkCircle02Icon,
   LockIcon,
   Cancel01Icon,
+  ArrowRight01Icon,
 } from "@hugeicons/core-free-icons";
 import type { IconSvgElement } from "@hugeicons/react";
 import type { Module, LessonType } from "./types";
@@ -159,14 +160,14 @@ export function LearningSidebar({
                         : "hover:bg-muted/50"
                     )}
                   >
-                    <span
+                    <HugeiconsIcon
+                      icon={ArrowRight01Icon}
+                      size={12}
                       className={cn(
-                        "text-[10px] transition-transform duration-200 shrink-0",
+                        "shrink-0 text-muted-foreground transition-transform duration-200",
                         isExpanded ? "rotate-90" : "rotate-0"
                       )}
-                    >
-                      ▶
-                    </span>
+                    />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-semibold truncate">{mod.title}</p>
                       <p className="text-[10px] text-muted-foreground">

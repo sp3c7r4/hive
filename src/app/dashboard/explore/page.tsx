@@ -9,6 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   UserGroupIcon,
@@ -113,9 +120,18 @@ function ExplorePage() {
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1 max-w-md"><HugeiconsIcon icon={Search02Icon} size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"/><Input value={search} onChange={(e)=>setSearch(e.target.value)} placeholder={`Search ${tab}...`} className="rounded-full pl-9"/></div>
           <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
-            <select value={category} onChange={(e)=>setCategory(e.target.value)} className="text-xs rounded-full border bg-background px-3 py-2 outline-none"><option value="All">All Categories</option>{CATEGORIES.filter(c=>c!=="All").map(c=><option key={c} value={c}>{c}</option>)}</select>
-            {tab==="courses" && <select value={difficulty} onChange={(e)=>setDifficulty(e.target.value)} className="text-xs rounded-full border bg-background px-3 py-2 outline-none">{DIFFICULTIES.map(d=><option key={d} value={d}>{d}</option>)}</select>}
-            <select value={priceFilter} onChange={(e)=>setPriceFilter(e.target.value)} className="text-xs rounded-full border bg-background px-3 py-2 outline-none"><option value="All">All Prices</option><option value="Free">Free</option><option value="Paid">Paid</option></select>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger className="text-xs rounded-full h-8 px-3 w-auto gap-1"><SelectValue /></SelectTrigger>
+              <SelectContent>{CATEGORIES.map(c=><SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+            </Select>
+            {tab==="courses" && <Select value={difficulty} onValueChange={setDifficulty}>
+              <SelectTrigger className="text-xs rounded-full h-8 px-3 w-auto gap-1"><SelectValue /></SelectTrigger>
+              <SelectContent>{DIFFICULTIES.map(d=><SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
+            </Select>}
+            <Select value={priceFilter} onValueChange={setPriceFilter}>
+              <SelectTrigger className="text-xs rounded-full h-8 px-3 w-auto gap-1"><SelectValue /></SelectTrigger>
+              <SelectContent><SelectItem value="All">All Prices</SelectItem><SelectItem value="Free">Free</SelectItem><SelectItem value="Paid">Paid</SelectItem></SelectContent>
+            </Select>
           </div>
         </div>
 

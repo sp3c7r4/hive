@@ -10,6 +10,13 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   UserGroupIcon,
@@ -170,16 +177,15 @@ function MyChildrenPage() {
             </div>
             <div className="w-full sm:w-[160px] flex flex-col gap-1.5">
               <Label className="text-xs">Relationship</Label>
-              <select
-                value={linkRelationship}
-                onChange={(e) => setLinkRelationship(e.target.value)}
-                className="flex h-9 w-full rounded-xl border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              >
-                <option>Child</option>
-                <option>Ward</option>
-                <option>Guardian</option>
-                <option>Sponsor</option>
-              </select>
+              <Select value={linkRelationship} onValueChange={setLinkRelationship}>
+                <SelectTrigger className="rounded-xl h-9 text-sm"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Child">Child</SelectItem>
+                  <SelectItem value="Ward">Ward</SelectItem>
+                  <SelectItem value="Guardian">Guardian</SelectItem>
+                  <SelectItem value="Sponsor">Sponsor</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex items-end">
               <Button

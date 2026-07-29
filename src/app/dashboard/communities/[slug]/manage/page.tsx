@@ -16,6 +16,13 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -273,16 +280,15 @@ function MembersTab() {
                 </div>
               </div>
               <div className="flex items-center gap-1.5 shrink-0 ml-12 sm:ml-0">
-                <select
-                  value={m.role}
-                  onChange={(e) => handleRoleChange(m.id, e.target.value as Member["role"])}
-                  className="text-[11px] rounded-full border bg-background px-2.5 py-1 outline-none"
-                >
-                  <option value="owner">Owner</option>
-                  <option value="admin">Admin</option>
-                  <option value="member">Member</option>
-                  <option value="guest">Guest</option>
-                </select>
+                <Select value={m.role} onValueChange={(v) => handleRoleChange(m.id, v as Member["role"])}>
+                  <SelectTrigger className="text-[11px] rounded-full h-7 px-2.5 w-auto gap-0.5"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="owner">Owner</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="member">Member</SelectItem>
+                    <SelectItem value="guest">Guest</SelectItem>
+                  </SelectContent>
+                </Select>
                 <Button size="sm" variant="ghost" className="rounded-full text-xs" onClick={() => handleBlockToggle(m.id)}>
                   {m.status === "active" ? "Block" : "Unblock"}
                 </Button>
@@ -425,7 +431,7 @@ function SettingsTab() {
         <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Community Name</Label><Input value={form.name} onChange={(e) => handleName(e.target.value)} className="rounded-xl" /></div>
         <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Slug</Label><div className="flex items-center rounded-xl border bg-muted/40 px-3 py-2 gap-1.5 text-sm"><span className="text-muted-foreground shrink-0">hive.ng/c/</span><input value={form.slug} onChange={(e) => update("slug", slugify(e.target.value))} className="flex-1 bg-transparent outline-none min-w-0" /></div></div>
         <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Description</Label><Textarea value={form.description} onChange={(e) => update("description", e.target.value)} className="rounded-xl min-h-[80px]" /></div>
-        <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Category</Label><select value={form.category} onChange={(e) => update("category", e.target.value)} className="rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"><option value="" disabled>Select</option>{CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}</select></div>
+        <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Category</Label><Select value={form.category} onValueChange={(v) => update("category", v)}><SelectTrigger className="rounded-xl h-10 text-sm"><SelectValue placeholder="Select" /></SelectTrigger><SelectContent>{CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select></div>
         <div>
           <Label className="text-xs font-medium mb-2 block">Cover Image</Label>
           {coverPreview ? (

@@ -39,6 +39,12 @@ import {
   NotificationOff01Icon,
   UserGroupIcon,
   AtSignIcon,
+  ThumbsUpIcon,
+  FavouriteIcon,
+  LaughingIcon,
+  SurpriseIcon,
+  SadIcon,
+  HandPrayerIcon,
 } from "@hugeicons/core-free-icons";
 
 /* ---------------------------------------------------------------- */
@@ -191,7 +197,14 @@ const searchableUsers = [
   { name: "Emeka Udoh", initials: "EU", role: "Admin" },
 ];
 
-const REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
+const REACTIONS = [
+  { icon: ThumbsUpIcon, label: "Like", color: "text-blue-500" },
+  { icon: FavouriteIcon, label: "Love", color: "text-red-500" },
+  { icon: LaughingIcon, label: "Laugh", color: "text-amber-500" },
+  { icon: SurpriseIcon, label: "Wow", color: "text-yellow-500" },
+  { icon: SadIcon, label: "Sad", color: "text-blue-400" },
+  { icon: HandPrayerIcon, label: "Pray", color: "text-purple-500" },
+];
 
 const FILTER_OPTIONS: { key: FilterMode; label: string }[] = [
   { key: "all", label: "All" },
@@ -449,8 +462,10 @@ function ReactionPicker({
   if (!open) return null;
   return (
     <div className="absolute -top-10 left-0 flex items-center gap-0.5 bg-popover border rounded-full px-1.5 py-1 shadow-lg z-10 animate-in fade-in zoom-in-95 origin-bottom-left">
-      {REACTIONS.map((emoji) => (
-        <button key={emoji} type="button" onClick={(e) => { e.stopPropagation(); onReact(emoji); }} className="size-7 flex items-center justify-center rounded-full hover:bg-muted text-sm transition-colors">{emoji}</button>
+      {REACTIONS.map((r) => (
+        <button key={r.label} type="button" onClick={(e) => { e.stopPropagation(); onReact(r.label); }} className="size-7 flex items-center justify-center rounded-full hover:bg-muted transition-colors" title={r.label}>
+          <HugeiconsIcon icon={r.icon} size={15} className={r.color} />
+        </button>
       ))}
       <button type="button" onClick={(e) => { e.stopPropagation(); onCopy(); }} className="size-7 flex items-center justify-center rounded-full hover:bg-muted transition-colors ml-0.5">
         <HugeiconsIcon icon={Copy01Icon} size={13} className="text-muted-foreground" />
@@ -630,7 +645,9 @@ function MessageBubble({
 
             {/* Reaction badge */}
             {msg.reaction && (
-              <span className={`absolute -bottom-2 ${isMe ? "-left-2" : "-right-2"} text-xs bg-popover border rounded-full px-2 py-0.5 shadow-sm`}>{msg.reaction}</span>
+              <span className={`absolute -bottom-2 ${isMe ? "-left-2" : "-right-2"} bg-popover border rounded-full px-2 py-0.5 shadow-sm flex items-center gap-0.5`}>
+                {(() => { const r = REACTIONS.find(x => x.label === msg.reaction); return r ? <HugeiconsIcon icon={r.icon} size={11} className={r.color} /> : msg.reaction; })()}
+              </span>
             )}
           </div>
         </div>
@@ -909,7 +926,7 @@ function MessagesPage() {
 
   return (
     <DashboardLayout role={role}>
-      <div className="h-[calc(100vh-6rem)] flex rounded-2xl border bg-card overflow-hidden -mx-1 sm:mx-0">
+      <div className="h-[calc(100dvh-6rem)] flex rounded-2xl border bg-card overflow-hidden -mx-1 sm:mx-0">
         {/* ---- Conversation List Panel ---- */}
         <div className={`shrink-0 w-full sm:w-80 border-r flex flex-col ${viewMode === "chat" ? "hidden sm:flex" : "flex"}`}>
           {/* Header */}
@@ -1013,7 +1030,7 @@ export default function MessagesPageWrapper() {
   return (
     <Suspense
       fallback={
-        <div className="h-[calc(100vh-6rem)] flex rounded-2xl border bg-card overflow-hidden">
+        <div className="h-[calc(100dvh-6rem)] flex rounded-2xl border bg-card overflow-hidden">
           <div className="w-80 border-r p-4 flex flex-col gap-3">
             <Skeleton className="h-10 w-full rounded-full" />
             {[1, 2, 3, 4, 5].map((i) => (

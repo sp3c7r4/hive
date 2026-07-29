@@ -368,17 +368,19 @@ export function DashboardLayout({
       <main className="flex-1 flex flex-col min-h-screen min-w-0 overflow-x-hidden">
         {/* Floating header */}
         <div className="sticky top-0 z-30 px-4 pt-3 pb-2">
-          <div className="flex items-center justify-between rounded-2xl bg-background px-4 py-2.5">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 rounded-2xl bg-background py-2.5">
+            <div className="flex items-center gap-2">
               <SidebarTrigger />
               <span className="text-sm font-semibold text-foreground shrink-0">{pageTitle}</span>
             </div>
             <GlobalSearchBar role={role} />
+            <div className="ml-auto">
             <TopbarActionCluster
               status="active"
               hasUnread
               fallback={role.charAt(0).toUpperCase()}
             />
+            </div>
           </div>
         </div>
         <div className="flex-1 px-4 pb-6">{children}</div>
