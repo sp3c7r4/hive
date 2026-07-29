@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { DashboardLayout } from "@/components/app-sidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowLeft02Icon,
@@ -32,6 +39,7 @@ import {
   LockIcon,
   CheckmarkCircle02Icon,
   CreditCardIcon,
+  ArrowDown01Icon,
 } from "@hugeicons/core-free-icons";
 import { RatingBreakdown } from "@/components/reviews/RatingBreakdown";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
@@ -40,38 +48,50 @@ import type { CourseReview } from "@/components/reviews/types";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
-const COURSE = {
-  title:"React for Designers", slug:"react-designers", subtitle:"Learn React fundamentals through hands-on design projects — from components to hooks, no prior JavaScript experience needed.",
-  category:"Development", difficulty:"beginner" as const,
-  instructor:{ name:"Ade Okafor", initials:"AO", bio:"Senior Frontend Engineer with 10+ years building for the web.", rank:"Top Instructor" },
-  enrollmentCount:342, rating:4.8, reviewCount:124, price:"Free", certificate:true,
-  certRequirements:{ completion:"80%", quizScore:"70%", attendance:"60%" },
-  enrolled:false, completed:false,
-  curriculum:[
-    { title:"Getting Started", lessons:[
-      { title:"Welcome & Course Overview", type:"video" as const, duration:"4:32", freePreview:true },
-      { title:"Setting Up Your Environment", type:"video" as const, duration:"8:15", freePreview:false },
-      { title:"How the Web Works", type:"pdf" as const, duration:"12 min read", freePreview:false },
-    ]},
-    { title:"React Fundamentals", lessons:[
-      { title:"Components & Props", type:"video" as const, duration:"15:20", freePreview:false },
-      { title:"State & Events", type:"video" as const, duration:"18:45", freePreview:false },
-      { title:"React Fundamentals Quiz", type:"quiz" as const, duration:"10 questions", freePreview:false },
-    ]},
-    { title:"Building Projects", lessons:[
-      { title:"Project: Design Portfolio", type:"assignment" as const, duration:"2-3 hours", freePreview:false },
-      { title:"Live Code Review", type:"live" as const, duration:"60 min", freePreview:false },
-    ]},
-  ],
-  reviews:[
-    { id:"r1", author:{ name:"Kelechi Okonkwo", initials:"KO" }, rating:5, title:"Game-changing course", comment:"This course completely changed how I approach frontend. Ade explains complex concepts in a way that just clicks. The projects are practical and the community support is incredible.", createdAt:new Date(Date.now()-1209600000).toISOString(), helpfulCount:42, markedHelpful:false, instructorReply:{ comment:"Thank you Kelechi! Your portfolio project was one of the best I've seen. Keep building!", createdAt:new Date(Date.now()-1036800000).toISOString() } },
-    { id:"r2", author:{ name:"Amara Obi", initials:"AO" }, rating:5, title:"Perfect for designers", comment:"The hands-on projects are fantastic. I built a real portfolio while learning. Highly recommend for designers who want to add React to their toolkit.", createdAt:new Date(Date.now()-2592000000).toISOString(), helpfulCount:28, markedHelpful:false },
-    { id:"r3", author:{ name:"Tunde Balogun", initials:"TB" }, rating:4, comment:"Great course overall. Would love more content on performance optimization and testing. The fundamentals section is solid.", createdAt:new Date(Date.now()-5184000000).toISOString(), helpfulCount:15, markedHelpful:false },
-    { id:"r4", author:{ name:"Ngozi Eze", initials:"NE" }, rating:5, title:"Best React intro out there", comment:"I tried three other React courses before this one — none of them stuck. Ade's teaching style is unmatched. I went from zero to shipping a client project in 4 weeks.", createdAt:new Date(Date.now()-7776000000).toISOString(), helpfulCount:63, markedHelpful:true, instructorReply:{ comment:"That's amazing Ngozi! Four weeks to a client project is the kind of progress we love to see.", createdAt:new Date(Date.now()-6912000000).toISOString() } },
-    { id:"r5", author:{ name:"Ibrahim Musa", initials:"IM" }, rating:3, comment:"Decent course but the later modules feel rushed. More exercises between lessons would help reinforce concepts. The certificate requirements are also a bit steep.", createdAt:new Date(Date.now()-10368000000).toISOString(), helpfulCount:9, markedHelpful:false },
-    { id:"r6", author:{ name:"Folake Adeyemi", initials:"FA" }, rating:5, comment:"The live code review sessions are worth the enrollment alone. Getting real-time feedback on my code accelerated my learning exponentially.", createdAt:new Date(Date.now()-12960000000).toISOString(), helpfulCount:31, markedHelpful:false },
-  ] as CourseReview[],
-};
+/* ---- shared course catalogue (matches explore page) ---- */
+
+const COURSE_CATALOGUE: Record<string, typeof COURSE_TEMPLATE> = {};
+
+const COURSES_DATA = [
+  { slug:"react-designers", title:"React for Designers", category:"Development", difficulty:"beginner" as const, rating:4.8, reviewCount:124, price:"Free", instructor:{ name:"Ade Okafor", initials:"AO", bio:"Senior Frontend Engineer with 10+ years building for the web.", rank:"Top Instructor" }, enrollmentCount:342, subtitle:"Learn React fundamentals through hands-on design projects — from components to hooks, no prior JavaScript experience needed.", certificate:true },
+  { slug:"advanced-typescript", title:"Advanced TypeScript", category:"Development", difficulty:"advanced" as const, rating:4.9, reviewCount:67, price:"₦15,000", instructor:{ name:"Prof. Adeyemi", initials:"PA", bio:"Computer Science professor specializing in type theory and programming languages.", rank:"Top Instructor" }, enrollmentCount:128, subtitle:"Master generics, decorators, and conditional types for production-grade TypeScript.", certificate:true },
+  { slug:"uiux-research", title:"UI/UX Research Methods", category:"Design", difficulty:"intermediate" as const, rating:4.5, reviewCount:43, price:"Free", instructor:{ name:"Dr. Okonkwo", initials:"DO", bio:"UX researcher with 15 years in academia and industry.", rank:"Instructor" }, enrollmentCount:215, subtitle:"Complete research toolkit for designers.", certificate:false },
+  { slug:"data-viz-d3", title:"Data Viz with D3", category:"Data Science", difficulty:"advanced" as const, rating:4.7, reviewCount:31, price:"₦12,500", instructor:{ name:"Kelechi Okonkwo", initials:"KO", bio:"Data visualization engineer at a leading fintech.", rank:"Instructor" }, enrollmentCount:89, subtitle:"Interactive charts and dashboards for the web.", certificate:true },
+  { slug:"product-strategy", title:"Product Strategy 101", category:"Product", difficulty:"beginner" as const, rating:4.3, reviewCount:56, price:"Free", instructor:{ name:"Amara Obi", initials:"AO", bio:"Product leader with 8+ years at fast-growing startups.", rank:"Instructor" }, enrollmentCount:198, subtitle:"Learn to define vision, set OKRs, and prioritize.", certificate:false },
+  { slug:"freelance-blueprint", title:"Freelance Business Blueprint", category:"Business", difficulty:"intermediate" as const, rating:4.6, reviewCount:89, price:"₦8,000", instructor:{ name:"Tunde Balogun", initials:"TB", bio:"Freelancer turned agency owner. Helped 500+ creatives launch.", rank:"Top Instructor" }, enrollmentCount:312, subtitle:"Pricing, contracts, and client management.", certificate:true },
+];
+
+function resolveCourse(slug: string) {
+  const data = COURSES_DATA.find(c => c.slug === slug) ?? COURSES_DATA[0];
+  return {
+    ...data,
+    enrolled: false,
+    completed: false,
+    certRequirements: { completion:"80%", quizScore:"70%", attendance:"60%" },
+    curriculum: [
+      { title:"Getting Started", lessons:[
+        { title:"Welcome & Course Overview", type:"video" as const, duration:"4:32", freePreview:true },
+        { title:"Setting Up Your Environment", type:"video" as const, duration:"8:15", freePreview:false },
+        { title:"How the Web Works", type:"pdf" as const, duration:"12 min read", freePreview:false },
+      ]},
+      { title:"Core Concepts", lessons:[
+        { title:"Components & Props", type:"video" as const, duration:"15:20", freePreview:false },
+        { title:"State & Events", type:"video" as const, duration:"18:45", freePreview:false },
+        { title:"Knowledge Check", type:"quiz" as const, duration:"10 questions", freePreview:false },
+      ]},
+      { title:"Building Projects", lessons:[
+        { title:"Project: Hands-on Build", type:"assignment" as const, duration:"2-3 hours", freePreview:false },
+        { title:"Live Code Review", type:"live" as const, duration:"60 min", freePreview:false },
+      ]},
+    ],
+    reviews: [
+      { id:"r1", author:{ name:"Kelechi Okonkwo", initials:"KO" }, rating:5, title:"Game-changing course", comment:"This course completely changed how I approach frontend. The instructor explains complex concepts in a way that just clicks.", createdAt:new Date(Date.now()-1209600000).toISOString(), helpfulCount:42, markedHelpful:false, instructorReply:{ comment:"Thank you! Your project was one of the best I've seen. Keep building!", createdAt:new Date(Date.now()-1036800000).toISOString() } },
+      { id:"r2", author:{ name:"Tunde Balogun", initials:"TB" }, rating:4, title:"Great practical approach", comment:"Love the hands-on projects. Would love more advanced content in future updates.", createdAt:new Date(Date.now()-2592000000).toISOString(), helpfulCount:18, markedHelpful:false },
+    ] as CourseReview[],
+  };
+}
+
+const COURSE_TEMPLATE = resolveCourse("react-designers");
 
 const LESSON_ICONS = { video:PlayIcon, pdf:File01Icon, live:LiveStreaming01Icon, quiz:CircleQuestionMarkIcon, assignment:AssignmentsIcon };
 const diffColors = { beginner:"bg-emerald-100 text-emerald-700", intermediate:"bg-amber-100 text-amber-700", advanced:"bg-rose-100 text-rose-700" } as const;
@@ -79,7 +99,9 @@ const diffColors = { beginner:"bg-emerald-100 text-emerald-700", intermediate:"b
 function CourseLandingPage() {
   const sp = useSearchParams();
   const router = useRouter();
+  const params = useParams<{ courseId: string }>();
   const role = (sp.get("role") as Role) || "student";
+  const COURSE = resolveCourse(params.courseId);
   const [expandedMods, setExpandedMods] = useState<Set<number>>(new Set([0]));
 
   const [reviews, setReviews] = useState<CourseReview[]>(COURSE.reviews);
@@ -91,9 +113,10 @@ function CourseLandingPage() {
   const cta = COURSE.completed ? { label:"View Certificate", variant:"outline" as const }
     : COURSE.enrolled ? { label:"Continue Learning", variant:"default" as const }
     : COURSE.price==="Free" ? { label:"Enroll for Free", variant:"default" as const }
-    : { label:`Enroll for ${COURSE.price}`, variant:"default" as const };
+    : { label:"Proceed to Payment", variant:"default" as const };
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [paying, setPaying] = useState(false);
   const [enrollForStudent, setEnrollForStudent] = useState("ta");
   const isParent = role === "parent";
 
@@ -104,12 +127,14 @@ function CourseLandingPage() {
       ]
     : [];
 
-  const handleEnroll = () => {
-    if (COURSE.price === "Free") {
-      router.push("/dashboard/payments?success=1&role=" + role);
-    } else {
-      setCheckoutOpen(true);
-    }
+  const handlePay = () => {
+    setPaying(true);
+    // Simulate backend generating Paystack link
+    setTimeout(() => {
+      setCheckoutOpen(false);
+      setPaying(false);
+      router.push(`/dashboard/payments?success=1&role=${role}`);
+    }, 2000);
   };
 
   return (
@@ -144,7 +169,7 @@ function CourseLandingPage() {
                   <Card key={mi} className="overflow-hidden">
                     <button onClick={()=>toggleMod(mi)} className="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-muted/30 transition-colors">
                       <div className="flex items-center gap-2"><span className="text-xs text-muted-foreground">Module {mi+1}</span><span className="text-sm font-medium">{mod.title}</span></div>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground"><span>{mod.lessons.length} lessons</span><span className={`transition-transform ${expandedMods.has(mi)?"rotate-180":""}`}>▼</span></div>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground"><span>{mod.lessons.length} lessons</span><HugeiconsIcon icon={ArrowDown01Icon} size={12} className={`transition-transform ${expandedMods.has(mi)?"rotate-180":""}`} /></div>
                     </button>
                     {expandedMods.has(mi) && (
                       <div className="divide-y animate-in fade-in">
@@ -228,8 +253,8 @@ function CourseLandingPage() {
               <p className="text-xs text-muted-foreground">{COURSE.instructor.bio}</p>
               <Separator />
               <div className="text-center"><p className="text-xl font-bold">{COURSE.price==="Free"?"Free":COURSE.price}</p><p className="text-[10px] text-muted-foreground">{COURSE.price==="Free"?"Full lifetime access":COURSE.price==="Free"?"":"One-time payment"}</p></div>
-              <Button className="rounded-full w-full" variant={cta.variant} onClick={handleEnroll}>
-                {isParent && !COURSE.enrolled ? `Pay for Student` : cta.label}
+              <Button className="rounded-full w-full" variant={cta.variant} onClick={() => COURSE.price === "Free" ? router.push(`/dashboard/payments?success=1&role=${role}`) : setCheckoutOpen(true)} disabled={paying}>
+                {paying ? <><span className="size-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-1.5" />Processing...</> : isParent && !COURSE.enrolled ? `Pay for Student` : cta.label}
               </Button>
               <p className="text-[10px] text-muted-foreground text-center">
                 {isParent && !COURSE.enrolled
@@ -251,17 +276,14 @@ function CourseLandingPage() {
             {isParent && (
               <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-medium text-muted-foreground">Enroll for</span>
-                <select
-                  value={enrollForStudent}
-                  onChange={(e) => setEnrollForStudent(e.target.value)}
-                  className="flex h-9 w-full rounded-xl border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                >
-                  {linkedStudents.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}
-                    </option>
-                  ))}
-                </select>
+                <Select value={enrollForStudent} onValueChange={setEnrollForStudent}>
+                  <SelectTrigger className="rounded-xl h-9 text-sm"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {linkedStudents.map((s) => (
+                      <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             )}
 
@@ -279,7 +301,9 @@ function CourseLandingPage() {
           </div>
           <DialogFooter className="px-5 pb-5 gap-2">
             <Button variant="outline" className="rounded-full" onClick={()=>setCheckoutOpen(false)}>Cancel</Button>
-            <Button className="rounded-full" onClick={()=>{setCheckoutOpen(false);router.push(`/dashboard/payments?success=1&role=${role}`);}}>Pay Now</Button>
+            <Button className="rounded-full" onClick={handlePay} disabled={paying}>
+              {paying ? <><span className="size-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-1.5" />Redirecting to Paystack...</> : "Pay Now"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
