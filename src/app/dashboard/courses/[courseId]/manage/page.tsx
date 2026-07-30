@@ -55,6 +55,8 @@ import {
   AssignmentsIcon,
   Copy01Icon,
   Alert01Icon,
+  Globe02Icon,
+  LockIcon,
 } from "@hugeicons/core-free-icons";
 
 /* ---------------------------------------------------------------- */
@@ -853,6 +855,7 @@ function SettingsTab() {
   const [allowComments, setAllowComments] = useState(COURSE.allowComments);
   const [allowDownloads, setAllowDownloads] = useState(COURSE.allowDownloads);
   const [offerCertificate, setOfferCertificate] = useState(COURSE.offerCertificate);
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [minCompletion, setMinCompletion] = useState(COURSE.minCompletion);
   const [minQuizScore, setMinQuizScore] = useState(COURSE.minQuizScore);
   const [minAttendance, setMinAttendance] = useState(COURSE.minAttendance);
@@ -878,6 +881,30 @@ function SettingsTab() {
         </div>
       </Card>
       <Card className="p-5 flex flex-col gap-4"><h3 className="text-sm font-semibold">Pricing</h3><div className="flex items-center justify-between"><p className="text-sm font-medium">Free course</p><Switch checked={isFree} onCheckedChange={setIsFree} /></div>{!isFree && (<div className="grid grid-cols-2 gap-4 animate-in fade-in">{[{ l:"One-time (₦)", v:oneTimePrice, s:setOneTimePrice },{ l:"Monthly (₦)", v:monthlyPrice, s:setMonthlyPrice }].map((f)=>(<div key={f.l} className="flex flex-col gap-1.5"><Label className="text-xs font-medium">{f.l}</Label><div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">₦</span><Input value={f.v} onChange={(e)=>f.s(fmtPrice(e.target.value))} className="rounded-xl pl-8" /></div></div>))}</div>)}</Card>
+      <Card className="p-5 flex flex-col gap-4">
+        <h3 className="text-sm font-semibold">Visibility</h3>
+        <div className="flex flex-wrap gap-2">
+          {([
+            { value: "public" as const, label: "Public", desc: "Visible on Explore — anyone can enroll", icon: Globe02Icon, color: "bg-emerald-100 dark:bg-emerald-900/30" as const },
+            { value: "private" as const, label: "Private", desc: "Community members only — hidden from Explore", icon: LockIcon, color: "bg-violet-100 dark:bg-violet-900/30" as const },
+          ]).map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setVisibility(opt.value)}
+              className={`flex-1 min-w-[140px] rounded-xl border-2 px-4 py-3 text-left transition-colors ${visibility === opt.value ? "border-foreground bg-muted/40" : "border-border hover:border-muted-foreground/30"}`}
+            >
+              <div className="flex items-center gap-2">
+                <div className={`size-7 rounded-lg ${opt.color} flex items-center justify-center`}>
+                  <HugeiconsIcon icon={opt.icon} size={14} className={opt.value === "public" ? "text-emerald-700 dark:text-emerald-400" : "text-violet-700 dark:text-violet-400"} />
+                </div>
+                <p className="text-sm font-medium">{opt.label}</p>
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-1.5">{opt.desc}</p>
+            </button>
+          ))}
+        </div>
+      </Card>
       <Card className="p-5 flex flex-col gap-4"><h3 className="text-sm font-semibold">Course Settings</h3>{[{ l:"Sequential Access", d:"Complete lessons in order", s:sequentialAccess, t:setSequentialAccess },{ l:"Drip Content", d:"Release on a schedule", s:dripContent, t:setDripContent },{ l:"Allow Comments", d:"Students can comment", s:allowComments, t:setAllowComments },{ l:"Allow Downloads", d:"Download materials", s:allowDownloads, t:setAllowDownloads }].map((item,i)=>(<div key={item.l}>{i>0&&<Separator className="mb-4"/>}<div className="flex items-center justify-between"><div><p className="text-sm font-medium">{item.l}</p><p className="text-xs text-muted-foreground">{item.d}</p></div><Switch checked={item.s} onCheckedChange={item.t}/></div></div>))}</Card>
       <Card className="p-5 flex flex-col gap-4"><h3 className="text-sm font-semibold">Certificate</h3><div className="flex items-center justify-between"><p className="text-sm font-medium">Offer Certificate</p><Switch checked={offerCertificate} onCheckedChange={setOfferCertificate} /></div>{offerCertificate&&(<div className="grid grid-cols-1 sm:grid-cols-3 gap-4 animate-in fade-in">{[{ l:"Min Completion",v:minCompletion,s:setMinCompletion },{ l:"Min Quiz Score",v:minQuizScore,s:setMinQuizScore },{ l:"Min Attendance",v:minAttendance,s:setMinAttendance }].map((f)=>(<div key={f.l} className="flex flex-col gap-1.5"><Label className="text-xs font-medium whitespace-nowrap">{f.l} (%)</Label><Input type="number" min={0} max={100} value={f.v} onChange={(e)=>f.s(e.target.value)} className="rounded-xl"/></div>))}</div>)}</Card>
       <div className="flex flex-col gap-6">

@@ -26,7 +26,9 @@ import {
   StarIcon,
   CourseIcon,
   Search02Icon,
+  Building02Icon,
 } from "@hugeicons/core-free-icons";
+import { COURSES_DATA } from "@/lib/course-utils";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 type ExploreTab = "communities" | "courses";
@@ -44,14 +46,23 @@ const MOCK_COMMUNITIES = [
   { id:"c6", name:"Product Management Hub", slug:"product-hub", category:"Product", memberCount:480, courseCount:3, visibility:"public" as const, rating:4.4, description:"PM frameworks, case studies, and mentorship.", price:"₦3,000/mo" },
 ];
 
-const MOCK_COURSES = [
-  { id:"cr1", title:"React for Designers", slug:"react-designers", category:"Development", difficulty:"beginner" as const, rating:4.8, reviewCount:124, price:"Free", instructor:{ name:"Ade Okafor", initials:"AO" }, enrollmentCount:342, description:"Learn React through hands-on design projects.", certificate:true },
-  { id:"cr2", title:"Advanced TypeScript", slug:"advanced-typescript", category:"Development", difficulty:"advanced" as const, rating:4.9, reviewCount:67, price:"₦15,000", instructor:{ name:"Prof. Adeyemi", initials:"PA" }, enrollmentCount:128, description:"Master generics, decorators, and conditional types.", certificate:true },
-  { id:"cr3", title:"UI/UX Research Methods", slug:"uiux-research", category:"Design", difficulty:"intermediate" as const, rating:4.5, reviewCount:43, price:"Free", instructor:{ name:"Dr. Okonkwo", initials:"DO" }, enrollmentCount:215, description:"Complete research toolkit for designers.", certificate:false },
-  { id:"cr4", title:"Data Viz with D3", slug:"data-viz-d3", category:"Data Science", difficulty:"advanced" as const, rating:4.7, reviewCount:31, price:"₦12,500", instructor:{ name:"Kelechi Okonkwo", initials:"KO" }, enrollmentCount:89, description:"Interactive charts and dashboards for the web.", certificate:true },
-  { id:"cr5", title:"Product Strategy 101", slug:"product-strategy", category:"Product", difficulty:"beginner" as const, rating:4.3, reviewCount:56, price:"Free", instructor:{ name:"Amara Obi", initials:"AO" }, enrollmentCount:198, description:"Learn to define vision, set OKRs, and prioritize.", certificate:false },
-  { id:"cr6", title:"Freelance Business Blueprint", slug:"freelance-blueprint", category:"Business", difficulty:"intermediate" as const, rating:4.6, reviewCount:89, price:"₦8,000", instructor:{ name:"Tunde Balogun", initials:"TB" }, enrollmentCount:312, description:"Pricing, contracts, and client management.", certificate:true },
-];
+// Courses sourced from shared catalogue — only public courses appear on Explore
+const ALL_COURSES = COURSES_DATA.filter((c) => c.visibility === "public").map((c, i) => ({
+  id: `cr${i + 1}`,
+  title: c.title,
+  slug: c.slug,
+  category: c.category,
+  difficulty: c.difficulty,
+  rating: c.rating,
+  reviewCount: c.reviewCount,
+  price: c.price,
+  instructor: c.instructor,
+  enrollmentCount: c.enrollmentCount,
+  description: c.subtitle,
+  certificate: c.certificate,
+  communityName: c.communityName,
+  communitySlug: c.communitySlug,
+}));
 
 const visMeta = {
   public: { icon: Globe02Icon, color:"bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" },
@@ -91,7 +102,7 @@ function ExplorePage() {
   }, [search, category, priceFilter]);
 
   const filteredCourses = useMemo(() => {
-    let list = MOCK_COURSES;
+    let list = ALL_COURSES;
     const q = search.toLowerCase();
     if (q) list = list.filter((c) => c.title.toLowerCase().includes(q) || c.category.toLowerCase().includes(q));
     if (category !== "All") list = list.filter((c) => c.category === category);
@@ -170,7 +181,7 @@ function ExplorePage() {
             <div className="flex flex-col items-center justify-center py-20 text-center gap-2"><HugeiconsIcon icon={BookOpen01Icon} size={32} className="text-muted-foreground/40"/><p className="text-sm text-muted-foreground">No courses found</p></div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredCourses.map((c) => (
+              {filteredCourses.map((c: typeof ALL_COURSES[number]) => (
                 <Link key={c.id} href={`/dashboard/explore/courses/${c.slug}?role=${role}`}>
                   <Card className="overflow-hidden hover:bg-muted/40 transition-colors h-full flex flex-col">
                     <div className="aspect-[2.5/1] bg-gradient-to-br from-muted/80 via-muted/40 to-muted flex items-center justify-center relative">
@@ -181,6 +192,7 @@ function ExplorePage() {
                       <div className="flex items-start justify-between gap-2"><p className="text-sm font-semibold truncate">{c.title}</p><Badge variant="secondary" className="rounded-full text-[10px] px-2 py-0 h-5 shrink-0">{c.category}</Badge></div>
                       <p className="text-xs text-muted-foreground line-clamp-2">{c.description}</p>
                       <div className="flex items-center gap-2 text-[10px] text-muted-foreground"><div className="size-5 rounded-full bg-muted flex items-center justify-center"><span className="text-[9px] font-medium">{c.instructor.initials}</span></div>{c.instructor.name}</div>
+                      <Link href={`/dashboard/explore/communities/${c.communitySlug}?role=${role}`} onClick={(e) => e.stopPropagation()} className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground"><HugeiconsIcon icon={Building02Icon} size={11}/>{c.communityName}</Link>
                       <StarRating rating={c.rating} count={c.reviewCount} />
                       <div className="flex items-center justify-between mt-2 pt-2 border-t text-[11px] text-muted-foreground">
                         <span><HugeiconsIcon icon={UserGroupIcon} size={12}/> {c.enrollmentCount} enrolled</span>

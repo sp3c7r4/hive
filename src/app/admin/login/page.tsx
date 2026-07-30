@@ -23,6 +23,7 @@ export default function AdminLoginPage() {
     setTimeout(() => {
       setLoading(false);
       if (email === "admin@hive.ng" && password === "admin123") {
+        document.cookie = "hive-role=admin; path=/; max-age=" + 60 * 60 * 24 * 7 + "; SameSite=Lax";
         localStorage.setItem("hive-role", "admin");
         window.location.href = "/dashboard?role=admin";
       } else {

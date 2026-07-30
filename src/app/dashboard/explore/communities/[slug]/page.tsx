@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams, useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { DashboardLayout } from "@/components/app-sidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,80 +25,11 @@ import {
   InformationCircleIcon,
 } from "@hugeicons/core-free-icons";
 import { cn } from "@/lib/utils";
+import { resolveCommunity } from "@/lib/community-utils";
+import { COURSES_DATA } from "@/lib/course-utils";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 type Tab = "feed" | "about";
-
-const COMMUNITY: {
-  name: string;
-  slug: string;
-  category: string;
-  visibility: string;
-  description: string;
-  memberCount: number;
-  courseCount: number;
-  rating: number;
-  reviewCount: number;
-  instructor: {
-    name: string;
-    initials: string;
-    bio: string;
-    specialties: string[];
-  };
-  price: string;
-  requiresApproval: boolean;
-  courses: {
-    id: string;
-    title: string;
-    difficulty: "beginner" | "intermediate" | "advanced";
-    free: boolean;
-  }[];
-} = {
-  name: "Frontend Devs",
-  slug: "frontend-devs",
-  category: "Development",
-  visibility: "public",
-  description:
-    "A community for frontend developers to share tips, tricks, and best practices. We cover React, Vue, CSS, Tailwind, TypeScript, and everything in between. Whether you're a beginner building your first component or a senior architect designing design systems, you'll find value here.\n\nWe host weekly code reviews, monthly workshops, and have an active chat where you can get unstuck in minutes. Members have access to exclusive courses, downloadable resources, and a network of 1,200+ developers.",
-  memberCount: 1248,
-  courseCount: 6,
-  rating: 4.8,
-  reviewCount: 89,
-  instructor: {
-    name: "Ade Okafor",
-    initials: "AO",
-    bio: "Senior Frontend Engineer with 10+ years building for the web. Formerly at Google and Flutterwave. Passionate about teaching and making frontend accessible.",
-    specialties: ["React", "TypeScript", "Design Systems"],
-  },
-  price: "Free",
-  requiresApproval: false,
-  courses: [
-    {
-      id: "cr1",
-      title: "React for Designers",
-      difficulty: "beginner" as const,
-      free: true,
-    },
-    {
-      id: "cr2",
-      title: "Advanced TypeScript Patterns",
-      difficulty: "advanced" as const,
-      free: false,
-    },
-    {
-      id: "cr3",
-      title: "CSS Mastery: From Flexbox to Grid",
-      difficulty: "intermediate" as const,
-      free: true,
-    },
-    {
-      id: "cr4",
-      title: "Building Accessible UIs",
-      difficulty: "intermediate" as const,
-      free: false,
-    },
-  ],
-};
 
 const visMeta = {
   public: {
@@ -126,28 +58,47 @@ const diffColors = {
 function CommunityLandingPage() {
   const sp = useSearchParams();
   const router = useRouter();
+  const params = useParams<{ slug: string }>();
   const role = (sp.get("role") as Role) || "student";
+  const community = resolveCommunity(params.slug);
   const [tab, setTab] = useState<Tab>("about");
   const [isMember, setIsMember] = useState(false);
-  const vm = visMeta[COMMUNITY.visibility as keyof typeof visMeta];
+
+  if (!community) {
+    return (
+      <DashboardLayout role={role}>
+        <div className="flex flex-col items-center justify-center py-24 text-center gap-4 min-w-0">
+          <div className="size-14 rounded-full bg-muted flex items-center justify-center">
+            <HugeiconsIcon icon={UserGroupIcon} size={24} className="text-muted-foreground" />
+          </div>
+          <h2 className="text-lg font-semibold">Community not found</h2>
+          <p className="text-sm text-muted-foreground max-w-sm">The community you&apos;re looking for doesn&apos;t exist or may have been removed.</p>
+          <Button variant="outline" className="rounded-full" render={<Link href={`/dashboard/explore?role=${role}`}>Browse Communities</Link>} />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  const communityCourses = COURSES_DATA.filter((c) => c.communitySlug === community.slug);
+  const vm = visMeta[community.visibility as keyof typeof visMeta];
 
   const joinCta = (() => {
-    if (COMMUNITY.visibility === "invite-only")
+    if (community.visibility === "invite-only")
       return {
         label: "This community is invite-only",
         disabled: true,
         action: () => {},
       };
-    if (COMMUNITY.requiresApproval)
+    if (community.requiresApproval)
       return {
         label: "Request to Join",
         disabled: false,
         action: () =>
           router.push(`/dashboard/payments?success=1&role=${role}`),
       };
-    if (COMMUNITY.price !== "Free")
+    if (community.price !== "Free")
       return {
-        label: `Join for ${COMMUNITY.price}/month`,
+        label: `Join for ${community.price}/month`,
         disabled: false,
         action: () =>
           router.push(`/dashboard/payments?success=1&role=${role}`),
@@ -186,7 +137,7 @@ function CommunityLandingPage() {
         {/* Banner */}
         <div className="aspect-[3/1] rounded-2xl bg-gradient-to-br from-muted/80 via-muted/40 to-muted flex items-center justify-center relative overflow-hidden">
           <span className="text-8xl opacity-10 font-black select-none absolute">
-            {COMMUNITY.name.charAt(0)}
+            {community.name.charAt(0)}
           </span>
           <Badge
             className={`absolute top-4 left-4 rounded-full text-[10px] px-2.5 py-0.5 h-6 font-medium ${vm.color}`}
@@ -201,9 +152,9 @@ function CommunityLandingPage() {
           <div className="lg:col-span-2 flex flex-col gap-6">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-2xl font-bold">{COMMUNITY.name}</h1>
+                <h1 className="text-2xl font-bold">{community.name}</h1>
                 <Badge variant="secondary" className="rounded-full">
-                  {COMMUNITY.category}
+                  {community.category}
                 </Badge>
               </div>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -213,11 +164,11 @@ function CommunityLandingPage() {
                     size={14}
                     className="text-amber-500 fill-amber-500"
                   />
-                  {COMMUNITY.rating} ({COMMUNITY.reviewCount} reviews)
+                  {community.rating} ({community.reviewCount} reviews)
                 </span>
                 <span>
                   <HugeiconsIcon icon={UserGroupIcon} size={14} className="inline mr-1" />
-                  {COMMUNITY.memberCount.toLocaleString()} members
+                  {community.memberCount.toLocaleString()} members
                 </span>
                 <span>
                   <HugeiconsIcon
@@ -225,7 +176,7 @@ function CommunityLandingPage() {
                     size={14}
                     className="inline mr-1"
                   />
-                  {COMMUNITY.courseCount} courses
+                  {community.courseCount} courses
                 </span>
               </div>
             </div>
@@ -272,7 +223,7 @@ function CommunityLandingPage() {
               <>
                 <div>
                   <h2 className="text-sm font-semibold mb-2">About</h2>
-                  {COMMUNITY.description.split("\n\n").map((p, i) => (
+                  {community.description.split("\n\n").map((p, i) => (
                     <p
                       key={i}
                       className="text-sm text-muted-foreground leading-relaxed mb-3"
@@ -284,12 +235,12 @@ function CommunityLandingPage() {
                 <Separator />
                 <div>
                   <h2 className="text-sm font-semibold mb-3">
-                    Courses ({COMMUNITY.courses.length})
+                    Courses ({communityCourses.length})
                   </h2>
                   <div className="flex flex-col gap-2">
-                    {COMMUNITY.courses.map((c) => (
+                    {communityCourses.map((c) => (
                       <div
-                        key={c.id}
+                        key={c.slug}
                         className="flex items-center justify-between rounded-xl border p-3 hover:bg-muted/30 transition-colors"
                       >
                         <div className="flex items-center gap-3 min-w-0">
@@ -312,7 +263,7 @@ function CommunityLandingPage() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          {!c.free && (
+                          {c.price !== "Free" && (
                             <HugeiconsIcon
                               icon={LockIcon}
                               size={14}
@@ -320,7 +271,7 @@ function CommunityLandingPage() {
                             />
                           )}
                           <span className="text-xs text-muted-foreground">
-                            {c.free ? "Free" : "Paid"}
+                            {c.price === "Free" ? "Free" : c.price}
                           </span>
                         </div>
                       </div>
@@ -338,20 +289,20 @@ function CommunityLandingPage() {
               <div className="flex items-center gap-3">
                 <Avatar className="size-12 shrink-0">
                   <AvatarFallback className="text-sm">
-                    {COMMUNITY.instructor.initials}
+                    {community.instructor.initials}
                   </AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="text-sm font-semibold">
-                    {COMMUNITY.instructor.name}
+                    {community.instructor.name}
                   </p>
                   <p className="text-xs text-muted-foreground line-clamp-3 mt-0.5">
-                    {COMMUNITY.instructor.bio}
+                    {community.instructor.bio}
                   </p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-1">
-                {COMMUNITY.instructor.specialties.map((s) => (
+                {community.instructor.specialties.map((s) => (
                   <Badge
                     key={s}
                     variant="secondary"
@@ -371,7 +322,7 @@ function CommunityLandingPage() {
             </Button>
             {!joinCta.disabled && (
               <p className="text-[10px] text-muted-foreground text-center -mt-2">
-                {COMMUNITY.price === "Free"
+                {community.price === "Free"
                   ? "Instant access. No payment required."
                   : ""}
               </p>

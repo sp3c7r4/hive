@@ -267,6 +267,7 @@ function LoginForm({
         return;
       }
       // Success: redirect to dashboard
+      document.cookie = `hive-role=${role || "student"}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
       localStorage.setItem("hive-role", role || "student");
       window.location.href = `/dashboard?role=${role || "student"}`;
     }, 1200);

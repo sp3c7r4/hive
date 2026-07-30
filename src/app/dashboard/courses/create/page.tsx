@@ -24,7 +24,18 @@ import {
   ArrowLeft02Icon,
   Image01Icon,
   Cancel01Icon,
+  Globe02Icon,
+  LockIcon,
+  Building02Icon,
 } from "@hugeicons/core-free-icons";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { COURSES_DATA } from "@/lib/course-utils";
 
 /* ---------------------------------------------------------------- */
 /*  Types                                                           */
@@ -72,6 +83,11 @@ function CreateCoursePage() {
   const [allowComments, setAllowComments] = useState(true);
   const [allowDownloads, setAllowDownloads] = useState(true);
   const [offerCertificate, setOfferCertificate] = useState(false);
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
+  const [selectedCommunity, setSelectedCommunity] = useState(community || "");
+
+  // Derive unique communities from course catalogue + the one passed via query
+  const communities = Array.from(new Map(COURSES_DATA.map(c => [c.communitySlug, c.communityName])).entries()).map(([slug, name]) => ({ slug, name }));
   const [minCompletion, setMinCompletion] = useState("80");
   const [minQuizScore, setMinQuizScore] = useState("70");
   const [minAttendance, setMinAttendance] = useState("60");
@@ -129,7 +145,8 @@ function CreateCoursePage() {
             <p className="text-[10px] text-muted-foreground text-right">{description.length}/800</p>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Category</Label><select value={category} onChange={(e) => setCategory(e.target.value)} className="rounded-xl border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"><option value="" disabled>Select</option>{CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}</select></div>
+            <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Category</Label><Select value={category} onValueChange={setCategory}><SelectTrigger className="rounded-xl h-9 text-sm"><SelectValue placeholder="Select" /></SelectTrigger><SelectContent>{CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select></div>
+            <div className="flex flex-col gap-1.5"><Label className="text-xs font-medium">Community</Label><Select value={selectedCommunity} onValueChange={setSelectedCommunity}><SelectTrigger className="rounded-xl h-9 text-sm"><SelectValue placeholder="Select a community" /></SelectTrigger><SelectContent>{communities.map((c) => <SelectItem key={c.slug} value={c.slug}>{c.name}</SelectItem>)}</SelectContent></Select></div>
           </div>
           <div className="flex flex-col gap-2">
             <Label className="text-xs font-medium">Difficulty</Label>
@@ -168,6 +185,35 @@ function CreateCoursePage() {
                 </div>
               </div>
             </div>
+          )}
+        </Card>
+
+        {/* ---- Visibility ---- */}
+        <Card className="p-5 flex flex-col gap-4">
+          <h3 className="text-sm font-semibold">Visibility</h3>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setVisibility("public")}
+              className={`flex-1 min-w-[140px] rounded-xl border-2 px-4 py-3 text-left transition-colors ${visibility === "public" ? "border-foreground bg-muted/40" : "border-border hover:border-muted-foreground/30"}`}
+            >
+              <div className="flex items-center gap-2"><div className="size-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center"><HugeiconsIcon icon={Globe02Icon} size={14} className="text-emerald-700 dark:text-emerald-400" /></div><p className="text-sm font-medium">Public</p></div>
+              <p className="text-[11px] text-muted-foreground mt-1.5">Anyone can find and enroll in this course from Explore</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => setVisibility("private")}
+              className={`flex-1 min-w-[140px] rounded-xl border-2 px-4 py-3 text-left transition-colors ${visibility === "private" ? "border-foreground bg-muted/40" : "border-border hover:border-muted-foreground/30"}`}
+            >
+              <div className="flex items-center gap-2"><div className="size-7 rounded-lg bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center"><HugeiconsIcon icon={LockIcon} size={14} className="text-violet-700 dark:text-violet-400" /></div><p className="text-sm font-medium">Private</p></div>
+              <p className="text-[11px] text-muted-foreground mt-1.5">Only visible to members of the linked community</p>
+            </button>
+          </div>
+          {!selectedCommunity && (
+            <p className="text-[11px] text-amber-600 dark:text-amber-400 flex items-center gap-1">
+              <HugeiconsIcon icon={Building02Icon} size={12} />
+              Select a community above to link this course
+            </p>
           )}
         </Card>
 

@@ -57,6 +57,8 @@ import {
   CancelCircleIcon,
   BookOpen01Icon,
 } from "@hugeicons/core-free-icons";
+import { resolveCommunity } from "@/lib/community-utils";
+import { COURSES_DATA } from "@/lib/course-utils";
 import {
   LineChart,
   Line,
@@ -189,7 +191,7 @@ function roleBadge(role: Member["role"]) {
 /*  Members tab                                                     */
 /* ---------------------------------------------------------------- */
 
-function MembersTab() {
+function MembersTab({ communitySlug }: { communitySlug: string }) {
   const [query, setQuery] = useState("");
   const [members, setMembers] = useState(MEMBERS);
   const [pending, setPending] = useState(PENDING);
@@ -309,8 +311,8 @@ function MembersTab() {
           <Button size="sm" className="rounded-full" onClick={handleInvite}>Send Invite</Button>
         </div>
         <div className="flex items-center gap-2 mb-3">
-          <Input value={`https://hive.ng/c/${COMMUNITY.slug}/join`} readOnly className="rounded-full text-xs bg-muted/40 flex-1" />
-          <Button size="icon" variant="outline" className="size-9 rounded-full shrink-0" onClick={() => navigator.clipboard.writeText(`https://hive.ng/c/${COMMUNITY.slug}/join`)}>
+          <Input value={`https://hive.ng/c/${communitySlug}/join`} readOnly className="rounded-full text-xs bg-muted/40 flex-1" />
+          <Button size="icon" variant="outline" className="size-9 rounded-full shrink-0" onClick={() => navigator.clipboard.writeText(`https://hive.ng/c/${communitySlug}/join`)}>
             <HugeiconsIcon icon={Copy01Icon} size={15} />
           </Button>
         </div>
@@ -400,16 +402,16 @@ function AnalyticsTab() {
 /*  Settings tab                                                    */
 /* ---------------------------------------------------------------- */
 
-function SettingsTab() {
+function SettingsTab({ community }: { community: NonNullable<ReturnType<typeof resolveCommunity>> }) {
   const [form, setForm] = useState({
-    name: COMMUNITY.name,
-    slug: COMMUNITY.slug,
-    description: COMMUNITY.description,
-    category: COMMUNITY.category,
-    visibility: COMMUNITY.visibility,
-    requireApproval: COMMUNITY.requireApproval,
-    isPaid: COMMUNITY.isPaid,
-    price: COMMUNITY.price,
+    name: community.name,
+    slug: community.slug,
+    description: community.description,
+    category: community.category,
+    visibility: community.visibility,
+    requireApproval: community.requiresApproval,
+    isPaid: community.price !== "Free",
+    price: community.price,
     sequentialCourses: false,
     allowDownloads: true,
     maxDevices: "3",
@@ -503,45 +505,45 @@ function SettingsTab() {
 /*  Courses tab (community context)                                  */
 /* ---------------------------------------------------------------- */
 
-const COMMUNITY_COURSES = [
-  { id: "1", title: "React for Designers", category: "Development", difficulty: "beginner" as const, status: "published" as const, enrollmentCount: 342, isFree: true },
-  { id: "2", title: "UI/UX Research Methods", category: "Design", difficulty: "intermediate" as const, status: "draft" as const, enrollmentCount: 0, isFree: true },
-];
+const diffColors2 = { beginner: "bg-emerald-100 text-emerald-700", intermediate: "bg-amber-100 text-amber-700", advanced: "bg-rose-100 text-rose-700" } as const;
 
-function CommunityCoursesTab() {
-  const router = useRouter();
-  const params = useParams();
+function CommunityCoursesTab({ communitySlug, communityName }: { communitySlug: string; communityName: string }) {
   const role = (useSearchParams().get("role") as Role) || "instructor";
+  const communityCourses = COURSES_DATA.filter((c) => c.communitySlug === communitySlug);
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold">Courses ({COMMUNITY_COURSES.length})</h3>
+        <h3 className="text-sm font-semibold">Courses ({communityCourses.length})</h3>
         <Button size="sm" className="rounded-full"
-          render={<Link href={`/dashboard/courses/create?role=${role}&community=Frontend+Devs`}><HugeiconsIcon icon={Add01Icon} size={14} className="mr-1" />Create Course</Link>}
+          render={<Link href={`/dashboard/courses/create?role=${role}&community=${encodeURIComponent(communityName)}`}><HugeiconsIcon icon={Add01Icon} size={14} className="mr-1" />Create Course</Link>}
         />
       </div>
 
-      {COMMUNITY_COURSES.length === 0 ? (
+      {communityCourses.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center gap-3">
           <HugeiconsIcon icon={BookOpen01Icon} size={32} className="text-muted-foreground/40" />
           <p className="text-sm text-muted-foreground">No courses in this community yet</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {COMMUNITY_COURSES.map((c) => (
-            <Link key={c.id} href={`/dashboard/courses/${c.id}/manage?role=${role}`}>
+          {communityCourses.map((c) => (
+            <Link key={c.slug} href={`/dashboard/courses/${c.slug}/manage?role=${role}`}>
               <Card className="p-4 hover:bg-muted/40 transition-colors flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Badge className={`rounded-full text-[10px] px-2 py-0 h-5 ${c.difficulty === "beginner" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>{c.difficulty}</Badge>
-                    {c.status === "draft" && <Badge variant="secondary" className="rounded-full text-[10px] px-2 py-0 h-5">Draft</Badge>}
+                    <Badge className={`rounded-full text-[10px] px-2 py-0 h-5 ${diffColors2[c.difficulty]}`}>{c.difficulty}</Badge>
+                    {c.visibility === "private" && (
+                      <Badge variant="secondary" className="rounded-full text-[10px] px-2 py-0 h-5">
+                        <HugeiconsIcon icon={LockIcon} size={9} className="mr-0.5" />Private
+                      </Badge>
+                    )}
                   </div>
                   <Badge variant="secondary" className="rounded-full text-[10px] px-2 py-0 h-5">{c.category}</Badge>
                 </div>
                 <p className="text-sm font-semibold">{c.title}</p>
                 <div className="flex items-center gap-1 text-[11px] text-muted-foreground mt-auto pt-2 border-t">
-                  <HugeiconsIcon icon={UserGroupIcon} size={12} />{c.enrollmentCount} enrolled · {c.isFree ? "Free" : "Paid"}
+                  <HugeiconsIcon icon={UserGroupIcon} size={12} />{c.enrollmentCount} enrolled · {c.price === "Free" ? "Free" : c.price}
                 </div>
               </Card>
             </Link>
@@ -680,8 +682,25 @@ function ManageCommunityPage() {
   const params = useParams();
   const router = useRouter();
   const role = (searchParams.get("role") as Role) || "instructor";
-  const slug = params?.slug as string;
+  const slug = (params?.slug as string) || "";
+  const community = resolveCommunity(slug);
   const [tab, setTab] = useState<Tab>("overview");
+
+  // Redirect if not found
+  if (!community) {
+    return (
+      <DashboardLayout role={role}>
+        <div className="flex flex-col items-center justify-center py-24 text-center gap-4 min-w-0">
+          <div className="size-14 rounded-full bg-muted flex items-center justify-center">
+            <HugeiconsIcon icon={UserGroupIcon} size={24} className="text-muted-foreground" />
+          </div>
+          <h2 className="text-lg font-semibold">Community not found</h2>
+          <p className="text-sm text-muted-foreground max-w-sm">The community you&apos;re looking for doesn&apos;t exist or may have been removed.</p>
+          <Button variant="outline" className="rounded-full" render={<Link href={`/dashboard/communities?role=${role}`}>Back to Communities</Link>} />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout role={role}>
@@ -693,10 +712,10 @@ function ManageCommunityPage() {
           </button>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h1 className="text-xl font-bold tracking-tight">{COMMUNITY.name}</h1>
+              <h1 className="text-xl font-bold tracking-tight">{community.name}</h1>
               <p className="text-sm text-muted-foreground">hive.ng/c/{slug}</p>
             </div>
-            <Badge variant="secondary" className="rounded-full w-fit"><HugeiconsIcon icon={UserGroupIcon} size={13} className="mr-1" />{COMMUNITY.memberCount.toLocaleString()} members</Badge>
+            <Badge variant="secondary" className="rounded-full w-fit"><HugeiconsIcon icon={UserGroupIcon} size={13} className="mr-1" />{community.memberCount.toLocaleString()} members</Badge>
           </div>
         </div>
 
@@ -719,14 +738,14 @@ function ManageCommunityPage() {
                 <Card key={s.label} className="p-4"><HugeiconsIcon icon={s.icon} size={16} className="text-muted-foreground mb-2" /><p className="text-xl font-bold tabular-nums">{s.value}</p><p className="text-[11px] text-muted-foreground">{s.label}</p></Card>
               ))}
             </div>
-            <Card className="p-5"><h3 className="text-sm font-semibold mb-2">About</h3><p className="text-sm text-muted-foreground">{COMMUNITY.description}</p><div className="flex flex-wrap gap-2 mt-3"><Badge variant="secondary" className="rounded-full">{COMMUNITY.category}</Badge><Badge variant="secondary" className="rounded-full">{COMMUNITY.visibility}</Badge>{COMMUNITY.isPaid && <Badge variant="secondary" className="rounded-full">Paid · ₦{COMMUNITY.price}/mo</Badge>}</div></Card>
+            <Card className="p-5"><h3 className="text-sm font-semibold mb-2">About</h3><p className="text-sm text-muted-foreground">{community.description}</p><div className="flex flex-wrap gap-2 mt-3"><Badge variant="secondary" className="rounded-full">{community.category}</Badge><Badge variant="secondary" className="rounded-full">{community.visibility}</Badge>{community.price !== "Free" && <Badge variant="secondary" className="rounded-full">Paid · {community.price}/mo</Badge>}</div></Card>
           </div>
         )}
-        {tab === "members" && <MembersTab />}
+        {tab === "members" && <MembersTab communitySlug={slug} />}
         {tab === "analytics" && <AnalyticsTab />}
-        {tab === "courses" && <CommunityCoursesTab />}
+        {tab === "courses" && <CommunityCoursesTab communitySlug={slug} communityName={community.name} />}
         {tab === "feed" && <FeedTab />}
-        {tab === "settings" && <SettingsTab />}
+        {tab === "settings" && <SettingsTab community={community} />}
       </div>
     </DashboardLayout>
   );
