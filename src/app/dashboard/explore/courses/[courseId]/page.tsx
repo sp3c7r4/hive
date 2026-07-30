@@ -48,6 +48,7 @@ import { RatingBreakdown } from "@/components/reviews/RatingBreakdown";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { ReviewList } from "@/components/reviews/ReviewList";
 import { resolveFullCourse } from "@/lib/course-utils";
+import { openPaystackPopup } from "@/lib/paystack";
 import type { CourseReview } from "@/components/reviews/types";
 
 type Role = "instructor" | "student" | "parent" | "admin";
@@ -106,12 +107,22 @@ function CourseLandingPage() {
     : [];
 
   const handlePay = () => {
+    if (!COURSE) return;
     setPaying(true);
-    setTimeout(() => {
-      setCheckoutOpen(false);
-      setPaying(false);
-      router.push(`/dashboard/payments?success=1&role=${role}`);
-    }, 2000);
+    const amountKobo = COURSE.price === "Free" ? 0 : parseInt(COURSE.price.replace(/[^0-9]/g, "")) * 100;
+    openPaystackPopup({
+      key: "pk_test_demo",
+      email: "chioma@hive.ng",
+      amount: amountKobo,
+      onSuccess: (ref) => {
+        setCheckoutOpen(false);
+        setPaying(false);
+        router.push(`/dashboard/payments?success=1&ref=${ref}&role=${role}`);
+      },
+      onClose: () => {
+        setPaying(false);
+      },
+    });
   };
 
   const handleJoinAndEnroll = () => {

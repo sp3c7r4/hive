@@ -27,14 +27,11 @@ import {
   Calendar01Icon,
   Clock01Icon,
   PlayIcon,
-  Award01Icon,
-  Notification03Icon,
-  Dollar01Icon,
-  UserCheck01Icon,
-  CourseIcon,
   Add01Icon,
-  Message02Icon,
+  CourseIcon,
+  UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
+import { ActivityFeed } from "@/components/activity-feed";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 type Role = "instructor" | "student" | "parent" | "admin";
@@ -44,27 +41,27 @@ type Role = "instructor" | "student" | "parent" | "admin";
 /* ---------------------------------------------------------------- */
 
 const dueSoon: { id: number; title: string; course: string; href: string; dueInHours: number }[] = [
-  // {
-  //   id: 1,
-  //   title: "Module 3 Quiz",
-  //   course: "UI/UX Design Fundamentals",
-  //   href: "/courses/uiux/quiz-3",
-  //   dueInHours: 6,
-  // },
-  // {
-  //   id: 2,
-  //   title: "Landing Page Assignment",
-  //   course: "Frontend with React",
-  //   href: "/courses/react/assignment-2",
-  //   dueInHours: 48,
-  // },
-  // {
-  //   id: 3,
-  //   title: "Final Project Submission",
-  //   course: "Data Analysis with Excel",
-  //   href: "/courses/excel/final",
-  //   dueInHours: 168,
-  // },
+  {
+    id: 1,
+    title: "Module 3 Quiz",
+    course: "React for Designers",
+    href: "/dashboard/courses/react-designers/learn",
+    dueInHours: 6,
+  },
+  {
+    id: 2,
+    title: "Landing Page Assignment",
+    course: "UI/UX Research Methods",
+    href: "/dashboard/courses/uiux-research/learn",
+    dueInHours: 48,
+  },
+  {
+    id: 3,
+    title: "Final Project Submission",
+    course: "Product Strategy 101",
+    href: "/dashboard/courses/product-strategy/learn",
+    dueInHours: 168,
+  },
 ];
 
 const continueLearning = [
@@ -217,10 +214,13 @@ function WelcomeBanner({
   firstName: string;
   streak: number;
 }) {
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+
   return (
     <div className="flex items-center gap-1 flex-wrap">
       <h1 className="text-2xl font-bold tracking-tight">
-        Good morning, <span className="text-primary">{firstName}</span>
+        {greeting}, <span className="text-primary">{firstName}</span>
       </h1>
         <StreakBadge streak={streak} />
     </div>
@@ -228,20 +228,6 @@ function WelcomeBanner({
 }
 
 /* ---------------------------------------------------------------- */
-/*  Activity icon per type                                           */
-/* ---------------------------------------------------------------- */
-
-function ActivityIcon({ type }: { type: string }) {
-  const cls = "text-muted-foreground";
-  if (type === "badge")
-    return <HugeiconsIcon icon={Award01Icon} size={18} className={cls} />;
-  if (type === "class")
-    return <HugeiconsIcon icon={Calendar01Icon} size={18} className={cls} />;
-  return (
-    <HugeiconsIcon icon={Notification03Icon} size={18} className={cls} />
-  );
-}
-
 /* ---------------------------------------------------------------- */
 /*  Student Dashboard                                                */
 /* ---------------------------------------------------------------- */
@@ -343,49 +329,13 @@ function StudentDashboard() {
       </div>
 
       {/* ---- 5. Recent Activity ---- */}
-      <div className="dash-widget">
-        <div className="flex items-center justify-between mb-4 gap-2">
-          <h2 className="text-sm font-semibold shrink-0">Recent Activity</h2>
-          <div className="overflow-x-auto -mx-1 px-1">
-            <div className="flex items-center gap-1 w-max">
-              {studentActivityTypes.map(({ key, label }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setActivityFilter(key)}
-                  className={`text-xs px-2.5 py-1 rounded-full transition-colors whitespace-nowrap ${
-                    activityFilter === key
-                      ? "bg-foreground text-background"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-        <Card className="p-4">
-          <div className="flex flex-col gap-0.5">
-            {recentActivity
-              .filter((a) => activityFilter === "all" || a.type === activityFilter)
-              .map((a) => (
-                <div
-                  key={a.id}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5"
-                >
-                  <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
-                    <ActivityIcon type={a.type} />
-                  </div>
-                  <p className="text-sm flex-1 min-w-0 truncate">{a.text}</p>
-                  <span className="text-xs text-muted-foreground shrink-0">
-                    {a.time}
-                  </span>
-                </div>
-              ))}
-          </div>
-        </Card>
-      </div>
+      <ActivityFeed
+        title="Recent Activity"
+        items={recentActivity}
+        types={studentActivityTypes}
+        filter={activityFilter}
+        onFilterChange={setActivityFilter}
+      />
     </div>
   );
 }
@@ -549,37 +499,6 @@ function StatNumber({
     <p ref={ref} className="text-2xl font-bold tabular-nums">
       {format(0)}
     </p>
-  );
-}
-
-function ActivityItem({
-  type,
-  text,
-  time,
-}: {
-  type: string;
-  text: string;
-  time: string;
-}) {
-  const icon =
-    type === "payment" ? (
-      <HugeiconsIcon icon={Dollar01Icon} size={18} className="text-muted-foreground" />
-    ) : type === "review" ? (
-      <HugeiconsIcon icon={Message02Icon} size={18} className="text-muted-foreground" />
-    ) : type === "submission" ? (
-      <HugeiconsIcon icon={Award01Icon} size={18} className="text-muted-foreground" />
-    ) : (
-      <HugeiconsIcon icon={UserCheck01Icon} size={18} className="text-muted-foreground" />
-    );
-
-  return (
-    <div className="flex items-center gap-3 rounded-lg px-3 py-2.5">
-      <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
-        {icon}
-      </div>
-      <p className="text-sm flex-1 min-w-0 truncate">{text}</p>
-      <span className="text-xs text-muted-foreground shrink-0">{time}</span>
-    </div>
   );
 }
 
@@ -782,43 +701,13 @@ function InstructorDashboard() {
       </div>
 
       {/* ---- 5. Recent Activity ---- */}
-      <div className="dash-widget">
-        <div className="flex items-center justify-between mb-4 gap-2">
-          <h2 className="text-sm font-semibold shrink-0">Recent Activity</h2>
-          <div className="overflow-x-auto -mx-1 px-1">
-            <div className="flex items-center gap-1 w-max">
-              {activityTypes.map(({ key, label }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setActivityFilter(key)}
-                  className={`text-xs px-2.5 py-1 rounded-full transition-colors whitespace-nowrap ${
-                    activityFilter === key
-                      ? "bg-foreground text-background"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-        <Card className="p-4">
-          <div className="flex flex-col gap-0.5">
-            {instructorActivity
-              .filter((a) => activityFilter === "all" || a.type === activityFilter)
-              .map((a) => (
-                <ActivityItem
-                  key={a.id}
-                  type={a.type}
-                  text={a.text}
-                  time={a.time}
-                />
-              ))}
-          </div>
-        </Card>
-      </div>
+      <ActivityFeed
+        title="Recent Activity"
+        items={instructorActivity}
+        types={activityTypes}
+        filter={activityFilter}
+        onFilterChange={setActivityFilter}
+      />
 
 
     </div>

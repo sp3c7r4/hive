@@ -65,6 +65,7 @@ const navByRole: Record<Role, NavItem[]> = {
     { label: "Members", href: "/dashboard/members", icon: UserCheck01Icon },
     { label: "Messages", href: "/dashboard/messages", icon: Message01Icon },
     { label: "Earnings", href: "/dashboard/earnings", icon: Wallet01Icon },
+    { label: "Withdrawals", href: "/dashboard/withdrawals", icon: CreditCardIcon },
   ],
   student: [
     { label: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
@@ -80,6 +81,7 @@ const navByRole: Record<Role, NavItem[]> = {
     { label: "My Children", href: "/dashboard/children", icon: UserGroupIcon },
     { label: "Messages", href: "/dashboard/messages", icon: Message01Icon },
     { label: "Payments", href: "/dashboard/payments", icon: CreditCardIcon },
+    { label: "Certificates", href: "/dashboard/certificates", icon: Award01Icon },
   ],
   admin: [
     { label: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
@@ -97,9 +99,7 @@ const navByRole: Record<Role, NavItem[]> = {
 
 function ThemeToggle() {
   const { state } = useSidebar();
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const { theme, setTheme, mounted } = useTheme();
 
   if (!mounted) return null;
 

@@ -8,12 +8,14 @@ interface ThemeContextValue {
   theme: Theme;
   resolved: "light" | "dark";
   setTheme: (t: Theme) => void;
+  mounted: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: "system",
   resolved: "light",
   setTheme: () => {},
+  mounted: false,
 });
 
 const STORAGE_KEY = "hive-dashboard-theme";
@@ -71,14 +73,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   if (!mounted) {
     // Prevent hydration mismatch — render without data-theme until mounted
     return (
-      <ThemeContext.Provider value={{ theme: "system", resolved: "light", setTheme }}>
+      <ThemeContext.Provider value={{ theme: "system", resolved: "light", setTheme, mounted: false }}>
         <div className="min-h-screen bg-background">{children}</div>
       </ThemeContext.Provider>
     );
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, resolved, setTheme }}>
+    <ThemeContext.Provider value={{ theme, resolved, setTheme, mounted: true }}>
       <div data-theme={resolved} className="min-h-screen bg-background text-foreground">{children}</div>
     </ThemeContext.Provider>
   );
