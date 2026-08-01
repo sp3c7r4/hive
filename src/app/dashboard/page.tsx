@@ -32,7 +32,6 @@ import {
   UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
 import { ActivityFeed } from "@/components/activity-feed";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
@@ -194,11 +193,10 @@ function StreakBadge({ streak }: { streak: number }) {
       ref={clusterRef}
       className="relative inline-flex items-center justify-center size-9 rounded-full bg-orange-50 dark:bg-orange-950/40"
     >
-      <DotLottieReact
-        src="/lotties/Fire.lottie"
-        autoplay
-        loop
-        className="size-6 pointer-events-none"
+      <img
+        src="/gif/fire.gif"
+        alt=""
+        className="size-6 pointer-events-none object-contain dark:invert"
       />
       <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-orange-500 text-white text-[10px] font-bold flex items-center justify-center">
         <span ref={numberRef}>0</span>
@@ -251,6 +249,11 @@ function StudentDashboard() {
 
   return (
     <div ref={containerRef} className="flex flex-col gap-6 min-w-0">
+      {/* ---- 2. Welcome + Streak ---- */}
+      <div className="dash-widget">
+        <WelcomeBanner firstName="Chioma" streak={5} />
+      </div>
+
       {/* ---- 1. Due Soon ---- */}
       <div className="dash-widget">
         <Card className="p-5">
@@ -289,11 +292,6 @@ function StudentDashboard() {
             </div>
           )}
         </Card>
-      </div>
-
-      {/* ---- 2. Welcome + Streak ---- */}
-      <div className="dash-widget">
-        <WelcomeBanner firstName="Chioma" streak={5} />
       </div>
 
       {/* ---- 3. Continue Learning ---- */}

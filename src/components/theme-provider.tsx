@@ -45,13 +45,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setMounted(true);
   }, []);
 
-  /* Sync data-theme to <html> so portaled content (mobile sidebar) inherits */
+  /* Keep data-theme on <html> so portaled content (mobile sidebar) inherits */
   useEffect(() => {
     if (!mounted) return;
     document.documentElement.setAttribute("data-theme", resolved);
-    return () => {
-      document.documentElement.removeAttribute("data-theme");
-    };
   }, [resolved, mounted]);
 
   useEffect(() => {
@@ -70,18 +67,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setResolved(resolveTheme(t));
   }, []);
 
-  if (!mounted) {
-    // Prevent hydration mismatch — render without data-theme until mounted
-    return (
-      <ThemeContext.Provider value={{ theme: "system", resolved: "light", setTheme, mounted: false }}>
-        <div className="min-h-screen bg-background">{children}</div>
-      </ThemeContext.Provider>
-    );
-  }
-
   return (
-    <ThemeContext.Provider value={{ theme, resolved, setTheme, mounted: true }}>
-      <div data-theme={resolved} className="min-h-screen bg-background text-foreground">{children}</div>
+    <ThemeContext.Provider value={{ theme, resolved, setTheme, mounted }}>
+      <div
+        data-theme={mounted ? resolved : undefined}
+        className="min-h-screen bg-background text-foreground"
+      >
+        {children}
+      </div>
     </ThemeContext.Provider>
   );
 }
