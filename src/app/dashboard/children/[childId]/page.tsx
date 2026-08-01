@@ -1,30 +1,30 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowLeft02Icon,
-  BookOpen01Icon,
-  Clock01Icon,
-  Calendar01Icon,
-  Award01Icon,
-  StarIcon,
-  PlayIcon,
-  File01Icon,
-  LiveStreaming01Icon,
-  CircleQuestionMarkIcon,
-  AssignmentsIcon,
-  FireIcon,
   ArrowRight02Icon,
+  AssignmentsIcon,
+  Award01Icon,
+  BookOpen01Icon,
+  Calendar01Icon,
+  CircleQuestionMarkIcon,
+  Clock01Icon,
+  File01Icon,
+  FireIcon,
+  LiveStreaming01Icon,
+  PlayIcon,
+  StarIcon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+import { DashboardLayout } from "@/components/app-sidebar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 type Role = "instructor" | "student" | "parent" | "admin";
@@ -53,7 +53,12 @@ const STUDENT_PROFILES: Record<
       lessonsCompleted: number;
       lessonsTotal: number;
       quizScores: { title: string; score: string; date: string }[];
-      assignmentGrades: { title: string; grade: string; max: string; date: string }[];
+      assignmentGrades: {
+        title: string;
+        grade: string;
+        max: string;
+        date: string;
+      }[];
       liveAttendance: { title: string; attended: string; date: string }[];
     }[];
     recentActivity: {
@@ -89,14 +94,31 @@ const STUDENT_PROFILES: Record<
         lessonsCompleted: 12,
         lessonsTotal: 16,
         quizScores: [
-          { title: "React Fundamentals Quiz", score: "8/10", date: "12 Mar 2025" },
-          { title: "Components & Props Quiz", score: "9/10", date: "18 Mar 2025" },
+          {
+            title: "React Fundamentals Quiz",
+            score: "8/10",
+            date: "12 Mar 2025",
+          },
+          {
+            title: "Components & Props Quiz",
+            score: "9/10",
+            date: "18 Mar 2025",
+          },
         ],
         assignmentGrades: [
-          { title: "Design Portfolio", grade: "85", max: "100", date: "15 Mar 2025" },
+          {
+            title: "Design Portfolio",
+            grade: "85",
+            max: "100",
+            date: "15 Mar 2025",
+          },
         ],
         liveAttendance: [
-          { title: "Live Code Review", attended: "52 min (87%)", date: "20 Mar 2025" },
+          {
+            title: "Live Code Review",
+            attended: "52 min (87%)",
+            date: "20 Mar 2025",
+          },
         ],
       },
       {
@@ -113,8 +135,18 @@ const STUDENT_PROFILES: Record<
           { title: "Grid Layout Mastery", score: "8/10", date: "12 Feb 2025" },
         ],
         assignmentGrades: [
-          { title: "Dashboard Layout", grade: "92", max: "100", date: "8 Feb 2025" },
-          { title: "Responsive Landing Page", grade: "88", max: "100", date: "15 Feb 2025" },
+          {
+            title: "Dashboard Layout",
+            grade: "92",
+            max: "100",
+            date: "8 Feb 2025",
+          },
+          {
+            title: "Responsive Landing Page",
+            grade: "88",
+            max: "100",
+            date: "15 Feb 2025",
+          },
         ],
         liveAttendance: [],
       },
@@ -280,9 +312,15 @@ function StudentDetailPage() {
 
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="size-14 rounded-2xl bg-amber-50 dark:bg-amber-950/20 flex items-center justify-center mb-4">
-              <HugeiconsIcon icon={Clock01Icon} size={24} className="text-amber-500" />
+              <HugeiconsIcon
+                icon={Clock01Icon}
+                size={24}
+                className="text-amber-500"
+              />
             </div>
-            <h3 className="text-lg font-bold mb-1">Waiting for student approval</h3>
+            <h3 className="text-lg font-bold mb-1">
+              Waiting for student approval
+            </h3>
             <p className="text-sm text-muted-foreground max-w-sm mb-4">
               This student hasn&apos;t approved your link request yet. Once they
               approve, you&apos;ll be able to see their progress, grades, and
@@ -293,7 +331,11 @@ function StudentDetailPage() {
               className="rounded-full"
               onClick={() => router.back()}
             >
-              <HugeiconsIcon icon={ArrowLeft02Icon} size={14} className="mr-1.5" />
+              <HugeiconsIcon
+                icon={ArrowLeft02Icon}
+                size={14}
+                className="mr-1.5"
+              />
               Back to My Children
             </Button>
           </div>
@@ -324,13 +366,15 @@ function StudentDetailPage() {
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-xl sm:text-2xl font-bold">{student.name}</h1>
+                <h1 className="text-xl sm:text-2xl font-bold">
+                  {student.name}
+                </h1>
                 <Badge
                   className={cn(
                     "rounded-full text-[10px] px-2 py-0 h-5",
                     student.status === "linked"
                       ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
-                      : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                      : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
                   )}
                 >
                   {student.status === "linked" ? "Linked" : "Pending"}
@@ -357,15 +401,47 @@ function StudentDetailPage() {
 
         {/* Scores + Streak bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {([
-            { label: "Avg Quiz Score", value: student.avgQuizScore, icon: CircleQuestionMarkIcon, color: "text-amber-500" },
-            { label: "Avg Assignment", value: student.avgAssignmentGrade, icon: AssignmentsIcon, color: "text-violet-500" },
-            { label: "Courses Active", value: String(student.enrolledCourses.filter(c => c.progress < 100).length), icon: BookOpen01Icon, color: "text-emerald-500" },
-            { label: "Completed", value: String(student.enrolledCourses.filter(c => c.progress === 100).length), icon: Award01Icon, color: "text-primary" },
-          ] as const).map((s) => (
+          {(
+            [
+              {
+                label: "Avg Quiz Score",
+                value: student.avgQuizScore,
+                icon: CircleQuestionMarkIcon,
+                color: "text-amber-500",
+              },
+              {
+                label: "Avg Assignment",
+                value: student.avgAssignmentGrade,
+                icon: AssignmentsIcon,
+                color: "text-violet-500",
+              },
+              {
+                label: "Courses Active",
+                value: String(
+                  student.enrolledCourses.filter((c) => c.progress < 100)
+                    .length,
+                ),
+                icon: BookOpen01Icon,
+                color: "text-emerald-500",
+              },
+              {
+                label: "Completed",
+                value: String(
+                  student.enrolledCourses.filter((c) => c.progress === 100)
+                    .length,
+                ),
+                icon: Award01Icon,
+                color: "text-primary",
+              },
+            ] as const
+          ).map((s) => (
             <Card key={s.label} className="p-3 sm:p-4">
-              <p className="text-[10px] sm:text-[11px] text-muted-foreground">{s.label}</p>
-              <p className="text-lg sm:text-xl font-bold tabular-nums mt-0.5">{s.value}</p>
+              <p className="text-[10px] sm:text-[11px] text-muted-foreground">
+                {s.label}
+              </p>
+              <p className="text-lg sm:text-xl font-bold tabular-nums mt-0.5">
+                {s.value}
+              </p>
             </Card>
           ))}
         </div>
@@ -411,7 +487,7 @@ function StudentDetailPage() {
                               "absolute inset-y-0 left-0 rounded-full",
                               course.progress === 100
                                 ? "bg-emerald-500"
-                                : "bg-primary"
+                                : "bg-primary",
                             )}
                             style={{ width: `${course.progress}%` }}
                           />
@@ -423,7 +499,7 @@ function StudentDetailPage() {
                       <span
                         className={cn(
                           "text-xs transition-transform",
-                          isExpanded && "rotate-180"
+                          isExpanded && "rotate-180",
                         )}
                       >
                         ▼
@@ -471,7 +547,7 @@ function StudentDetailPage() {
                               "rounded-full text-[10px] px-1.5 py-0 h-4 mt-0.5",
                               course.progress === 100
                                 ? "bg-emerald-100 text-emerald-700"
-                                : "bg-primary/10 text-primary"
+                                : "bg-primary/10 text-primary",
                             )}
                           >
                             {course.progress === 100
@@ -574,9 +650,7 @@ function StudentDetailPage() {
               >
                 <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0 mt-0.5">
                   <HugeiconsIcon
-                    icon={
-                      ACTIVITY_ICONS[activity.type]
-                    }
+                    icon={ACTIVITY_ICONS[activity.type]}
                     size={14}
                     className="text-muted-foreground"
                   />

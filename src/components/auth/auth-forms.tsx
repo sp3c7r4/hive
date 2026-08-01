@@ -1,16 +1,35 @@
-import { type ReactNode, useState, useCallback, useRef, useEffect } from "react";
+import {
+  Backpack03Icon,
+  CanvasIcon,
+  CheckmarkCircle02Icon,
+  ChevronLeftIcon,
+  EyeIcon,
+  EyeOffIcon,
+  LockIcon,
+  Mail01Icon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Mail01Icon, LockIcon, EyeIcon, EyeOffIcon, ChevronLeftIcon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
-import { CanvasIcon, Backpack03Icon, UserGroupIcon } from "@hugeicons/core-free-icons";
-import { Input } from "@/components/ui/input";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { OTPInput } from "@/components/ui/otp-input";
-import { Label } from "@/components/ui/label";
+import Image from "next/image";
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { Label } from "@/components/ui/label";
+import { OTPInput } from "@/components/ui/otp-input";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 /* ------------------------------------------------------------------ */
 /*  Field error                                                       */
@@ -31,7 +50,8 @@ const validators = {
   required: (v: string) => (v.trim() ? null : "This field is required"),
   email: (v: string) => {
     if (!v.trim()) return "Email is required";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return "Enter a valid email address";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))
+      return "Enter a valid email address";
     return null;
   },
   password: (v: string) => {
@@ -79,7 +99,7 @@ function RoleSelector({
               "flex flex-col items-center justify-center gap-3 border py-5 px-3 transition-all duration-150",
               active
                 ? "border-foreground/25 bg-muted shadow-sm"
-                : "border-transparent bg-muted/60 hover:bg-muted hover:border-border"
+                : "border-transparent bg-muted/60 hover:bg-muted hover:border-border",
             )}
           >
             <HugeiconsIcon
@@ -90,7 +110,7 @@ function RoleSelector({
             <span
               className={cn(
                 "text-xs font-medium",
-                active ? "text-foreground" : "text-muted-foreground"
+                active ? "text-foreground" : "text-muted-foreground",
               )}
             >
               {role.label}
@@ -125,7 +145,10 @@ function IconInput({
 /* ------------------------------------------------------------------ */
 /*  Shared: Password Input with show/hide toggle                      */
 /* ------------------------------------------------------------------ */
-function PasswordInput({ className, ...props }: React.ComponentProps<typeof Input>) {
+function PasswordInput({
+  className,
+  ...props
+}: React.ComponentProps<typeof Input>) {
   const [show, setShow] = useState(false);
 
   return (
@@ -133,7 +156,11 @@ function PasswordInput({ className, ...props }: React.ComponentProps<typeof Inpu
       <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
         <HugeiconsIcon icon={LockIcon} size={16} />
       </div>
-      <Input type={show ? "text" : "password"} className={cn("pl-10 pr-10", className)} {...props} />
+      <Input
+        type={show ? "text" : "password"}
+        className={cn("pl-10 pr-10", className)}
+        {...props}
+      />
       <Button
         type="button"
         variant="ghost"
@@ -194,11 +221,23 @@ function BackButton({ onClick }: { onClick: () => void }) {
 /* ------------------------------------------------------------------ */
 /*  Shared: Footer switch link                                        */
 /* ------------------------------------------------------------------ */
-function FooterLink({ text, linkText, onClick }: { text: string; linkText: string; onClick: () => void }) {
+function FooterLink({
+  text,
+  linkText,
+  onClick,
+}: {
+  text: string;
+  linkText: string;
+  onClick: () => void;
+}) {
   return (
     <p className="text-center text-sm text-muted-foreground">
       {text}{" "}
-      <button type="button" onClick={onClick} className="text-primary font-medium hover:underline">
+      <button
+        type="button"
+        onClick={onClick}
+        className="text-primary font-medium hover:underline"
+      >
         {linkText}
       </button>
     </p>
@@ -227,7 +266,12 @@ function LoginForm({
   onNavigate,
   message,
 }: {
-  onNavigate: (screen: string, email?: string, role?: string, message?: string) => void;
+  onNavigate: (
+    screen: string,
+    email?: string,
+    role?: string,
+    message?: string,
+  ) => void;
   message?: string;
 }) {
   const [role, setRole] = useState<Role | null>(null);
@@ -280,17 +324,31 @@ function LoginForm({
       {message && (
         <div className="mb-6 flex items-center gap-3 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/30 px-4 py-3 shadow-sm">
           <div className="size-6 flex items-center justify-center shrink-0 rounded-full bg-emerald-100 dark:bg-emerald-900/50">
-            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="text-emerald-600 dark:text-emerald-300" />
+            <HugeiconsIcon
+              icon={CheckmarkCircle02Icon}
+              size={14}
+              className="text-emerald-600 dark:text-emerald-300"
+            />
           </div>
-          <p className="text-sm text-emerald-700 dark:text-emerald-300">{message}</p>
+          <p className="text-sm text-emerald-700 dark:text-emerald-300">
+            {message}
+          </p>
         </div>
       )}
 
       <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
         <div>
           <Label className="mb-2 block">I&apos;m signing in as a</Label>
-          <RoleSelector value={role} onChange={(r) => { setRole(r); if (submitted) validate(); }} />
-          <FieldError message={submitted ? errors.role ?? undefined : undefined} />
+          <RoleSelector
+            value={role}
+            onChange={(r) => {
+              setRole(r);
+              if (submitted) validate();
+            }}
+          />
+          <FieldError
+            message={submitted ? (errors.role ?? undefined) : undefined}
+          />
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -302,10 +360,15 @@ function LoginForm({
             type="email"
             autoComplete="email"
             value={email}
-            onChange={(e) => { setEmail(e.target.value); if (submitted) validate(); }}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (submitted) validate();
+            }}
             aria-invalid={submitted && !!errors.email ? true : undefined}
           />
-          <FieldError message={submitted ? errors.email ?? undefined : undefined} />
+          <FieldError
+            message={submitted ? (errors.email ?? undefined) : undefined}
+          />
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -315,15 +378,23 @@ function LoginForm({
             placeholder="Enter your password"
             autoComplete="current-password"
             value={password}
-            onChange={(e) => { setPassword(e.target.value); if (submitted) validate(); }}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              if (submitted) validate();
+            }}
             aria-invalid={submitted && !!errors.password ? true : undefined}
           />
-          <FieldError message={submitted ? errors.password ?? undefined : undefined} />
+          <FieldError
+            message={submitted ? (errors.password ?? undefined) : undefined}
+          />
         </div>
 
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
-            <Checkbox checked={remember} onCheckedChange={(c) => setRemember(!!c)} />
+            <Checkbox
+              checked={remember}
+              onCheckedChange={(c) => setRemember(!!c)}
+            />
             Remember me
           </label>
           <button
@@ -341,7 +412,12 @@ function LoginForm({
           </p>
         )}
 
-        <Button type="submit" className="w-full rounded-full" size="lg" disabled={loggingIn}>
+        <Button
+          type="submit"
+          className="w-full rounded-full"
+          size="lg"
+          disabled={loggingIn}
+        >
           {loggingIn ? "Signing in..." : "Login"}
         </Button>
       </form>
@@ -352,7 +428,11 @@ function LoginForm({
       </div>
 
       <div className="mt-8">
-        <FooterLink text="Don't have an account?" linkText="Sign up" onClick={() => onNavigate("signup")} />
+        <FooterLink
+          text="Don't have an account?"
+          linkText="Sign up"
+          onClick={() => onNavigate("signup")}
+        />
       </div>
     </div>
   );
@@ -361,7 +441,11 @@ function LoginForm({
 /* ------------------------------------------------------------------ */
 /*  Sign Up Form                                                      */
 /* ------------------------------------------------------------------ */
-function SignUpForm({ onNavigate }: { onNavigate: (screen: string, email?: string, role?: string) => void }) {
+function SignUpForm({
+  onNavigate,
+}: {
+  onNavigate: (screen: string, email?: string, role?: string) => void;
+}) {
   const [role, setRole] = useState<Role | null>(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -394,7 +478,10 @@ function SignUpForm({ onNavigate }: { onNavigate: (screen: string, email?: strin
 
   return (
     <div className="w-full max-w-[400px] mx-auto">
-      <AuthHeading title="Sign Up" subtitle="Let&apos;s keep it quick, just 2 steps and you&apos;re in" />
+      <AuthHeading
+        title="Sign Up"
+        subtitle="Let&apos;s keep it quick, just 2 steps and you&apos;re in"
+      />
 
       <div className="h-1 w-full bg-muted rounded-full mb-8">
         <div className="h-full w-1/2 bg-primary rounded-full transition-all" />
@@ -403,8 +490,16 @@ function SignUpForm({ onNavigate }: { onNavigate: (screen: string, email?: strin
       <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
         <div>
           <Label className="mb-2 block">I&apos;m signing up as a</Label>
-          <RoleSelector value={role} onChange={(r) => { setRole(r); if (submitted) runValidation(); }} />
-          <FieldError message={submitted ? errors.role ?? undefined : undefined} />
+          <RoleSelector
+            value={role}
+            onChange={(r) => {
+              setRole(r);
+              if (submitted) runValidation();
+            }}
+          />
+          <FieldError
+            message={submitted ? (errors.role ?? undefined) : undefined}
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -415,10 +510,15 @@ function SignUpForm({ onNavigate }: { onNavigate: (screen: string, email?: strin
               placeholder="John"
               autoComplete="given-name"
               value={firstName}
-              onChange={(e) => { setFirstName(e.target.value); if (submitted) runValidation(); }}
+              onChange={(e) => {
+                setFirstName(e.target.value);
+                if (submitted) runValidation();
+              }}
               aria-invalid={submitted && !!errors.firstName ? true : undefined}
             />
-            <FieldError message={submitted ? errors.firstName ?? undefined : undefined} />
+            <FieldError
+              message={submitted ? (errors.firstName ?? undefined) : undefined}
+            />
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="signup-lastname">Last Name</Label>
@@ -427,10 +527,15 @@ function SignUpForm({ onNavigate }: { onNavigate: (screen: string, email?: strin
               placeholder="Doe"
               autoComplete="family-name"
               value={lastName}
-              onChange={(e) => { setLastName(e.target.value); if (submitted) runValidation(); }}
+              onChange={(e) => {
+                setLastName(e.target.value);
+                if (submitted) runValidation();
+              }}
               aria-invalid={submitted && !!errors.lastName ? true : undefined}
             />
-            <FieldError message={submitted ? errors.lastName ?? undefined : undefined} />
+            <FieldError
+              message={submitted ? (errors.lastName ?? undefined) : undefined}
+            />
           </div>
         </div>
 
@@ -443,10 +548,15 @@ function SignUpForm({ onNavigate }: { onNavigate: (screen: string, email?: strin
             type="email"
             autoComplete="email"
             value={email}
-            onChange={(e) => { setEmail(e.target.value); if (submitted) runValidation(); }}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (submitted) runValidation();
+            }}
             aria-invalid={submitted && !!errors.email ? true : undefined}
           />
-          <FieldError message={submitted ? errors.email ?? undefined : undefined} />
+          <FieldError
+            message={submitted ? (errors.email ?? undefined) : undefined}
+          />
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -456,21 +566,37 @@ function SignUpForm({ onNavigate }: { onNavigate: (screen: string, email?: strin
             placeholder="Create a password"
             autoComplete="new-password"
             value={password}
-            onChange={(e) => { setPassword(e.target.value); if (submitted) runValidation(); }}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              if (submitted) runValidation();
+            }}
             aria-invalid={submitted && !!errors.password ? true : undefined}
           />
-          <FieldError message={submitted ? errors.password ?? undefined : undefined} />
+          <FieldError
+            message={submitted ? (errors.password ?? undefined) : undefined}
+          />
         </div>
 
         <div>
           <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
-            <Checkbox checked={agreed} onCheckedChange={(c) => { setAgreed(!!c); if (submitted) runValidation(); }} />
+            <Checkbox
+              checked={agreed}
+              onCheckedChange={(c) => {
+                setAgreed(!!c);
+                if (submitted) runValidation();
+              }}
+            />
             I agree with{" "}
-            <button type="button" className="text-primary font-medium underline">
+            <button
+              type="button"
+              className="text-primary font-medium underline"
+            >
               terms and conditions
             </button>
           </label>
-          <FieldError message={submitted ? errors.terms ?? undefined : undefined} />
+          <FieldError
+            message={submitted ? (errors.terms ?? undefined) : undefined}
+          />
         </div>
 
         <Button type="submit" className="w-full rounded-full" size="lg">
@@ -484,7 +610,11 @@ function SignUpForm({ onNavigate }: { onNavigate: (screen: string, email?: strin
       </div>
 
       <div className="mt-8">
-        <FooterLink text="Have an account?" linkText="Sign in" onClick={() => onNavigate("login")} />
+        <FooterLink
+          text="Have an account?"
+          linkText="Sign in"
+          onClick={() => onNavigate("login")}
+        />
       </div>
     </div>
   );
@@ -493,7 +623,11 @@ function SignUpForm({ onNavigate }: { onNavigate: (screen: string, email?: strin
 /* ------------------------------------------------------------------ */
 /*  Forgot Password Form                                              */
 /* ------------------------------------------------------------------ */
-function ForgotPasswordForm({ onNavigate }: { onNavigate: (screen: string, email?: string, role?: string) => void }) {
+function ForgotPasswordForm({
+  onNavigate,
+}: {
+  onNavigate: (screen: string, email?: string, role?: string) => void;
+}) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<Role | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -501,9 +635,15 @@ function ForgotPasswordForm({ onNavigate }: { onNavigate: (screen: string, email
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!role) { setFieldError("Please select your role"); return; }
+    if (!role) {
+      setFieldError("Please select your role");
+      return;
+    }
     const err = validators.email(email);
-    if (err) { setError(err); return; }
+    if (err) {
+      setError(err);
+      return;
+    }
     setError(null);
     setFieldError(null);
     onNavigate("verify-otp", email, role ?? undefined);
@@ -518,19 +658,32 @@ function ForgotPasswordForm({ onNavigate }: { onNavigate: (screen: string, email
       </div>
 
       <div className="mb-8">
-        <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">Forgot</p>
-        <h1 className="text-2xl font-bold text-foreground mt-1">Forgot Password?</h1>
+        <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">
+          Forgot
+        </p>
+        <h1 className="text-2xl font-bold text-foreground mt-1">
+          Forgot Password?
+        </h1>
       </div>
 
       <p className="text-sm text-muted-foreground leading-relaxed mb-8">
-        Don&apos;t worry! It happens. Select your role and enter the email address associated with your account.
+        Don&apos;t worry! It happens. Select your role and enter the email
+        address associated with your account.
       </p>
 
       <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
         <div className="flex flex-col gap-2">
           <Label className="text-sm font-medium">I am a...</Label>
-          <RoleSelector value={role} onChange={(r) => { setRole(r); if (fieldError) setFieldError(null); }} />
-          {fieldError && <p className="text-xs text-destructive">{fieldError}</p>}
+          <RoleSelector
+            value={role}
+            onChange={(r) => {
+              setRole(r);
+              if (fieldError) setFieldError(null);
+            }}
+          />
+          {fieldError && (
+            <p className="text-xs text-destructive">{fieldError}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -542,8 +695,11 @@ function ForgotPasswordForm({ onNavigate }: { onNavigate: (screen: string, email
             type="email"
             autoComplete="email"
             value={email}
-            onChange={(e) => { setEmail(e.target.value); if (error) setError(null); }}
-            aria-invalid={!!error ? true : undefined}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (error) setError(null);
+            }}
+            aria-invalid={error ? true : undefined}
           />
           <FieldError message={error ?? undefined} />
         </div>
@@ -568,7 +724,12 @@ function VerifyOTPForm({
   email?: string;
   source: "signup" | "forgot-password";
   role?: string;
-  onNavigate: (screen: string, email?: string, role?: string, message?: string) => void;
+  onNavigate: (
+    screen: string,
+    email?: string,
+    role?: string,
+    message?: string,
+  ) => void;
 }) {
   const [otp, setOtp] = useState("");
   const [countdown, setCountdown] = useState(60);
@@ -640,12 +801,19 @@ function VerifyOTPForm({
           <span className="font-semibold text-foreground">{displayEmail}</span>
         </p>
 
-        <form className="flex flex-col gap-5" onSubmit={handleVerify} noValidate>
+        <form
+          className="flex flex-col gap-5"
+          onSubmit={handleVerify}
+          noValidate
+        >
           <div className="flex justify-center">
             <OTPInput
               length={6}
               value={otp}
-              onChange={(val) => { setOtp(val); if (error) setError(null); }}
+              onChange={(val) => {
+                setOtp(val);
+                if (error) setError(null);
+              }}
               disabled={verifying}
             />
           </div>
@@ -656,7 +824,12 @@ function VerifyOTPForm({
             </p>
           )}
 
-          <Button type="submit" className="w-full rounded-full" size="lg" disabled={verifying}>
+          <Button
+            type="submit"
+            className="w-full rounded-full"
+            size="lg"
+            disabled={verifying}
+          >
             {verifying ? "Verifying..." : "Verify"}
           </Button>
         </form>
@@ -665,7 +838,11 @@ function VerifyOTPForm({
           {countdown > 0 ? (
             <>Resend code ({timeStr})</>
           ) : (
-            <button type="button" onClick={handleResend} className="text-primary font-medium hover:underline">
+            <button
+              type="button"
+              onClick={handleResend}
+              className="text-primary font-medium hover:underline"
+            >
               Resend code
             </button>
           )}
@@ -679,7 +856,10 @@ function VerifyOTPForm({
 /*  Reset Password Form                                              */
 /* ------------------------------------------------------------------ */
 
-function passwordStrength(pw: string): { label: string; score: 0 | 1 | 2 | 3 | 4 } {
+function passwordStrength(pw: string): {
+  label: string;
+  score: 0 | 1 | 2 | 3 | 4;
+} {
   let score = 0;
   if (pw.length >= 8) score++;
   if (pw.length >= 12) score++;
@@ -687,7 +867,10 @@ function passwordStrength(pw: string): { label: string; score: 0 | 1 | 2 | 3 | 4
   if (/[0-9]/.test(pw)) score++;
   if (/[^A-Za-z0-9]/.test(pw)) score++;
   const labels = ["Too weak", "Weak", "Fair", "Strong", "Very strong"];
-  return { label: labels[score] ?? "Weak", score: Math.min(score, 4) as 0 | 1 | 2 | 3 | 4 };
+  return {
+    label: labels[score] ?? "Weak",
+    score: Math.min(score, 4) as 0 | 1 | 2 | 3 | 4,
+  };
 }
 
 function ResetPasswordForm({
@@ -697,7 +880,12 @@ function ResetPasswordForm({
 }: {
   email?: string;
   role?: string;
-  onNavigate: (screen: string, email?: string, role?: string, message?: string) => void;
+  onNavigate: (
+    screen: string,
+    email?: string,
+    role?: string,
+    message?: string,
+  ) => void;
 }) {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -706,17 +894,21 @@ function ResetPasswordForm({
 
   const strength = passwordStrength(password);
   const barWidth =
-    strength.score === 0 ? "w-0" :
-    strength.score === 1 ? "w-1/4" :
-    strength.score === 2 ? "w-2/4" :
-    strength.score === 3 ? "w-3/4" :
-    "w-full";
+    strength.score === 0
+      ? "w-0"
+      : strength.score === 1
+        ? "w-1/4"
+        : strength.score === 2
+          ? "w-2/4"
+          : strength.score === 3
+            ? "w-3/4"
+            : "w-full";
   const barColor =
     strength.score <= 1
       ? "bg-destructive"
       : strength.score === 2
-      ? "bg-amber-500"
-      : "bg-emerald-500";
+        ? "bg-amber-500"
+        : "bg-emerald-500";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -736,7 +928,12 @@ function ResetPasswordForm({
     // Simulate password reset
     setTimeout(() => {
       setResetting(false);
-      onNavigate("login", undefined, undefined, "Your password has been reset. Sign in below.");
+      onNavigate(
+        "login",
+        undefined,
+        undefined,
+        "Your password has been reset. Sign in below.",
+      );
     }, 1200);
   };
 
@@ -749,8 +946,12 @@ function ResetPasswordForm({
       </div>
 
       <div className="mb-8">
-        <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">Reset</p>
-        <h1 className="text-2xl font-bold text-foreground mt-1">Set New Password</h1>
+        <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">
+          Reset
+        </p>
+        <h1 className="text-2xl font-bold text-foreground mt-1">
+          Set New Password
+        </h1>
       </div>
 
       <p className="text-sm text-muted-foreground leading-relaxed mb-8">
@@ -772,20 +973,33 @@ function ResetPasswordForm({
             placeholder="Create a strong password"
             autoComplete="new-password"
             value={password}
-            onChange={(e) => { setPassword(e.target.value); if (error) setError(null); }}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              if (error) setError(null);
+            }}
           />
           {/* Strength indicator */}
           {password.length > 0 && (
             <div className="mt-1.5">
               <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
                 <div
-                  className={cn("h-full rounded-full transition-all duration-300", barWidth, barColor)}
+                  className={cn(
+                    "h-full rounded-full transition-all duration-300",
+                    barWidth,
+                    barColor,
+                  )}
                 />
               </div>
-              <p className={cn(
-                "text-xs mt-1",
-                strength.score <= 1 ? "text-destructive" : strength.score === 2 ? "text-amber-500" : "text-emerald-500"
-              )}>
+              <p
+                className={cn(
+                  "text-xs mt-1",
+                  strength.score <= 1
+                    ? "text-destructive"
+                    : strength.score === 2
+                      ? "text-amber-500"
+                      : "text-emerald-500",
+                )}
+              >
                 {strength.label}
               </p>
             </div>
@@ -799,7 +1013,10 @@ function ResetPasswordForm({
             placeholder="Re-enter your password"
             autoComplete="new-password"
             value={confirm}
-            onChange={(e) => { setConfirm(e.target.value); if (error) setError(null); }}
+            onChange={(e) => {
+              setConfirm(e.target.value);
+              if (error) setError(null);
+            }}
           />
         </div>
 
@@ -809,7 +1026,12 @@ function ResetPasswordForm({
           </p>
         )}
 
-        <Button type="submit" className="w-full rounded-full" size="lg" disabled={resetting}>
+        <Button
+          type="submit"
+          className="w-full rounded-full"
+          size="lg"
+          disabled={resetting}
+        >
           {resetting ? "Resetting..." : "Reset Password"}
         </Button>
       </form>

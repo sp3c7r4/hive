@@ -23,7 +23,7 @@ export const ACCESS_COOKIE_OPTIONS = {
 
 export async function setAuthCookies(
   accessToken: string,
-  refreshToken: string
+  refreshToken: string,
 ) {
   const jar = await cookies();
   jar.set(COOKIE_NAMES.refreshToken, refreshToken, REFRESH_COOKIE_OPTIONS);

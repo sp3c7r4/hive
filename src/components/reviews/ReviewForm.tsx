@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { SentIcon, StarIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { StarIcon, SentIcon } from "@hugeicons/core-free-icons";
 import { cn } from "@/lib/utils";
 import type { CourseReview } from "./types";
 
@@ -41,7 +41,11 @@ export function ReviewForm({ currentUser, onSubmit }: ReviewFormProps) {
       <h3 className="text-sm font-semibold">Leave a Review</h3>
 
       {/* Stars */}
-      <div className="flex items-center gap-1" role="radiogroup" aria-label="Rating">
+      <div
+        className="flex items-center gap-1"
+        role="radiogroup"
+        aria-label="Rating"
+      >
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
@@ -61,7 +65,7 @@ export function ReviewForm({ currentUser, onSubmit }: ReviewFormProps) {
                 "transition-colors",
                 star <= displayRating
                   ? "text-amber-400 fill-amber-400"
-                  : "text-muted-foreground/30"
+                  : "text-muted-foreground/30",
               )}
             />
           </button>

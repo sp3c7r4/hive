@@ -1,22 +1,22 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { HugeiconsIcon } from "@hugeicons/react";
-import type { IconSvgElement } from "@hugeicons/react";
 import {
-  Cancel01Icon,
-  Notification01Icon,
-  UserCheck01Icon,
-  CreditCardIcon,
-  BookOpen01Icon,
   Award01Icon,
+  BookOpen01Icon,
+  Cancel01Icon,
+  CreditCardIcon,
   Message01Icon,
+  Notification01Icon,
   Settings01Icon,
+  UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
+import type { IconSvgElement } from "@hugeicons/react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 /* ---------------------------------------------------------------- */
 /*  Types & demo data                                               */
@@ -70,14 +70,12 @@ const typeConfig: Record<
   message: {
     icon: Message01Icon,
     label: "Message",
-    color:
-      "text-rose-600 bg-rose-100 dark:bg-rose-900/30 dark:text-rose-400",
+    color: "text-rose-600 bg-rose-100 dark:bg-rose-900/30 dark:text-rose-400",
   },
   system: {
     icon: Settings01Icon,
     label: "System",
-    color:
-      "text-muted-foreground bg-muted",
+    color: "text-muted-foreground bg-muted",
   },
 };
 
@@ -86,7 +84,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "1",
     type: "quiz",
     title: "Quiz Graded",
-    text: "Your \"React Hooks Deep Dive\" quiz has been graded. Score: 85%",
+    text: 'Your "React Hooks Deep Dive" quiz has been graded. Score: 85%',
     time: "2m ago",
     read: false,
     href: "/dashboard/my-courses",
@@ -95,7 +93,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "2",
     type: "message",
     title: "New Message",
-    text: "Ade Okafor sent you a message: \"Great work on the last assignment!\"",
+    text: 'Ade Okafor sent you a message: "Great work on the last assignment!"',
     time: "5m ago",
     read: false,
     href: "/dashboard/messages",
@@ -104,7 +102,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "3",
     type: "enrollment",
     title: "New Enrollment",
-    text: "You've been enrolled in \"Advanced Data Analysis with Excel\"",
+    text: 'You\'ve been enrolled in "Advanced Data Analysis with Excel"',
     time: "1h ago",
     read: false,
     href: "/dashboard/my-courses",
@@ -113,7 +111,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "4",
     type: "assignment",
     title: "Assignment Due",
-    text: "\"Build a REST API\" is due in 2 days. Submit your work before the deadline.",
+    text: '"Build a REST API" is due in 2 days. Submit your work before the deadline.',
     time: "2h ago",
     read: true,
     href: "/dashboard/my-courses",
@@ -122,7 +120,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "5",
     type: "payment",
     title: "Payment Confirmed",
-    text: "Your payment of ₦25,000 for \"Frontend Masterclass\" has been confirmed.",
+    text: 'Your payment of ₦25,000 for "Frontend Masterclass" has been confirmed.',
     time: "3h ago",
     read: true,
     href: "/dashboard/payments",
@@ -139,7 +137,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "7",
     type: "message",
     title: "New Message",
-    text: "Kelechi Nwosu: \"Can we schedule a study group this weekend?\"",
+    text: 'Kelechi Nwosu: "Can we schedule a study group this weekend?"',
     time: "Yesterday",
     read: true,
     href: "/dashboard/messages",
@@ -148,7 +146,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "8",
     type: "assignment",
     title: "Assignment Graded",
-    text: "Your \"CSS Grid Layout Challenge\" received a score of 92%. Excellent work!",
+    text: 'Your "CSS Grid Layout Challenge" received a score of 92%. Excellent work!',
     time: "Yesterday",
     read: true,
     href: "/dashboard/my-courses",
@@ -157,7 +155,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "9",
     type: "quiz",
     title: "New Quiz Available",
-    text: "\"JavaScript Fundamentals\" quiz is now available. 20 questions, 30 minutes.",
+    text: '"JavaScript Fundamentals" quiz is now available. 20 questions, 30 minutes.',
     time: "2d ago",
     read: true,
     href: "/dashboard/my-courses",
@@ -166,7 +164,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "10",
     type: "enrollment",
     title: "Course Completed",
-    text: "Congratulations! You've completed \"Intro to UI/UX Design\".",
+    text: 'Congratulations! You\'ve completed "Intro to UI/UX Design".',
     time: "3d ago",
     read: true,
     href: "/dashboard/certificates",
@@ -192,7 +190,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "13",
     type: "message",
     title: "New Message",
-    text: "Dr. Okonkwo shared a file: \"midterm-study-guide.pdf\"",
+    text: 'Dr. Okonkwo shared a file: "midterm-study-guide.pdf"',
     time: "1w ago",
     read: true,
     href: "/dashboard/messages",
@@ -201,7 +199,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "14",
     type: "assignment",
     title: "Feedback Received",
-    text: "You received feedback on \"User Research Case Study\". View detailed comments.",
+    text: 'You received feedback on "User Research Case Study". View detailed comments.',
     time: "1w ago",
     read: true,
     href: "/dashboard/my-courses",
@@ -210,7 +208,7 @@ const MOCK_NOTIFICATIONS: NotificationItem[] = [
     id: "15",
     type: "quiz",
     title: "Quiz Reminder",
-    text: "\"TypeScript Advanced Patterns\" quiz closes in 24 hours. Don't miss it!",
+    text: '"TypeScript Advanced Patterns" quiz closes in 24 hours. Don\'t miss it!',
     time: "1w ago",
     read: true,
     href: "/dashboard/my-courses",
@@ -459,8 +457,8 @@ export function NotificationDrawer({
                 {unreadOnly
                   ? "No unread notifications"
                   : typeFilter !== "all"
-                  ? `No ${typeConfig[typeFilter].label.toLowerCase()} notifications`
-                  : "No notifications"}
+                    ? `No ${typeConfig[typeFilter].label.toLowerCase()} notifications`
+                    : "No notifications"}
               </p>
             </div>
           ) : (
@@ -471,7 +469,12 @@ export function NotificationDrawer({
                   <button
                     type="button"
                     key={n.id}
-                    onClick={() => { if (n.href) { router.push(n.href); onClose(); } }}
+                    onClick={() => {
+                      if (n.href) {
+                        router.push(n.href);
+                        onClose();
+                      }
+                    }}
                     className={`w-full text-left flex items-start gap-3 px-5 py-3.5 hover:bg-muted/50 transition-colors ${
                       !n.read ? "bg-primary/5" : ""
                     }`}

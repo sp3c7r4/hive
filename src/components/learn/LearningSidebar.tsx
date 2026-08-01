@@ -1,21 +1,21 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { cn } from "@/lib/utils";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  PlayIcon,
+  ArrowRight01Icon,
+  AssignmentsIcon,
+  Cancel01Icon,
+  CheckmarkCircle02Icon,
+  CircleQuestionMarkIcon,
   File01Icon,
   LiveStreaming01Icon,
-  CircleQuestionMarkIcon,
-  AssignmentsIcon,
-  CheckmarkCircle02Icon,
   LockIcon,
-  Cancel01Icon,
-  ArrowRight01Icon,
+  PlayIcon,
 } from "@hugeicons/core-free-icons";
 import type { IconSvgElement } from "@hugeicons/react";
-import type { Module, LessonType } from "./types";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useCallback, useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import type { LessonType, Module } from "./types";
 
 /* ---------------------------------------------------------------- */
 /*  Icon per lesson type                                             */
@@ -76,7 +76,9 @@ export function LearningSidebar({
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   const toggleModule = useCallback((modId: string) => {
@@ -96,7 +98,7 @@ export function LearningSidebar({
       <div
         className={cn(
           "fixed inset-0 z-30 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden",
-          open ? "opacity-100" : "opacity-0 pointer-events-none"
+          open ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={onClose}
         aria-hidden="true"
@@ -113,15 +115,19 @@ export function LearningSidebar({
           "fixed lg:relative inset-y-0 left-0 z-40 flex w-80 max-w-[85vw]",
           open
             ? "translate-x-0 shadow-2xl"
-            : "-translate-x-full lg:translate-x-0 lg:shadow-none"
+            : "-translate-x-full lg:translate-x-0 lg:shadow-none",
         )}
       >
         <div className="flex flex-col h-full w-80 max-w-[85vw]">
           {/* Progress bar at top */}
           <div className="px-4 pt-4 pb-2 shrink-0">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs font-medium text-muted-foreground">Course Progress</span>
-              <span className="text-xs font-bold tabular-nums text-foreground">{progress}%</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                Course Progress
+              </span>
+              <span className="text-xs font-bold tabular-nums text-foreground">
+                {progress}%
+              </span>
             </div>
             <div className="relative flex h-2 w-full items-center overflow-x-hidden rounded-full bg-muted">
               <div
@@ -144,8 +150,12 @@ export function LearningSidebar({
 
             {modules.map((mod) => {
               const isExpanded = expandedModules.has(mod.id);
-              const completedCount = mod.lessons.filter((l) => l.status === "completed").length;
-              const hasCurrent = mod.lessons.some((l) => l.id === currentLessonId);
+              const completedCount = mod.lessons.filter(
+                (l) => l.status === "completed",
+              ).length;
+              const hasCurrent = mod.lessons.some(
+                (l) => l.id === currentLessonId,
+              );
 
               return (
                 <div key={mod.id} className="mb-0.5">
@@ -155,9 +165,7 @@ export function LearningSidebar({
                     onClick={() => toggleModule(mod.id)}
                     className={cn(
                       "w-full flex items-center gap-2 px-3 py-2.5 text-left transition-colors group",
-                      hasCurrent
-                        ? "bg-primary/5"
-                        : "hover:bg-muted/50"
+                      hasCurrent ? "bg-primary/5" : "hover:bg-muted/50",
                     )}
                   >
                     <HugeiconsIcon
@@ -165,11 +173,13 @@ export function LearningSidebar({
                       size={12}
                       className={cn(
                         "shrink-0 text-muted-foreground transition-transform duration-200",
-                        isExpanded ? "rotate-90" : "rotate-0"
+                        isExpanded ? "rotate-90" : "rotate-0",
                       )}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold truncate">{mod.title}</p>
+                      <p className="text-xs font-semibold truncate">
+                        {mod.title}
+                      </p>
                       <p className="text-[10px] text-muted-foreground">
                         {completedCount}/{mod.lessons.length} lessons
                       </p>
@@ -180,7 +190,7 @@ export function LearningSidebar({
                   <div
                     className={cn(
                       "overflow-hidden transition-all duration-200",
-                      isExpanded ? "max-h-[600px]" : "max-h-0"
+                      isExpanded ? "max-h-[600px]" : "max-h-0",
                     )}
                   >
                     {mod.lessons.map((lesson) => {
@@ -198,9 +208,10 @@ export function LearningSidebar({
                           onClick={() => !isLocked && onSelectLesson(lesson.id)}
                           className={cn(
                             "w-full flex items-center gap-2.5 pl-9 pr-3 py-2.5 text-left transition-colors group",
-                            isCurrent && "bg-primary/10 border-r-[3px] border-primary",
+                            isCurrent &&
+                              "bg-primary/10 border-r-[3px] border-primary",
                             !isCurrent && !isLocked && "hover:bg-muted/30",
-                            isLocked && "opacity-50 cursor-not-allowed"
+                            isLocked && "opacity-50 cursor-not-allowed",
                           )}
                         >
                           {/* Status or type icon */}
@@ -221,7 +232,10 @@ export function LearningSidebar({
                               <HugeiconsIcon
                                 icon={IconComp}
                                 size={15}
-                                className={cn(iconColor, isCurrent && "opacity-100")}
+                                className={cn(
+                                  iconColor,
+                                  isCurrent && "opacity-100",
+                                )}
                               />
                             )}
                           </span>
@@ -230,8 +244,10 @@ export function LearningSidebar({
                             <p
                               className={cn(
                                 "text-xs leading-tight",
-                                isCurrent ? "font-semibold text-foreground" : "text-muted-foreground",
-                                isCompleted && "text-muted-foreground"
+                                isCurrent
+                                  ? "font-semibold text-foreground"
+                                  : "text-muted-foreground",
+                                isCompleted && "text-muted-foreground",
                               )}
                             >
                               {lesson.title}

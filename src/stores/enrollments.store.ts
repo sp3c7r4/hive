@@ -22,7 +22,7 @@ export const useEnrollmentsStore = create<EnrollmentsState>((set) => ({
     try {
       const { data } = await enrollmentsApi.list();
       set({ enrollments: data.data, isLoading: false });
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to load enrollments", isLoading: false });
     }
   },
@@ -36,7 +36,7 @@ export const useEnrollmentsStore = create<EnrollmentsState>((set) => ({
         isLoading: false,
       }));
       return data.data;
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to enroll", isLoading: false });
       return null;
     }

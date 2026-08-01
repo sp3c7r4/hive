@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { ChevronRightIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function HeroSection() {
@@ -24,7 +24,11 @@ export default function HeroSection() {
             opportunity.
           </p>
           <span className="hero-cta inline-block">
-            <Button className="rounded-full w-fit" size="lg" render={<Link href="/auth" />}>
+            <Button
+              className="rounded-full w-fit"
+              size="lg"
+              render={<Link href="/auth" />}
+            >
               Start Learning
               <span data-icon="inline-end">
                 <HugeiconsIcon icon={ChevronRightIcon} size={16} />

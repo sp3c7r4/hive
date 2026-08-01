@@ -1,19 +1,19 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { HugeiconsIcon } from "@hugeicons/react";
-import type { IconSvgElement } from "@hugeicons/react";
 import {
   ArrowLeft02Icon,
   ArrowRight02Icon,
-  LockIcon,
+  AssignmentsIcon,
   CheckmarkCircle02Icon,
-  PlayIcon,
+  CircleQuestionMarkIcon,
   File01Icon,
   LiveStreaming01Icon,
-  CircleQuestionMarkIcon,
-  AssignmentsIcon,
+  LockIcon,
+  PlayIcon,
 } from "@hugeicons/core-free-icons";
+import type { IconSvgElement } from "@hugeicons/react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@/components/ui/button";
 import type { Lesson, LessonType } from "./types";
 
 /* ---------------------------------------------------------------- */
@@ -68,7 +68,9 @@ export function LessonNavigation({
                 className="shrink-0 transition-transform group-hover:-translate-x-0.5"
               />
               <div className="text-left min-w-0 hidden sm:block">
-                <p className="text-[10px] text-muted-foreground leading-tight">Previous</p>
+                <p className="text-[10px] text-muted-foreground leading-tight">
+                  Previous
+                </p>
                 <p className="text-xs font-medium truncate max-w-[120px] lg:max-w-[160px] leading-tight">
                   {prev.title}
                 </p>
@@ -89,13 +91,21 @@ export function LessonNavigation({
               onClick={onMarkComplete}
               className="rounded-full h-7 sm:h-8 text-xs"
             >
-              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} className="sm:mr-1.5" />
+              <HugeiconsIcon
+                icon={CheckmarkCircle02Icon}
+                size={13}
+                className="sm:mr-1.5"
+              />
               <span className="hidden sm:inline">Mark Complete</span>
             </Button>
           )}
           {currentCompleted && (
             <span className="text-[10px] sm:text-xs font-medium text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 dark:text-emerald-400 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full inline-flex items-center gap-1">
-              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={12} className="sm:size-[13px]" />
+              <HugeiconsIcon
+                icon={CheckmarkCircle02Icon}
+                size={12}
+                className="sm:size-[13px]"
+              />
               <span className="hidden sm:inline">Completed</span>
             </span>
           )}
@@ -108,7 +118,9 @@ export function LessonNavigation({
               <div className="flex items-center gap-1 sm:gap-2 text-muted-foreground/60 pr-2">
                 <HugeiconsIcon icon={LockIcon} size={12} className="shrink-0" />
                 <div className="text-right min-w-0 hidden sm:block">
-                  <p className="text-[10px] leading-tight">Complete lesson to unlock</p>
+                  <p className="text-[10px] leading-tight">
+                    Complete lesson to unlock
+                  </p>
                   <div className="flex items-center gap-1 justify-end">
                     <HugeiconsIcon icon={TYPE_ICON[next.type]} size={11} />
                     <p className="text-xs font-medium truncate max-w-[120px] lg:max-w-[160px] leading-tight">
@@ -116,7 +128,9 @@ export function LessonNavigation({
                     </p>
                   </div>
                 </div>
-                <span className="sm:hidden text-xs text-muted-foreground/60">Locked</span>
+                <span className="sm:hidden text-xs text-muted-foreground/60">
+                  Locked
+                </span>
               </div>
             ) : (
               <button
@@ -125,7 +139,9 @@ export function LessonNavigation({
                 className="flex items-center gap-1 sm:gap-1.5 text-muted-foreground hover:text-foreground transition-colors group rounded-full hover:bg-muted/50 px-2 sm:px-3 py-1.5 -mr-2 sm:-mr-3"
               >
                 <div className="text-right min-w-0 hidden sm:block">
-                  <p className="text-[10px] text-muted-foreground leading-tight">Next</p>
+                  <p className="text-[10px] text-muted-foreground leading-tight">
+                    Next
+                  </p>
                   <div className="flex items-center gap-1 justify-end">
                     <HugeiconsIcon icon={TYPE_ICON[next.type]} size={11} />
                     <p className="text-xs font-medium truncate max-w-[120px] lg:max-w-[160px] leading-tight">

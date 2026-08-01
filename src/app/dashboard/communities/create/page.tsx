@@ -1,17 +1,21 @@
 "use client";
 
-import { Suspense, useState, useRef, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import {
+  ArrowLeft02Icon,
+  Camera01Icon,
+  Cancel01Icon,
+  Image01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useRef, useState } from "react";
 import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -19,13 +23,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Camera01Icon,
-  Image01Icon,
-  Cancel01Icon,
-  ArrowLeft02Icon,
-} from "@hugeicons/core-free-icons";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 
 /* ---------------------------------------------------------------- */
 /*  Types                                                           */
@@ -107,21 +107,19 @@ function CreateCommunityPage() {
     <K extends keyof FormData>(key: K, value: FormData[K]) => {
       setForm((prev) => ({ ...prev, [key]: value }));
     },
-    []
+    [],
   );
 
-  const handleNameChange = useCallback(
-    (value: string) => {
-      setForm((prev) => ({
-        ...prev,
-        name: value,
-        slug: prev.slug === slugify(prev.name) || !prev.slug
+  const handleNameChange = useCallback((value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      name: value,
+      slug:
+        prev.slug === slugify(prev.name) || !prev.slug
           ? slugify(value)
           : prev.slug,
-      }));
-    },
-    []
-  );
+    }));
+  }, []);
 
   const handleCoverSelect = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +129,7 @@ function CreateCommunityPage() {
       updateField("coverPreview", URL.createObjectURL(file));
       if (fileInputRef.current) fileInputRef.current.value = "";
     },
-    [updateField]
+    [updateField],
   );
 
   const handleRemoveCover = useCallback(() => {
@@ -147,7 +145,7 @@ function CreateCommunityPage() {
       const slug = form.slug || slugify(form.name);
       router.push(`/dashboard/communities/${slug}/manage?role=${role}`);
     },
-    [form, router, role]
+    [form, router, role],
   );
 
   const isValid =
@@ -217,9 +215,7 @@ function CreateCommunityPage() {
                   />
                 </div>
                 <div className="text-center">
-                  <p className="text-sm font-medium">
-                    Upload a cover image
-                  </p>
+                  <p className="text-sm font-medium">Upload a cover image</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     16:9 recommended · PNG, JPG up to 5MB
                   </p>
@@ -271,10 +267,7 @@ function CreateCommunityPage() {
                       id="slug"
                       value={form.slug}
                       onChange={(e) =>
-                        updateField(
-                          "slug",
-                          slugify(e.target.value)
-                        )
+                        updateField("slug", slugify(e.target.value))
                       }
                       placeholder="design-academy"
                       className="flex-1 bg-transparent outline-none text-foreground placeholder:text-muted-foreground/60 min-w-0"
@@ -306,12 +299,24 @@ function CreateCommunityPage() {
 
                 {/* Category */}
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="category" className="text-xs font-medium">Category</Label>
-                  <Select value={form.category} onValueChange={(v) => updateField("category", v)}>
-                    <SelectTrigger id="category" className="rounded-xl h-10 text-sm"><SelectValue placeholder="Select a category" /></SelectTrigger>
+                  <Label htmlFor="category" className="text-xs font-medium">
+                    Category
+                  </Label>
+                  <Select
+                    value={form.category}
+                    onValueChange={(v) => updateField("category", v)}
+                  >
+                    <SelectTrigger
+                      id="category"
+                      className="rounded-xl h-10 text-sm"
+                    >
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
                     <SelectContent>
                       {CATEGORIES.map((cat) => (
-                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                        <SelectItem key={cat} value={cat}>
+                          {cat}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -330,9 +335,21 @@ function CreateCommunityPage() {
               <div className="flex flex-wrap gap-2">
                 {(
                   [
-                    { value: "public", label: "Public", desc: "Anyone can find and join" },
-                    { value: "private", label: "Private", desc: "Only invited people can join" },
-                    { value: "invite-only", label: "Invite Only", desc: "Members invite others" },
+                    {
+                      value: "public",
+                      label: "Public",
+                      desc: "Anyone can find and join",
+                    },
+                    {
+                      value: "private",
+                      label: "Private",
+                      desc: "Only invited people can join",
+                    },
+                    {
+                      value: "invite-only",
+                      label: "Invite Only",
+                      desc: "Members invite others",
+                    },
                   ] as const
                 ).map((opt) => (
                   <button
@@ -402,7 +419,14 @@ function CreateCommunityPage() {
                       step={100}
                       placeholder="2,500"
                       value={form.price}
-                      onChange={(e) => updateField("price", e.target.value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","))}
+                      onChange={(e) =>
+                        updateField(
+                          "price",
+                          e.target.value
+                            .replace(/\D/g, "")
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                        )
+                      }
                       className="rounded-xl pl-8"
                     />
                   </div>
@@ -424,11 +448,7 @@ function CreateCommunityPage() {
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              className="rounded-full"
-              disabled={!isValid}
-            >
+            <Button type="submit" className="rounded-full" disabled={!isValid}>
               Create Community
             </Button>
           </div>

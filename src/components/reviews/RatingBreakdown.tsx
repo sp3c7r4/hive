@@ -1,7 +1,7 @@
 "use client";
 
-import { HugeiconsIcon } from "@hugeicons/react";
 import { StarIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
 
 interface RatingBreakdownProps {
@@ -33,7 +33,7 @@ export function RatingBreakdown({
               className={cn(
                 s <= Math.round(rating)
                   ? "text-amber-400 fill-amber-400"
-                  : "text-muted-foreground/20"
+                  : "text-muted-foreground/20",
               )}
             />
           ))}
@@ -57,8 +57,8 @@ export function RatingBreakdown({
                   d.stars >= 4
                     ? "bg-emerald-500"
                     : d.stars === 3
-                    ? "bg-amber-500"
-                    : "bg-rose-400"
+                      ? "bg-amber-500"
+                      : "bg-rose-400",
                 )}
                 style={{
                   width: `${(d.count / maxCount) * 100}%`,

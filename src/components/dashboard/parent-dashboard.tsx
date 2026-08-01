@@ -1,38 +1,38 @@
 "use client";
 
-import { useRef } from "react";
-import Link from "next/link";
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import {
-  Line,
-  LineChart,
-  BarChart,
+  Award01Icon,
+  Calendar01Icon,
+  CourseIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import gsap from "gsap";
+import Link from "next/link";
+import { useRef } from "react";
+import {
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  ReferenceLine,
   Cell,
   LabelList,
+  Line,
+  LineChart,
+  ReferenceLine,
+  XAxis,
+  YAxis,
 } from "recharts";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Card } from "@/components/ui/card";
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "@/components/ui/chart";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Calendar01Icon,
-  Award01Icon,
-  CourseIcon,
-} from "@hugeicons/core-free-icons";
+import { Progress } from "@/components/ui/progress";
 
 /* ---------------------------------------------------------------- */
 /*  Demo data                                                       */
@@ -135,7 +135,12 @@ const performanceConfig = {
   score: { label: "Score %", color: "var(--chart-2)" },
 } satisfies ChartConfig;
 
-const barColors = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)"];
+const barColors = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+];
 
 /* ---------------------------------------------------------------- */
 /*  Flag card                                                       */
@@ -264,7 +269,7 @@ export function ParentDashboard() {
         ease: "power2.out",
       });
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   /* ---- Empty state: no linked students ---- */

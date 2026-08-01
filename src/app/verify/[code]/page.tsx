@@ -1,20 +1,20 @@
 "use client";
 
-import { Suspense, useRef } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { useGSAP } from "@gsap/react";
 import {
+  ArrowLeft02Icon,
+  Cancel01Icon,
   Certificate01Icon,
   CheckmarkCircle02Icon,
-  ArrowLeft02Icon,
-  Share01Icon,
   Download01Icon,
-  Cancel01Icon,
+  Share01Icon,
 } from "@hugeicons/core-free-icons";
-import { useGSAP } from "@gsap/react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import gsap from "gsap";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { Suspense, useRef } from "react";
+import { Button } from "@/components/ui/button";
 
 const VERIFIED_CERTS: Record<
   string,
@@ -59,7 +59,7 @@ function VerifyPage() {
         ease: "back.out(1.3)",
       });
     },
-    { scope: cardRef }
+    { scope: cardRef },
   );
 
   return (
@@ -73,7 +73,10 @@ function VerifyPage() {
       </Link>
 
       {cert ? (
-        <div ref={cardRef} className="flex flex-col items-center gap-5 max-w-lg w-full">
+        <div
+          ref={cardRef}
+          className="flex flex-col items-center gap-5 max-w-lg w-full"
+        >
           {/* Verified badge */}
           <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400">
             <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} />
@@ -104,7 +107,9 @@ function VerifyPage() {
                 Certificate of Completion
               </p>
 
-              <p className="text-xs text-muted-foreground">This certifies that</p>
+              <p className="text-xs text-muted-foreground">
+                This certifies that
+              </p>
 
               <h2 className="text-xl sm:text-2xl font-bold text-foreground">
                 {cert.studentName}
@@ -148,7 +153,11 @@ function VerifyPage() {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <Button variant="outline" className="rounded-full" onClick={() => window.print()}>
+            <Button
+              variant="outline"
+              className="rounded-full"
+              onClick={() => window.print()}
+            >
               <HugeiconsIcon icon={Download01Icon} size={15} className="mr-2" />
               Download
             </Button>
@@ -182,8 +191,12 @@ function VerifyPage() {
           <div>
             <h1 className="text-lg font-bold">Certificate Not Found</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              The verification code <code className="text-xs bg-muted px-1.5 py-0.5 rounded font-mono">{params.code}</code> does not match any
-              certificate. It may have been revoked or never existed.
+              The verification code{" "}
+              <code className="text-xs bg-muted px-1.5 py-0.5 rounded font-mono">
+                {params.code}
+              </code>{" "}
+              does not match any certificate. It may have been revoked or never
+              existed.
             </p>
           </div>
           <Link href="/">

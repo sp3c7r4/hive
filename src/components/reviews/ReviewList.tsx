@@ -1,15 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Button } from "@/components/ui/button";
+import { ArrowDown02Icon, Tick01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  ArrowDown02Icon,
-  Tick01Icon,
-} from "@hugeicons/core-free-icons";
+import { useCallback, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ReviewCard } from "./ReviewCard";
 import type { CourseReview } from "./types";
-import { cn } from "@/lib/utils";
 
 type SortOption = "recent" | "highest" | "lowest" | "helpful";
 
@@ -47,7 +44,7 @@ export function ReviewList({
       default:
         return copy.sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
     }
   }, [reviews, sort]);
@@ -59,9 +56,7 @@ export function ReviewList({
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold">
-          Reviews ({reviews.length})
-        </h3>
+        <h3 className="text-sm font-semibold">Reviews ({reviews.length})</h3>
 
         {/* Sort dropdown */}
         <div className="relative">
@@ -92,7 +87,7 @@ export function ReviewList({
                       }}
                       className={cn(
                         "w-full text-left px-3 py-1.5 text-[11px] hover:bg-muted flex items-center justify-between gap-2",
-                        sort === key && "font-semibold"
+                        sort === key && "font-semibold",
                       )}
                     >
                       {label}
@@ -104,7 +99,7 @@ export function ReviewList({
                         />
                       )}
                     </button>
-                  )
+                  ),
                 )}
               </div>
             </>

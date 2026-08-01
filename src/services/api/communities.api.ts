@@ -1,10 +1,10 @@
-import { apiClient } from "./api-client";
 import type { ApiResponse, PaginatedResponse } from "@/types/api";
 import type {
   Community,
   CreateCommunityInput,
   UpdateCommunityInput,
 } from "@/types/community";
+import { apiClient } from "./api-client";
 
 export const communitiesApi = {
   list: (params?: { page?: number; limit?: number }) =>

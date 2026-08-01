@@ -1,21 +1,21 @@
 "use client";
 
-import { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  UserGroupIcon,
-  StarIcon,
-  BookOpen01Icon,
   ArrowRight02Icon,
+  BookOpen01Icon,
   CompassIcon,
+  StarIcon,
+  UserGroupIcon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { DashboardLayout } from "@/components/app-sidebar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
@@ -100,7 +100,7 @@ function MyCommunitiesPage() {
                 className="p-5 hover:bg-muted/20 transition-colors cursor-pointer group"
                 onClick={() =>
                   router.push(
-                    `/dashboard/explore/communities/${c.slug}?role=${role}`
+                    `/dashboard/explore/communities/${c.slug}?role=${role}`,
                   )
                 }
               >
@@ -117,7 +117,10 @@ function MyCommunitiesPage() {
                       <h3 className="text-sm font-bold group-hover:text-primary transition-colors">
                         {c.name}
                       </h3>
-                      <Badge variant="secondary" className="rounded-full text-[10px] px-1.5 py-0 h-4">
+                      <Badge
+                        variant="secondary"
+                        className="rounded-full text-[10px] px-1.5 py-0 h-4"
+                      >
                         {c.category}
                       </Badge>
                     </div>

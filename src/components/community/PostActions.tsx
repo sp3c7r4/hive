@@ -1,11 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { FavouriteIcon, Message02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  FavouriteIcon,
-  Message02Icon,
-} from "@hugeicons/core-free-icons";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface PostActionsProps {
@@ -29,7 +26,7 @@ export function PostActions({
     <div
       className={cn(
         "flex items-center gap-1 border-t border-border pt-2.5 mt-2",
-        className
+        className,
       )}
     >
       <Button
@@ -38,7 +35,7 @@ export function PostActions({
         onClick={onLike}
         className={cn(
           "rounded-full h-8 px-3 text-xs gap-1.5",
-          likedByUser && "text-rose-500 hover:text-rose-600"
+          likedByUser && "text-rose-500 hover:text-rose-600",
         )}
       >
         <HugeiconsIcon
@@ -46,12 +43,8 @@ export function PostActions({
           size={14}
           className={cn(likedByUser && "fill-rose-500")}
         />
-        {likeCount > 0 && (
-          <span className="tabular-nums">{likeCount}</span>
-        )}
-        <span className="sr-only">
-          {likedByUser ? "Unlike" : "Like"}
-        </span>
+        {likeCount > 0 && <span className="tabular-nums">{likeCount}</span>}
+        <span className="sr-only">{likedByUser ? "Unlike" : "Like"}</span>
       </Button>
 
       <Button

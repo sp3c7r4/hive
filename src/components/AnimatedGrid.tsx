@@ -1,10 +1,14 @@
 "use client";
 
-import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useRef } from "react";
 
-export default function AnimatedGrid({ children }: { children: React.ReactNode }) {
+export default function AnimatedGrid({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const scope = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -32,7 +36,7 @@ export default function AnimatedGrid({ children }: { children: React.ReactNode }
                   stagger: 0.08,
                   ease: "power3.out",
                   overwrite: true,
-                }
+                },
               );
             },
             start: "top 92%",
@@ -45,7 +49,7 @@ export default function AnimatedGrid({ children }: { children: React.ReactNode }
         mm?.revert();
       };
     },
-    { scope }
+    { scope },
   );
 
   return <div ref={scope}>{children}</div>;

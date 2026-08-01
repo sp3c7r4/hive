@@ -5,7 +5,12 @@ type Role = "instructor" | "student" | "parent" | "admin";
 export function getStoredRole(): Role | null {
   if (typeof window === "undefined") return null;
   const v = localStorage.getItem(ROLE_KEY);
-  return v === "instructor" || v === "student" || v === "parent" || v === "admin" ? v : null;
+  return v === "instructor" ||
+    v === "student" ||
+    v === "parent" ||
+    v === "admin"
+    ? v
+    : null;
 }
 
 export function setStoredRole(role: Role) {
@@ -15,7 +20,12 @@ export function setStoredRole(role: Role) {
 
 export function getDashboardRole(searchParamsRole: string | null): Role {
   const fromUrl = searchParamsRole;
-  if (fromUrl === "instructor" || fromUrl === "student" || fromUrl === "parent" || fromUrl === "admin") {
+  if (
+    fromUrl === "instructor" ||
+    fromUrl === "student" ||
+    fromUrl === "parent" ||
+    fromUrl === "admin"
+  ) {
     setStoredRole(fromUrl);
     return fromUrl;
   }

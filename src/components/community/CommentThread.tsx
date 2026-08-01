@@ -1,15 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { MoreHorizontalIcon, SentIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useCallback, useState } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  SentIcon,
-  MoreHorizontalIcon,
-} from "@hugeicons/core-free-icons";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import type { Comment } from "./types";
 
 interface CommentThreadProps {
@@ -75,9 +72,7 @@ function CommentItem({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold">
-            {comment.author.name}
-          </span>
+          <span className="text-xs font-semibold">{comment.author.name}</span>
           {comment.isInstructorReply && (
             <Badge className="rounded-full text-[9px] px-1.5 py-0 h-4 bg-primary/10 text-primary">
               Instructor
@@ -181,7 +176,8 @@ function CommentItem({
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleReply();
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey))
+                  handleReply();
               }}
               placeholder="Write a reply..."
               className="min-h-[56px] text-xs resize-y"

@@ -1,20 +1,20 @@
 "use client";
 
-import { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Certificate01Icon,
+  ArrowRight02Icon,
   Award01Icon,
+  Certificate01Icon,
+  CheckmarkCircle02Icon,
   Download01Icon,
   Share01Icon,
-  ArrowRight02Icon,
-  CheckmarkCircle02Icon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { DashboardLayout } from "@/components/app-sidebar";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
@@ -75,7 +75,11 @@ function CertificatesPage() {
               onClick={() => router.push("/dashboard/explore")}
             >
               Explore Courses
-              <HugeiconsIcon icon={ArrowRight02Icon} size={16} className="ml-1.5" />
+              <HugeiconsIcon
+                icon={ArrowRight02Icon}
+                size={16}
+                className="ml-1.5"
+              />
             </Button>
           </div>
         ) : (
@@ -85,9 +89,7 @@ function CertificatesPage() {
               <Card
                 key={cert.id}
                 className="p-5 group hover:bg-muted/20 transition-colors cursor-pointer"
-                onClick={() =>
-                  router.push(`/verify/${cert.verificationCode}`)
-                }
+                onClick={() => router.push(`/verify/${cert.verificationCode}`)}
               >
                 {/* Mini certificate preview */}
                 <div className="aspect-[1.4/1] rounded-xl border border-amber-200 dark:border-amber-800/30 bg-gradient-to-br from-amber-50/50 to-white dark:from-amber-950/10 dark:to-background flex flex-col items-center justify-center p-4 mb-4 relative overflow-hidden">
@@ -144,7 +146,11 @@ function CertificatesPage() {
                         router.push(`/verify/${cert.verificationCode}`);
                       }}
                     >
-                      <HugeiconsIcon icon={Award01Icon} size={11} className="mr-1" />
+                      <HugeiconsIcon
+                        icon={Award01Icon}
+                        size={11}
+                        className="mr-1"
+                      />
                       View
                     </Button>
                     <Button
@@ -154,7 +160,7 @@ function CertificatesPage() {
                       onClick={(e) => {
                         e.stopPropagation();
                         navigator.clipboard?.writeText(
-                          `${window.location.origin}/verify/${cert.verificationCode}`
+                          `${window.location.origin}/verify/${cert.verificationCode}`,
                         );
                       }}
                     >

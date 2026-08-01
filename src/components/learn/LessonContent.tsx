@@ -1,11 +1,11 @@
 "use client";
 
-import { VideoPlayer } from "./VideoPlayer";
-import { PdfViewer } from "./PdfViewer";
-import { LiveClass } from "./LiveClass";
-import { QuizLesson } from "./QuizLesson";
 import { AssignmentLesson } from "./AssignmentLesson";
+import { LiveClass } from "./LiveClass";
+import { PdfViewer } from "./PdfViewer";
+import { QuizLesson } from "./QuizLesson";
 import type { Lesson } from "./types";
+import { VideoPlayer } from "./VideoPlayer";
 
 interface LessonContentProps {
   lesson: Lesson;

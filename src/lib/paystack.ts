@@ -61,18 +61,20 @@ export function openPaystackPopup(config: PaystackConfig) {
     return;
   }
 
-  handler.setup({
-    key: config.key,
-    email: config.email,
-    amount: config.amount,
-    currency: config.currency ?? "NGN",
-    ref: config.ref ?? `hive_${Date.now()}`,
-    metadata: { custom_fields: [], ...config.metadata },
-    callback: (response: { reference: string }) => {
-      config.onSuccess(response.reference);
-    },
-    onClose: () => {
-      config.onClose();
-    },
-  }).openIframe();
+  handler
+    .setup({
+      key: config.key,
+      email: config.email,
+      amount: config.amount,
+      currency: config.currency ?? "NGN",
+      ref: config.ref ?? `hive_${Date.now()}`,
+      metadata: { custom_fields: [], ...config.metadata },
+      callback: (response: { reference: string }) => {
+        config.onSuccess(response.reference);
+      },
+      onClose: () => {
+        config.onClose();
+      },
+    })
+    .openIframe();
 }

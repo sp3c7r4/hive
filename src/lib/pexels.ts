@@ -56,7 +56,7 @@ interface PexelsSearchResponse {
 async function pexelsFetch<T>(path: string): Promise<T> {
   if (!PEXELS_API_KEY) {
     throw new Error(
-      "Missing PEXELS_API_KEY. Add it to your .env.local file — see setup instructions."
+      "Missing PEXELS_API_KEY. Add it to your .env.local file — see setup instructions.",
     );
   }
 
@@ -81,7 +81,11 @@ async function pexelsFetch<T>(path: string): Promise<T> {
  */
 export async function searchPhotos(
   query: string,
-  options?: { perPage?: number; page?: number; orientation?: "landscape" | "portrait" | "square" }
+  options?: {
+    perPage?: number;
+    page?: number;
+    orientation?: "landscape" | "portrait" | "square";
+  },
 ): Promise<PexelsPhoto[]> {
   const params = new URLSearchParams({
     query,
@@ -93,7 +97,9 @@ export async function searchPhotos(
     params.set("orientation", options.orientation);
   }
 
-  const data = await pexelsFetch<PexelsSearchResponse>(`/search?${params.toString()}`);
+  const data = await pexelsFetch<PexelsSearchResponse>(
+    `/search?${params.toString()}`,
+  );
   return data.photos;
 }
 
@@ -101,9 +107,12 @@ export async function searchPhotos(
  * Get Pexels' hand-picked "curated" photos — good for generic hero/background imagery
  * when you don't have a specific search term.
  */
-export async function getCuratedPhotos(perPage = 6, page = 1): Promise<PexelsPhoto[]> {
+export async function getCuratedPhotos(
+  perPage = 6,
+  page = 1,
+): Promise<PexelsPhoto[]> {
   const data = await pexelsFetch<PexelsSearchResponse>(
-    `/curated?per_page=${perPage}&page=${page}`
+    `/curated?per_page=${perPage}&page=${page}`,
   );
   return data.photos;
 }

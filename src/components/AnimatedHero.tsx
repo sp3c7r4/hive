@@ -1,10 +1,14 @@
 "use client";
 
-import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useRef } from "react";
 
-export default function AnimatedHero({ children }: { children: React.ReactNode }) {
+export default function AnimatedHero({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const scope = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -21,21 +25,17 @@ export default function AnimatedHero({ children }: { children: React.ReactNode }
           duration: 0.9,
           stagger: 0.18,
         })
-          .from(
-            ".hero-body",
-            { autoAlpha: 0, y: 24, duration: 0.7 },
-            "-=0.3"
-          )
+          .from(".hero-body", { autoAlpha: 0, y: 24, duration: 0.7 }, "-=0.3")
           .from(
             ".hero-cta",
             { autoAlpha: 0, scale: 0.85, duration: 0.6, ease: "back.out(1.7)" },
-            "-=0.2"
+            "-=0.2",
           );
       });
 
       return () => mm.revert();
     },
-    { scope }
+    { scope },
   );
 
   return <div ref={scope}>{children}</div>;

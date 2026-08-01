@@ -210,14 +210,15 @@ git commit -m "[INFRA]: Add axios, zustand, env config, and shared types"
 
 **Files:**
 - Create: `src/app/api/auth/login/route.ts`
-- Create: `src/app/api/auth/register/route.ts`
+- Create: `src/app/api/auth/signup/route.ts`
 - Create: `src/app/api/auth/logout/route.ts`
 - Create: `src/app/api/auth/refresh/route.ts`
 - Create: `src/app/api/auth/session/route.ts`
 
 **Interfaces:**
 - Consumes: `NEXT_PUBLIC_API_URL` env var, `User` type
-- Produces: `/api/auth/login` (POST), `/api/auth/register` (POST), `/api/auth/logout` (POST), `/api/auth/refresh` (POST), `/api/auth/session` (GET) — consumed by `auth.api.ts` (Task 5), `api-client.ts` interceptor (Task 4), `AuthGuard` (Task 6)
+- Produces: `/api/auth/login` (POST), `/api/auth/signup` (POST), `/api/auth/logout` (POST), `/api/auth/refresh` (POST), `/api/auth/session` (GET) — consumed by `auth.api.ts` (Task 5), `api-client.ts` interceptor (Task 4), `AuthGuard` (Task 6)
+- Backend contract: login expects `{ email, password, loginType: "password" }`, refresh/logout expect `{ refreshToken }` in body, signup returns only verification token (no auth tokens — no cookies set), `/auth/me` returns user data under `data.data`
 
 - [ ] **Step 1: Create shared BFF cookie helper**
 
@@ -276,10 +277,11 @@ const BACKEND = process.env.NEXT_PUBLIC_API_URL!;
 export async function POST(request: Request) {
   const body = await request.json();
 
+  // Backend requires loginType field ("password" | "otp")
   const res = await fetch(`${BACKEND}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: JSON.stringify({ ...body, loginType: "password" }),
   });
 
   const json = await res.json();
@@ -288,6 +290,7 @@ export async function POST(request: Request) {
     return NextResponse.json(json, { status: res.status });
   }
 
+  // Backend response: { timestamp, status, success, data: { message, user, accessToken, refreshToken } }
   const { accessToken, refreshToken, user } = json.data;
   await setAuthCookies(accessToken, refreshToken);
 
@@ -295,18 +298,19 @@ export async function POST(request: Request) {
 }
 ```
 
-- [ ] **Step 3: Create `src/app/api/auth/register/route.ts`**
+- [ ] **Step 3: Create `src/app/api/auth/signup/route.ts`**
+
+Note: Backend signup returns only a verification token — NOT auth tokens. The user must verify email then login. No cookies are set here.
 
 ```ts
 import { NextResponse } from "next/server";
-import { setAuthCookies } from "../cookies";
 
 const BACKEND = process.env.NEXT_PUBLIC_API_URL!;
 
 export async function POST(request: Request) {
   const body = await request.json();
 
-  const res = await fetch(`${BACKEND}/auth/register`, {
+  const res = await fetch(`${BACKEND}/auth/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -314,18 +318,14 @@ export async function POST(request: Request) {
 
   const json = await res.json();
 
-  if (!res.ok) {
-    return NextResponse.json(json, { status: res.status });
-  }
-
-  const { accessToken, refreshToken, user } = json.data;
-  await setAuthCookies(accessToken, refreshToken);
-
-  return NextResponse.json({ data: { accessToken, user } });
+  // Pass through — no cookies set (signup returns verification token only)
+  return NextResponse.json(json, { status: res.status });
 }
 ```
 
 - [ ] **Step 4: Create `src/app/api/auth/refresh/route.ts`**
+
+Note: Backend expects `{ refreshToken }` in request body, NOT as a Bearer header.
 
 ```ts
 import { NextResponse } from "next/server";
@@ -340,12 +340,11 @@ export async function POST() {
     return NextResponse.json({ error: { message: "No refresh token" } }, { status: 401 });
   }
 
+  // Backend expects refresh token in body: { refreshToken: "..." }
   const res = await fetch(`${BACKEND}/auth/refresh`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${refreshToken}`,
-    },
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken }),
   });
 
   const json = await res.json();
@@ -355,6 +354,7 @@ export async function POST() {
     return NextResponse.json(json, { status: res.status });
   }
 
+  // Backend response: { data: { message, accessToken, refreshToken } }
   const { accessToken, refreshToken: newRefreshToken } = json.data;
   await setAuthCookies(accessToken, newRefreshToken);
 
@@ -363,6 +363,8 @@ export async function POST() {
 ```
 
 - [ ] **Step 5: Create `src/app/api/auth/logout/route.ts`**
+
+Note: Backend expects `{ refreshToken }` in request body, NOT as a Bearer header.
 
 ```ts
 import { NextResponse } from "next/server";
@@ -375,12 +377,11 @@ export async function POST() {
 
   if (refreshToken) {
     // Best-effort — don't block on backend response
+    // Backend expects refresh token in body: { refreshToken: "..." }
     await fetch(`${BACKEND}/auth/logout`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${refreshToken}`,
-      },
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
     }).catch(() => {});
   }
 
@@ -390,6 +391,8 @@ export async function POST() {
 ```
 
 - [ ] **Step 6: Create `src/app/api/auth/session/route.ts`**
+
+The session route validates the refresh token, obtains a fresh access token, then fetches user data.
 
 ```ts
 import { NextResponse } from "next/server";
@@ -404,40 +407,39 @@ export async function GET() {
     return NextResponse.json({ error: { message: "Not authenticated" } }, { status: 401 });
   }
 
-  // Use the refresh token as Bearer — the backend /auth/session validates it
-  const res = await fetch(`${BACKEND}/auth/refresh`, {
+  // Step 1: Refresh tokens — backend expects { refreshToken } in body
+  const refreshRes = await fetch(`${BACKEND}/auth/refresh`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${refreshToken}`,
-    },
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken }),
   });
 
-  const json = await res.json();
+  const refreshJson = await refreshRes.json();
 
-  if (!res.ok) {
+  if (!refreshRes.ok) {
     await clearAuthCookies();
     return NextResponse.json({ error: { message: "Session expired" } }, { status: 401 });
   }
 
-  const { accessToken, refreshToken: newRefreshToken } = json.data;
+  // Backend response: { data: { message, accessToken, refreshToken } }
+  const { accessToken, refreshToken: newRefreshToken } = refreshJson.data;
 
-  // Get user data from the new access token
+  // Step 2: Get user data using the fresh access token
   const userRes = await fetch(`${BACKEND}/auth/me`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
   const userJson = await userRes.json();
 
+  // Backend response: { timestamp, status, success, data: { message, data: user } }
+  // user is nested under data.data
+  const user = userJson.data?.data ?? userJson.data;
+
   await setAuthCookies(accessToken, newRefreshToken);
 
-  return NextResponse.json({
-    data: { accessToken, user: userJson.data },
-  });
+  return NextResponse.json({ data: { accessToken, user } });
 }
 ```
-
-**Note:** If the backend doesn't have a `/auth/me` endpoint, the session handler can decode the JWT payload client-side (after receiving the access token). Adjust based on what the backend actually provides.
 
 - [ ] **Step 7: Verify TypeScript compilation**
 
@@ -682,13 +684,13 @@ export const authApi = {
   login: (credentials: { email: string; password: string }) =>
     axios.post("/api/auth/login", credentials),
 
-  register: (data: {
+  signup: (data: {
     firstName: string;
     lastName: string;
     email: string;
     password: string;
     role: "instructor" | "student" | "parent";
-  }) => axios.post("/api/auth/register", data),
+  }) => axios.post("/api/auth/signup", data),
 
   refresh: () => axios.post("/api/auth/refresh"),
 

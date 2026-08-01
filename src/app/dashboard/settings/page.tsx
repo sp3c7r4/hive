@@ -1,15 +1,20 @@
 "use client";
 
-import { Suspense, useState, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import {
+  BellIcon,
+  Camera01Icon,
+  ComputerIcon,
+  Delete01Icon,
+  Link03Icon,
+  LockIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useRef, useState } from "react";
 import { DashboardLayout } from "@/components/app-sidebar";
+import { LinkedAccounts } from "@/components/settings/LinkedAccounts";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -18,16 +23,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Camera01Icon,
-  LockIcon,
-  BellIcon,
-  ComputerIcon,
-  Delete01Icon,
-  Link03Icon,
-} from "@hugeicons/core-free-icons";
-import { LinkedAccounts } from "@/components/settings/LinkedAccounts";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
@@ -272,9 +272,7 @@ function SettingsContent() {
 
           <Separator className="my-5" />
 
-          <p className="text-xs text-muted-foreground mb-3">
-            Active sessions
-          </p>
+          <p className="text-xs text-muted-foreground mb-3">Active sessions</p>
 
           <div className="flex flex-col gap-2">
             {sessions.map((s, i) => (
@@ -338,15 +336,9 @@ function SettingsContent() {
                 ["Push", notifPush, setNotifPush] as const,
               ] satisfies readonly [string, boolean, (v: boolean) => void][]
             ).map(([label, value, setter]) => (
-              <div
-                key={label}
-                className="flex items-center justify-between"
-              >
+              <div key={label} className="flex items-center justify-between">
                 <span className="text-sm">{label}</span>
-                <Switch
-                  checked={value}
-                  onCheckedChange={setter}
-                />
+                <Switch checked={value} onCheckedChange={setter} />
               </div>
             ))}
           </div>

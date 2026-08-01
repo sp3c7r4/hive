@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import {
+  clearAuthCookies,
   getRefreshTokenCookie,
   setAuthCookies,
-  clearAuthCookies,
 } from "../cookies";
 
 const BACKEND = process.env.NEXT_PUBLIC_API_URL!;
@@ -13,7 +13,7 @@ export async function GET() {
   if (!refreshToken) {
     return NextResponse.json(
       { error: { message: "Not authenticated" } },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -30,7 +30,7 @@ export async function GET() {
     await clearAuthCookies();
     return NextResponse.json(
       { error: { message: "Session expired" } },
-      { status: 401 }
+      { status: 401 },
     );
   }
 

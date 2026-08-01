@@ -1,22 +1,22 @@
 "use client";
 
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Add01Icon,
-  UserGroupIcon,
   Globe02Icon,
   LockIcon,
   Mail01Icon,
+  UserGroupIcon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { DashboardLayout } from "@/components/app-sidebar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 /* ---------------------------------------------------------------- */
 /*  Types & demo data                                               */
@@ -36,9 +36,24 @@ type Community = {
 };
 
 const visibilityMeta = {
-  public: { icon: Globe02Icon, label: "Public", color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" },
-  private: { icon: LockIcon, label: "Private", color: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400" },
-  "invite-only": { icon: Mail01Icon, label: "Invite Only", color: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400" },
+  public: {
+    icon: Globe02Icon,
+    label: "Public",
+    color:
+      "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+  },
+  private: {
+    icon: LockIcon,
+    label: "Private",
+    color:
+      "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+  },
+  "invite-only": {
+    icon: Mail01Icon,
+    label: "Invite Only",
+    color:
+      "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
+  },
 } as const;
 
 const MOCK_COMMUNITIES: Community[] = [
@@ -46,7 +61,8 @@ const MOCK_COMMUNITIES: Community[] = [
     id: "1",
     name: "Frontend Devs",
     slug: "frontend-devs",
-    description: "A community for frontend developers to share tips, tricks, and best practices. We cover React, Vue, CSS, and everything in between.",
+    description:
+      "A community for frontend developers to share tips, tricks, and best practices. We cover React, Vue, CSS, and everything in between.",
     category: "Development",
     visibility: "public",
     memberCount: 1248,
@@ -55,7 +71,8 @@ const MOCK_COMMUNITIES: Community[] = [
     id: "2",
     name: "UI/UX Critique Circle",
     slug: "uiux-critique-circle",
-    description: "Weekly design critiques, portfolio reviews, and UX discussions. Bring your work and get honest, constructive feedback.",
+    description:
+      "Weekly design critiques, portfolio reviews, and UX discussions. Bring your work and get honest, constructive feedback.",
     category: "Design",
     visibility: "public",
     memberCount: 860,
@@ -64,7 +81,8 @@ const MOCK_COMMUNITIES: Community[] = [
     id: "3",
     name: "Data Science Lab",
     slug: "data-science-lab",
-    description: "Collaborative space for data scientists and analysts. Share datasets, discuss methodologies, and work on real-world problems.",
+    description:
+      "Collaborative space for data scientists and analysts. Share datasets, discuss methodologies, and work on real-world problems.",
     category: "Data Science",
     visibility: "private",
     memberCount: 342,
@@ -73,7 +91,8 @@ const MOCK_COMMUNITIES: Community[] = [
     id: "4",
     name: "Freelance Creatives",
     slug: "freelance-creatives",
-    description: "For designers, writers, and developers navigating the freelance life. Pricing strategies, client management, and community support.",
+    description:
+      "For designers, writers, and developers navigating the freelance life. Pricing strategies, client management, and community support.",
     category: "Business",
     visibility: "invite-only",
     memberCount: 156,
@@ -108,7 +127,10 @@ function CommunityCard({ community }: { community: Community }) {
         <div className="p-4 flex flex-col gap-2 flex-1">
           <div className="flex items-start justify-between gap-2">
             <p className="text-sm font-semibold truncate">{community.name}</p>
-            <Badge variant="secondary" className="rounded-full text-[10px] px-2 py-0 h-5 shrink-0">
+            <Badge
+              variant="secondary"
+              className="rounded-full text-[10px] px-2 py-0 h-5 shrink-0"
+            >
               {community.category}
             </Badge>
           </div>
@@ -141,9 +163,7 @@ function CommunitiesPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-xl font-bold tracking-tight">
-              My Communities
-            </h1>
+            <h1 className="text-xl font-bold tracking-tight">My Communities</h1>
             <p className="text-sm text-muted-foreground mt-1">
               {communities.length} communit{communities.length !== 1 && "ies"}
             </p>
@@ -163,7 +183,11 @@ function CommunitiesPage() {
         {communities.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
             <div className="size-16 rounded-full bg-muted flex items-center justify-center">
-              <HugeiconsIcon icon={UserGroupIcon} size={28} className="text-muted-foreground" />
+              <HugeiconsIcon
+                icon={UserGroupIcon}
+                size={28}
+                className="text-muted-foreground"
+              />
             </div>
             <div>
               <p className="text-sm font-medium">No communities yet</p>
@@ -175,7 +199,11 @@ function CommunitiesPage() {
               className="rounded-full"
               render={
                 <Link href={`/dashboard/communities/create?role=${role}`}>
-                  <HugeiconsIcon icon={Add01Icon} size={16} className="mr-1.5" />
+                  <HugeiconsIcon
+                    icon={Add01Icon}
+                    size={16}
+                    className="mr-1.5"
+                  />
                   Create Community
                 </Link>
               }

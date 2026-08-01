@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 const VALID_ROLES = ["instructor", "student", "parent", "admin"] as const;
 
@@ -18,7 +18,10 @@ export function proxy(request: NextRequest) {
     const roleParam = request.nextUrl.searchParams.get("role");
 
     // If role cookie exists, enforce it (ignore query param manipulation)
-    if (roleCookie && VALID_ROLES.includes(roleCookie as typeof VALID_ROLES[number])) {
+    if (
+      roleCookie &&
+      VALID_ROLES.includes(roleCookie as (typeof VALID_ROLES)[number])
+    ) {
       // Rewrite the query param to match the cookie so client code is consistent
       if (roleParam !== roleCookie) {
         const url = request.nextUrl.clone();
@@ -29,7 +32,10 @@ export function proxy(request: NextRequest) {
     }
 
     // If no cookie, use query param as fallback and set cookie
-    if (roleParam && VALID_ROLES.includes(roleParam as typeof VALID_ROLES[number])) {
+    if (
+      roleParam &&
+      VALID_ROLES.includes(roleParam as (typeof VALID_ROLES)[number])
+    ) {
       const response = NextResponse.next();
       response.cookies.set("hive-role", roleParam, {
         path: "/",

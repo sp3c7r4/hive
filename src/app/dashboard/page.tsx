@@ -1,37 +1,37 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { useGSAP } from "@gsap/react";
-import { getDashboardRole } from "@/lib/role-utils";
+import {
+  Add01Icon,
+  Calendar01Icon,
+  Clock01Icon,
+  CourseIcon,
+  PlayIcon,
+  UserCheck01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import gsap from "gsap";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { ActivityFeed } from "@/components/activity-feed";
 import { DashboardLayout } from "@/components/app-sidebar";
 import { ParentDashboard } from "@/components/dashboard/parent-dashboard";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from "@/components/ui/card";
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "@/components/ui/chart";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Calendar01Icon,
-  Clock01Icon,
-  PlayIcon,
-  Add01Icon,
-  CourseIcon,
-  UserCheck01Icon,
-} from "@hugeicons/core-free-icons";
-import { ActivityFeed } from "@/components/activity-feed";
+import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getDashboardRole } from "@/lib/role-utils";
 import { useCoursesStore } from "@/stores/courses.store";
 import { useEnrollmentsStore } from "@/stores/enrollments.store";
 
@@ -41,7 +41,13 @@ type Role = "instructor" | "student" | "parent" | "admin";
 /*  Demo data                                                       */
 /* ---------------------------------------------------------------- */
 
-const dueSoon: { id: number; title: string; course: string; href: string; dueInHours: number }[] = [
+const dueSoon: {
+  id: number;
+  title: string;
+  course: string;
+  href: string;
+  dueInHours: number;
+}[] = [
   {
     id: 1,
     title: "Module 3 Quiz",
@@ -184,10 +190,10 @@ function StreakBadge({ streak }: { streak: number }) {
               numberRef.current.textContent = Math.round(obj.val).toString();
           },
         },
-        "-=0.1"
+        "-=0.1",
       );
     },
-    { dependencies: [streak] }
+    { dependencies: [streak] },
   );
 
   return (
@@ -215,14 +221,15 @@ function WelcomeBanner({
   streak: number;
 }) {
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const greeting =
+    hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 
   return (
     <div className="flex items-center gap-1 flex-wrap">
       <h1 className="text-2xl font-bold tracking-tight">
         {greeting}, <span className="text-primary">{firstName}</span>
       </h1>
-        <StreakBadge streak={streak} />
+      <StreakBadge streak={streak} />
     </div>
   );
 }
@@ -236,23 +243,32 @@ function StudentDashboard() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activityFilter, setActivityFilter] = useState<string>("all");
 
-  const { courses, fetchCourses, isLoading: coursesLoading } = useCoursesStore();
-  const { enrollments, fetchEnrollments, isLoading: enrollmentsLoading } = useEnrollmentsStore();
+  const {
+    courses,
+    fetchCourses,
+    isLoading: coursesLoading,
+  } = useCoursesStore();
+  const {
+    enrollments,
+    fetchEnrollments,
+    isLoading: enrollmentsLoading,
+  } = useEnrollmentsStore();
 
   useEffect(() => {
     fetchCourses();
     fetchEnrollments();
   }, [fetchCourses, fetchEnrollments]);
 
-  const derivedContinueLearning = courses.length > 0
-    ? courses.map((c) => ({
-        id: c.id,
-        title: c.title,
-        instructor: "Instructor",
-        progress: 0,
-        cover: "/images/course-placeholder.jpg",
-      }))
-    : continueLearning;
+  const derivedContinueLearning =
+    courses.length > 0
+      ? courses.map((c) => ({
+          id: c.id,
+          title: c.title,
+          instructor: "Instructor",
+          progress: 0,
+          cover: "/images/course-placeholder.jpg",
+        }))
+      : continueLearning;
 
   useGSAP(
     () => {
@@ -264,7 +280,7 @@ function StudentDashboard() {
         ease: "power2.out",
       });
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
@@ -299,9 +315,7 @@ function StudentDashboard() {
                   className="flex items-center justify-between rounded-lg px-3 py-2.5 hover:bg-muted transition-colors"
                 >
                   <div className="min-w-0 mr-3">
-                    <p className="text-sm font-medium truncate">
-                      {item.title}
-                    </p>
+                    <p className="text-sm font-medium truncate">{item.title}</p>
                     <p className="text-xs text-muted-foreground truncate">
                       {item.course}
                     </p>
@@ -360,12 +374,44 @@ function StudentDashboard() {
 
 const liveClasses = {
   upcoming: [
-    { id:"lc1", title:"Live Code Review", community:"Frontend Devs", date:"Apr 15, 2025", time:"6:00 PM WAT", link:"https://meet.google.com/abc-defg-hij", countdown:"Today" },
-    { id:"lc2", title:"Q&A: State Management", community:"Frontend Devs", date:"Apr 18, 2025", time:"4:00 PM WAT", link:"https://meet.google.com/xyz-uvwx-yz1", countdown:"3 days" },
+    {
+      id: "lc1",
+      title: "Live Code Review",
+      community: "Frontend Devs",
+      date: "Apr 15, 2025",
+      time: "6:00 PM WAT",
+      link: "https://meet.google.com/abc-defg-hij",
+      countdown: "Today",
+    },
+    {
+      id: "lc2",
+      title: "Q&A: State Management",
+      community: "Frontend Devs",
+      date: "Apr 18, 2025",
+      time: "4:00 PM WAT",
+      link: "https://meet.google.com/xyz-uvwx-yz1",
+      countdown: "3 days",
+    },
   ],
   past: [
-    { id:"lc3", title:"Intro to React Workshop", community:"Frontend Devs", date:"Apr 5, 2025", recording:true, attendees:28, avgDuration:"52 min" },
-    { id:"lc4", title:"Portfolio Review Session", community:"UI/UX Critique Circle", date:"Mar 28, 2025", recording:false, attendees:18, avgDuration:"64 min" },
+    {
+      id: "lc3",
+      title: "Intro to React Workshop",
+      community: "Frontend Devs",
+      date: "Apr 5, 2025",
+      recording: true,
+      attendees: 28,
+      avgDuration: "52 min",
+    },
+    {
+      id: "lc4",
+      title: "Portfolio Review Session",
+      community: "UI/UX Critique Circle",
+      date: "Mar 28, 2025",
+      recording: false,
+      attendees: 18,
+      avgDuration: "64 min",
+    },
   ],
 };
 
@@ -394,7 +440,11 @@ const actionQueue = [
   },
 ];
 
-const instructorRevenue = { total: 842000, thisMonth: 156000, available: 63000 };
+const instructorRevenue = {
+  total: 842000,
+  thisMonth: 156000,
+  available: 63000,
+};
 
 const enrollmentDataWeekly = [
   { period: "Week 1", enrollments: 12 },
@@ -511,7 +561,7 @@ function StatNumber({
         },
       });
     },
-    { dependencies: [target] }
+    { dependencies: [target] },
   );
   return (
     <p ref={ref} className="text-2xl font-bold tabular-nums">
@@ -544,22 +594,43 @@ function InstructorDashboard() {
         ease: "power2.out",
       });
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
     <div ref={containerRef} className="flex flex-col gap-6 min-w-0">
       {/* ---- 0. Quick Actions ---- */}
       <div className="dash-widget flex flex-col sm:flex-row gap-2">
-        <Button variant="outline" className="w-full sm:w-auto rounded-full" render={<Link href="/dashboard/communities/create"><HugeiconsIcon icon={Add01Icon} size={16} className="mr-1.5" />Create Community</Link>} />
-        <Button className="w-full sm:w-auto rounded-full" render={<Link href="/dashboard/courses/create"><HugeiconsIcon icon={CourseIcon} size={16} className="mr-1.5" />Create Course</Link>} />
+        <Button
+          variant="outline"
+          className="w-full sm:w-auto rounded-full"
+          render={
+            <Link href="/dashboard/communities/create">
+              <HugeiconsIcon icon={Add01Icon} size={16} className="mr-1.5" />
+              Create Community
+            </Link>
+          }
+        />
+        <Button
+          className="w-full sm:w-auto rounded-full"
+          render={
+            <Link href="/dashboard/courses/create">
+              <HugeiconsIcon icon={CourseIcon} size={16} className="mr-1.5" />
+              Create Course
+            </Link>
+          }
+        />
       </div>
 
       {/* ---- 0.5 Live Classes ---- */}
       <div className="dash-widget">
         <Card className="p-5">
           <div className="flex items-center gap-2 mb-4">
-            <HugeiconsIcon icon={Calendar01Icon} size={18} className="text-muted-foreground" />
+            <HugeiconsIcon
+              icon={Calendar01Icon}
+              size={18}
+              className="text-muted-foreground"
+            />
             <h2 className="text-sm font-semibold">Live Classes</h2>
           </div>
 
@@ -567,14 +638,41 @@ function InstructorDashboard() {
           {liveClasses.upcoming.length > 0 && (
             <div className="flex flex-col gap-2 mb-4">
               {liveClasses.upcoming.map((lc) => (
-                <div key={lc.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border p-4 bg-primary/5">
+                <div
+                  key={lc.id}
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border p-4 bg-primary/5"
+                >
                   <div className="min-w-0">
                     <p className="text-sm font-semibold">{lc.title}</p>
-                    <p className="text-xs text-muted-foreground">{lc.community} · {lc.date} · {lc.time}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {lc.community} · {lc.date} · {lc.time}
+                    </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <Badge variant="secondary" className="rounded-full text-[10px]">{lc.countdown}</Badge>
-                    <Button size="sm" className="rounded-full" render={<a href={lc.link} target="_blank" rel="noopener noreferrer"><HugeiconsIcon icon={PlayIcon} size={13} className="mr-1" />Join as Host</a>} />
+                    <Badge
+                      variant="secondary"
+                      className="rounded-full text-[10px]"
+                    >
+                      {lc.countdown}
+                    </Badge>
+                    <Button
+                      size="sm"
+                      className="rounded-full"
+                      render={
+                        <a
+                          href={lc.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <HugeiconsIcon
+                            icon={PlayIcon}
+                            size={13}
+                            className="mr-1"
+                          />
+                          Join as Host
+                        </a>
+                      }
+                    />
                   </div>
                 </div>
               ))}
@@ -584,18 +682,34 @@ function InstructorDashboard() {
           {/* Past */}
           {liveClasses.past.length > 0 && (
             <div className="flex flex-col gap-2">
-              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Recent</p>
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
+                Recent
+              </p>
               {liveClasses.past.map((lc) => (
-                <div key={lc.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border p-3">
+                <div
+                  key={lc.id}
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border p-3"
+                >
                   <div className="min-w-0">
                     <p className="text-sm font-medium truncate">{lc.title}</p>
-                    <p className="text-xs text-muted-foreground">{lc.community} · {lc.date} · {lc.attendees} attended · {lc.avgDuration} avg</p>
+                    <p className="text-xs text-muted-foreground">
+                      {lc.community} · {lc.date} · {lc.attendees} attended ·{" "}
+                      {lc.avgDuration} avg
+                    </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     {lc.recording ? (
-                      <Badge className="rounded-full text-[10px] px-2 py-0 h-5 bg-emerald-100 text-emerald-700">Recording ready</Badge>
+                      <Badge className="rounded-full text-[10px] px-2 py-0 h-5 bg-emerald-100 text-emerald-700">
+                        Recording ready
+                      </Badge>
                     ) : (
-                      <Button size="sm" variant="outline" className="rounded-full text-xs h-8">Upload Recording</Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="rounded-full text-xs h-8"
+                      >
+                        Upload Recording
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -633,7 +747,12 @@ function InstructorDashboard() {
                     </Badge>
                     <p className="text-sm">{item.label}</p>
                   </div>
-                  <Button size="sm" variant="outline" className="w-full sm:w-auto shrink-0 rounded-full" render={<Link href={item.href}>Review</Link>} />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full sm:w-auto shrink-0 rounded-full"
+                    render={<Link href={item.href}>Review</Link>}
+                  />
                 </div>
               ))}
             </div>
@@ -676,8 +795,14 @@ function InstructorDashboard() {
             </Tabs>
           </div>
           {/* Unpadded zone — chart bleeds to edges */}
-          <ChartContainer config={chartConfig} className="h-[200px] w-full min-w-0">
-            <AreaChart data={data} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
+          <ChartContainer
+            config={chartConfig}
+            className="h-[200px] w-full min-w-0"
+          >
+            <AreaChart
+              data={data}
+              margin={{ top: 4, right: 0, left: 0, bottom: 0 }}
+            >
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="period"
@@ -726,8 +851,6 @@ function InstructorDashboard() {
         filter={activityFilter}
         onFilterChange={setActivityFilter}
       />
-
-
     </div>
   );
 }
@@ -738,38 +861,66 @@ function InstructorDashboard() {
 
 function AdminDashboard() {
   const stats = [
-    { label:"Total Users", value:"1,847", change:"+12%" },
-    { label:"Total Communities", value:"34", change:"+3" },
-    { label:"Total Courses", value:"128", change:"+8" },
-    { label:"Revenue (All Time)", value:"₦2.4M", change:"+18%" },
-    { label:"Revenue This Month", value:"₦48K", change:"+22%" },
-    { label:"Active Users (7d)", value:"432", change:"+5%" },
+    { label: "Total Users", value: "1,847", change: "+12%" },
+    { label: "Total Communities", value: "34", change: "+3" },
+    { label: "Total Courses", value: "128", change: "+8" },
+    { label: "Revenue (All Time)", value: "₦2.4M", change: "+18%" },
+    { label: "Revenue This Month", value: "₦48K", change: "+22%" },
+    { label: "Active Users (7d)", value: "432", change: "+5%" },
   ];
 
   const recentSignups = [
-    { name:"Kelechi Okonkwo", role:"student", time:"10 min ago" },
-    { name:"Amara Obi", role:"instructor", time:"1 hour ago" },
-    { name:"Tunde Balogun", role:"student", time:"3 hours ago" },
+    { name: "Kelechi Okonkwo", role: "student", time: "10 min ago" },
+    { name: "Amara Obi", role: "instructor", time: "1 hour ago" },
+    { name: "Tunde Balogun", role: "student", time: "3 hours ago" },
   ];
 
   const recentPayments = [
-    { user:"Chioma Eze", amount:"₦10,000", course:"Python for Data Science", time:"2 hours ago" },
-    { user:"Ngozi Adeyemi", amount:"₦10,000", course:"Python (Kunle)", time:"5 hours ago" },
-    { user:"Emeka Nwosu", amount:"₦5,000", course:"Backend 101", time:"1 day ago" },
+    {
+      user: "Chioma Eze",
+      amount: "₦10,000",
+      course: "Python for Data Science",
+      time: "2 hours ago",
+    },
+    {
+      user: "Ngozi Adeyemi",
+      amount: "₦10,000",
+      course: "Python (Kunle)",
+      time: "5 hours ago",
+    },
+    {
+      user: "Emeka Nwosu",
+      amount: "₦5,000",
+      course: "Backend 101",
+      time: "1 day ago",
+    },
   ];
 
   return (
     <div className="flex flex-col gap-6">
-      <div><h1 className="text-2xl font-bold tracking-tight">Welcome back, Admin</h1><p className="text-muted-foreground mt-1">Platform-wide metrics and activity.</p></div>
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">
+          Welcome back, Admin
+        </h1>
+        <p className="text-muted-foreground mt-1">
+          Platform-wide metrics and activity.
+        </p>
+      </div>
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {stats.map((s) => (
           <Card key={s.label} className="p-4 flex flex-col justify-between">
-            <p className="text-[10px] sm:text-[11px] text-muted-foreground leading-tight">{s.label}</p>
+            <p className="text-[10px] sm:text-[11px] text-muted-foreground leading-tight">
+              {s.label}
+            </p>
             <div>
-              <p className="text-lg sm:text-xl font-bold tabular-nums mt-1">{s.value}</p>
-              <p className="text-[9px] text-emerald-600 font-medium">{s.change}</p>
+              <p className="text-lg sm:text-xl font-bold tabular-nums mt-1">
+                {s.value}
+              </p>
+              <p className="text-[9px] text-emerald-600 font-medium">
+                {s.change}
+              </p>
             </div>
           </Card>
         ))}
@@ -778,12 +929,32 @@ function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent signups */}
         <Card className="p-5">
-          <div className="flex items-center justify-between mb-4"><h3 className="text-sm font-semibold">Recent Signups</h3><Link href="/dashboard/users?role=admin" className="text-xs text-primary hover:underline">View all</Link></div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold">Recent Signups</h3>
+            <Link
+              href="/dashboard/users?role=admin"
+              className="text-xs text-primary hover:underline"
+            >
+              View all
+            </Link>
+          </div>
           <div className="flex flex-col gap-3">
-            {recentSignups.map((s,i) => (
+            {recentSignups.map((s, i) => (
               <div key={i} className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5"><div className="size-7 rounded-full bg-muted flex items-center justify-center text-[10px] font-semibold">{s.name.charAt(0)}</div><div><p className="text-sm font-medium">{s.name}</p><p className="text-[10px] text-muted-foreground">{s.role}</p></div></div>
-                <span className="text-[10px] text-muted-foreground">{s.time}</span>
+                <div className="flex items-center gap-2.5">
+                  <div className="size-7 rounded-full bg-muted flex items-center justify-center text-[10px] font-semibold">
+                    {s.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{s.name}</p>
+                    <p className="text-[10px] text-muted-foreground">
+                      {s.role}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] text-muted-foreground">
+                  {s.time}
+                </span>
               </div>
             ))}
           </div>
@@ -791,12 +962,28 @@ function AdminDashboard() {
 
         {/* Recent payments */}
         <Card className="p-5">
-          <div className="flex items-center justify-between mb-4"><h3 className="text-sm font-semibold">Recent Payments</h3><Link href="/dashboard/admin/payments?role=admin" className="text-xs text-primary hover:underline">View all</Link></div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold">Recent Payments</h3>
+            <Link
+              href="/dashboard/admin/payments?role=admin"
+              className="text-xs text-primary hover:underline"
+            >
+              View all
+            </Link>
+          </div>
           <div className="flex flex-col gap-3">
-            {recentPayments.map((p,i) => (
+            {recentPayments.map((p, i) => (
               <div key={i} className="flex items-center justify-between">
-                <div><p className="text-sm font-medium">{p.user}</p><p className="text-[10px] text-muted-foreground">{p.course}</p></div>
-                <div className="text-right"><p className="text-sm font-bold tabular-nums">{p.amount}</p><p className="text-[10px] text-muted-foreground">{p.time}</p></div>
+                <div>
+                  <p className="text-sm font-medium">{p.user}</p>
+                  <p className="text-[10px] text-muted-foreground">
+                    {p.course}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-bold tabular-nums">{p.amount}</p>
+                  <p className="text-[10px] text-muted-foreground">{p.time}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -806,13 +993,22 @@ function AdminDashboard() {
       {/* Quick links */}
       <div className="flex flex-wrap gap-2">
         {[
-          { label:"Manage Users", href:"/dashboard/users?role=admin" },
-          { label:"All Payments", href:"/dashboard/admin/payments?role=admin" },
-          { label:"Withdrawals", href:"/dashboard/withdrawals?role=admin" },
-          { label:"Activity Logs", href:"/dashboard/logs?role=admin" },
+          { label: "Manage Users", href: "/dashboard/users?role=admin" },
+          {
+            label: "All Payments",
+            href: "/dashboard/admin/payments?role=admin",
+          },
+          { label: "Withdrawals", href: "/dashboard/withdrawals?role=admin" },
+          { label: "Activity Logs", href: "/dashboard/logs?role=admin" },
         ].map((q) => (
           <Link key={q.label} href={q.href}>
-            <Button variant="outline" size="sm" className="rounded-full text-xs">{q.label} →</Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full text-xs"
+            >
+              {q.label} →
+            </Button>
           </Link>
         ))}
       </div>
@@ -825,10 +1021,10 @@ function PlaceholderDashboard({ role }: { role: Role }) {
     role === "instructor"
       ? "Ade"
       : role === "parent"
-      ? "Ngozi"
-      : role === "admin"
-      ? "Admin"
-      : "Chioma";
+        ? "Ngozi"
+        : role === "admin"
+          ? "Admin"
+          : "Chioma";
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -839,10 +1035,10 @@ function PlaceholderDashboard({ role }: { role: Role }) {
           {role === "instructor"
             ? "Here is your academy overview for today."
             : role === "parent"
-            ? "Here is how your children are progressing."
-            : role === "admin"
-            ? "Platform-wide metrics and activity."
-            : "Continue learning where you left off."}
+              ? "Here is how your children are progressing."
+              : role === "admin"
+                ? "Platform-wide metrics and activity."
+                : "Continue learning where you left off."}
         </p>
       </div>
 

@@ -31,7 +31,7 @@ export const useCoursesStore = create<CoursesState>((set) => ({
     try {
       const { data } = await coursesApi.list();
       set({ courses: data.data, isLoading: false });
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to load courses", isLoading: false });
     }
   },
@@ -41,7 +41,7 @@ export const useCoursesStore = create<CoursesState>((set) => ({
     try {
       const { data } = await coursesApi.getById(id);
       set({ currentCourse: data.data, isLoading: false });
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to load course", isLoading: false });
     }
   },
@@ -55,7 +55,7 @@ export const useCoursesStore = create<CoursesState>((set) => ({
         isLoading: false,
       }));
       return data.data;
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to create course", isLoading: false });
       return null;
     }
@@ -67,11 +67,10 @@ export const useCoursesStore = create<CoursesState>((set) => ({
       const { data } = await coursesApi.update(id, input);
       set((s) => ({
         courses: s.courses.map((c) => (c.id === id ? data.data : c)),
-        currentCourse:
-          s.currentCourse?.id === id ? data.data : s.currentCourse,
+        currentCourse: s.currentCourse?.id === id ? data.data : s.currentCourse,
         isLoading: false,
       }));
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to update course", isLoading: false });
     }
   },
@@ -85,7 +84,7 @@ export const useCoursesStore = create<CoursesState>((set) => ({
         currentCourse: s.currentCourse?.id === id ? null : s.currentCourse,
         isLoading: false,
       }));
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to delete course", isLoading: false });
     }
   },

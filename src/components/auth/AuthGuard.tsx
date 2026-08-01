@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAuthStore } from "@/stores/auth.store";
 import { authApi } from "@/services/api/auth.api";
+import { useAuthStore } from "@/stores/auth.store";
 
 function DashboardSkeleton() {
   return (

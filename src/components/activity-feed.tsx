@@ -1,14 +1,14 @@
 "use client";
 
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Notification03Icon,
   Award01Icon,
   Calendar01Icon,
   Dollar01Icon,
-  UserCheck01Icon,
   Message02Icon,
+  Notification03Icon,
+  UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 export type ActivityItem = {
   id: number;
@@ -23,16 +23,60 @@ export type ActivityType = {
 };
 
 const iconMap: Record<string, React.ReactNode> = {
-  badge: <HugeiconsIcon icon={Award01Icon} size={18} className="text-muted-foreground" />,
-  class: <HugeiconsIcon icon={Calendar01Icon} size={18} className="text-muted-foreground" />,
-  payment: <HugeiconsIcon icon={Dollar01Icon} size={18} className="text-muted-foreground" />,
-  review: <HugeiconsIcon icon={Message02Icon} size={18} className="text-muted-foreground" />,
-  enrollment: <HugeiconsIcon icon={UserCheck01Icon} size={18} className="text-muted-foreground" />,
-  submission: <HugeiconsIcon icon={Award01Icon} size={18} className="text-muted-foreground" />,
+  badge: (
+    <HugeiconsIcon
+      icon={Award01Icon}
+      size={18}
+      className="text-muted-foreground"
+    />
+  ),
+  class: (
+    <HugeiconsIcon
+      icon={Calendar01Icon}
+      size={18}
+      className="text-muted-foreground"
+    />
+  ),
+  payment: (
+    <HugeiconsIcon
+      icon={Dollar01Icon}
+      size={18}
+      className="text-muted-foreground"
+    />
+  ),
+  review: (
+    <HugeiconsIcon
+      icon={Message02Icon}
+      size={18}
+      className="text-muted-foreground"
+    />
+  ),
+  enrollment: (
+    <HugeiconsIcon
+      icon={UserCheck01Icon}
+      size={18}
+      className="text-muted-foreground"
+    />
+  ),
+  submission: (
+    <HugeiconsIcon
+      icon={Award01Icon}
+      size={18}
+      className="text-muted-foreground"
+    />
+  ),
 };
 
 export function ActivityIcon({ type }: { type: string }) {
-  return iconMap[type] ?? <HugeiconsIcon icon={Notification03Icon} size={18} className="text-muted-foreground" />;
+  return (
+    iconMap[type] ?? (
+      <HugeiconsIcon
+        icon={Notification03Icon}
+        size={18}
+        className="text-muted-foreground"
+      />
+    )
+  );
 }
 
 export function ActivityFeed({
@@ -48,7 +92,8 @@ export function ActivityFeed({
   filter: string;
   onFilterChange: (key: string) => void;
 }) {
-  const filtered = filter === "all" ? items : items.filter((a) => a.type === filter);
+  const filtered =
+    filter === "all" ? items : items.filter((a) => a.type === filter);
 
   return (
     <div className="dash-widget">
@@ -76,12 +121,17 @@ export function ActivityFeed({
       <div className="rounded-xl border bg-card p-4">
         <div className="flex flex-col gap-0.5">
           {filtered.map((a) => (
-            <div key={a.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5">
+            <div
+              key={a.id}
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5"
+            >
               <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
                 <ActivityIcon type={a.type} />
               </div>
               <p className="text-sm flex-1 min-w-0 truncate">{a.text}</p>
-              <span className="text-xs text-muted-foreground shrink-0">{a.time}</span>
+              <span className="text-xs text-muted-foreground shrink-0">
+                {a.time}
+              </span>
             </div>
           ))}
         </div>

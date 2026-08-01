@@ -31,7 +31,7 @@ export const useCommunitiesStore = create<CommunitiesState>((set) => ({
     try {
       const { data } = await communitiesApi.list();
       set({ communities: data.data, isLoading: false });
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to load communities", isLoading: false });
     }
   },
@@ -41,7 +41,7 @@ export const useCommunitiesStore = create<CommunitiesState>((set) => ({
     try {
       const { data } = await communitiesApi.getBySlug(slug);
       set({ currentCommunity: data.data, isLoading: false });
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to load community", isLoading: false });
     }
   },
@@ -55,7 +55,7 @@ export const useCommunitiesStore = create<CommunitiesState>((set) => ({
         isLoading: false,
       }));
       return data.data;
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to create community", isLoading: false });
       return null;
     }
@@ -71,7 +71,7 @@ export const useCommunitiesStore = create<CommunitiesState>((set) => ({
           s.currentCommunity?.id === id ? data.data : s.currentCommunity,
         isLoading: false,
       }));
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to update community", isLoading: false });
     }
   },
@@ -86,7 +86,7 @@ export const useCommunitiesStore = create<CommunitiesState>((set) => ({
           s.currentCommunity?.id === id ? null : s.currentCommunity,
         isLoading: false,
       }));
-    } catch (err) {
+    } catch (_err) {
       set({ error: "Failed to delete community", isLoading: false });
     }
   },

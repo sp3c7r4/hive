@@ -1,13 +1,13 @@
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
-  WebDesignIcon,
-  MotionIcon,
-  Megaphone01Icon,
   Layout04Icon,
+  Megaphone01Icon,
+  MotionIcon,
+  WebDesignIcon,
   WebProgrammingIcon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 export interface GridImages {
   webDesign: string;
@@ -118,25 +118,48 @@ function Portrait({ images }: { images: GridImages }) {
   return (
     <>
       <div className="grid-card">
-        <PortraitCard imageUrl={images.webDesign} badgeLabel="Web Design" icon={WebDesignIcon} tall />
+        <PortraitCard
+          imageUrl={images.webDesign}
+          badgeLabel="Web Design"
+          icon={WebDesignIcon}
+          tall
+        />
       </div>
       <div className="grid-card">
         <StatCard value="10K+" label="Learners" color="orange" />
       </div>
       <div className="grid-card">
-        <PortraitCard imageUrl={images.motionDesign} badgeLabel="Motion Design" icon={MotionIcon} />
+        <PortraitCard
+          imageUrl={images.motionDesign}
+          badgeLabel="Motion Design"
+          icon={MotionIcon}
+        />
       </div>
       <div className="grid-card">
-        <PortraitCard imageUrl={images.digitalMarketing} badgeLabel="Digital Marketing" icon={Megaphone01Icon} tall />
+        <PortraitCard
+          imageUrl={images.digitalMarketing}
+          badgeLabel="Digital Marketing"
+          icon={Megaphone01Icon}
+          tall
+        />
       </div>
       <div className="grid-card">
-        <PortraitCard imageUrl={images.designSystem} badgeLabel="Design System" icon={Layout04Icon} />
+        <PortraitCard
+          imageUrl={images.designSystem}
+          badgeLabel="Design System"
+          icon={Layout04Icon}
+        />
       </div>
       <div className="grid-card">
         <StatCard value="92%" label="Course Completion" color="purple" />
       </div>
       <div className="grid-card">
-        <PortraitCard imageUrl={images.webDevelopment} badgeLabel="Web Development" icon={WebProgrammingIcon} tall />
+        <PortraitCard
+          imageUrl={images.webDevelopment}
+          badgeLabel="Web Development"
+          icon={WebProgrammingIcon}
+          tall
+        />
       </div>
     </>
   );
@@ -157,7 +180,12 @@ export default function BalancedBox({ images }: { images: GridImages }) {
       <div className="hidden lg:flex gap-4 px-6 lg:px-12">
         {/* Col 1: Portrait (tall) */}
         <div className="flex-1 flex flex-col min-w-0 grid-card">
-          <PortraitCard imageUrl={images.webDesign} badgeLabel="Web Design" icon={WebDesignIcon} tall />
+          <PortraitCard
+            imageUrl={images.webDesign}
+            badgeLabel="Web Design"
+            icon={WebDesignIcon}
+            tall
+          />
         </div>
 
         {/* Col 2: Stat + Portrait (stacked) */}
@@ -166,19 +194,32 @@ export default function BalancedBox({ images }: { images: GridImages }) {
             <StatCard value="10K+" label="Learners" color="orange" />
           </div>
           <div className="grid-card">
-            <PortraitCard imageUrl={images.motionDesign} badgeLabel="Motion Design" icon={MotionIcon} />
+            <PortraitCard
+              imageUrl={images.motionDesign}
+              badgeLabel="Motion Design"
+              icon={MotionIcon}
+            />
           </div>
         </div>
 
         {/* Col 3: Portrait (tall, offset) */}
         <div className="flex-1 flex flex-col pt-16 min-w-0 grid-card">
-          <PortraitCard imageUrl={images.digitalMarketing} badgeLabel="Digital Marketing" icon={Megaphone01Icon} tall />
+          <PortraitCard
+            imageUrl={images.digitalMarketing}
+            badgeLabel="Digital Marketing"
+            icon={Megaphone01Icon}
+            tall
+          />
         </div>
 
         {/* Col 4: Portrait + Stat (stacked) */}
         <div className="flex-1 flex flex-col gap-4 min-w-0">
           <div className="grid-card">
-            <PortraitCard imageUrl={images.designSystem} badgeLabel="Design System" icon={Layout04Icon} />
+            <PortraitCard
+              imageUrl={images.designSystem}
+              badgeLabel="Design System"
+              icon={Layout04Icon}
+            />
           </div>
           <div className="grid-card">
             <StatCard value="92%" label="Course Completion" color="purple" />
@@ -187,7 +228,12 @@ export default function BalancedBox({ images }: { images: GridImages }) {
 
         {/* Col 5: Portrait (tall) */}
         <div className="flex-1 flex flex-col min-w-0 grid-card">
-          <PortraitCard imageUrl={images.webDevelopment} badgeLabel="Web Development" icon={WebProgrammingIcon} tall />
+          <PortraitCard
+            imageUrl={images.webDevelopment}
+            badgeLabel="Web Development"
+            icon={WebProgrammingIcon}
+            tall
+          />
         </div>
       </div>
     </section>

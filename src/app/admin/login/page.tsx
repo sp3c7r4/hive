@@ -1,12 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import {
+  EyeIcon,
+  EyeOffIcon,
+  LockIcon,
+  Mail01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Mail01Icon, LockIcon, EyeIcon, EyeOffIcon } from "@hugeicons/core-free-icons";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -23,7 +28,10 @@ export default function AdminLoginPage() {
     setTimeout(() => {
       setLoading(false);
       if (email === "admin@hive.ng" && password === "admin123") {
-        document.cookie = "hive-role=admin; path=/; max-age=" + 60 * 60 * 24 * 7 + "; SameSite=Lax";
+        document.cookie =
+          "hive-role=admin; path=/; max-age=" +
+          60 * 60 * 24 * 7 +
+          "; SameSite=Lax";
         localStorage.setItem("hive-role", "admin");
         window.location.href = "/dashboard?role=admin";
       } else {
@@ -38,12 +46,24 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-[400px] rounded-2xl border border-border bg-card p-6 sm:p-8">
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-6">
-          <Image src="/logo.svg" alt="Hive" width={44} height={46} className="shrink-0 mb-4" />
+          <Image
+            src="/logo.svg"
+            alt="Hive"
+            width={44}
+            height={46}
+            className="shrink-0 mb-4"
+          />
           <h1 className="text-lg font-bold">Admin Portal</h1>
-          <p className="text-sm text-muted-foreground mt-1">Sign in to manage the platform</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            Sign in to manage the platform
+          </p>
         </div>
 
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={handleSubmit}
+          noValidate
+        >
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="admin-email">Email Address</Label>
             <div className="relative">
@@ -94,7 +114,11 @@ export default function AdminLoginPage() {
             </p>
           )}
 
-          <Button type="submit" className="rounded-full w-full mt-1" disabled={loading}>
+          <Button
+            type="submit"
+            className="rounded-full w-full mt-1"
+            disabled={loading}
+          >
             {loading ? "Signing in…" : "Sign In"}
           </Button>
         </form>

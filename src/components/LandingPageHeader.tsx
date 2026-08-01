@@ -1,16 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/stores/auth.store";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { Menu01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useAuthStore } from "@/stores/auth.store";
 
 const navLinks = [
   "Course",
@@ -134,7 +130,7 @@ export default function LandingPageHeader() {
                       className="w-full rounded-full bg-foreground text-background hover:bg-foreground/90 font-bold"
                       onClick={() =>
                         router.push(
-                          `/dashboard?role=${user?.role ?? "student"}`
+                          `/dashboard?role=${user?.role ?? "student"}`,
                         )
                       }
                     >

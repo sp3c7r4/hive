@@ -1,6 +1,11 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent, type ClipboardEvent } from "react";
+import {
+  type ClipboardEvent,
+  type KeyboardEvent,
+  useRef,
+  useState,
+} from "react";
 import { cn } from "@/lib/utils";
 
 function OTPInput({
@@ -52,7 +57,10 @@ function OTPInput({
 
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, length);
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, length);
     onChange(pasted);
     if (pasted.length < length) {
       inputsRef.current[pasted.length]?.focus();
@@ -69,7 +77,9 @@ function OTPInput({
         return (
           <input
             key={i}
-            ref={(el) => { inputsRef.current[i] = el; }}
+            ref={(el) => {
+              inputsRef.current[i] = el;
+            }}
             type="text"
             inputMode="numeric"
             autoComplete="one-time-code"
@@ -89,7 +99,7 @@ function OTPInput({
                 : filled
                   ? "border-border bg-muted/50"
                   : "border-border bg-transparent",
-              disabled && "opacity-50 cursor-not-allowed"
+              disabled && "opacity-50 cursor-not-allowed",
             )}
           />
         );

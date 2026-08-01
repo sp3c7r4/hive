@@ -1,15 +1,23 @@
 "use client";
 
-import { Suspense, useState, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import {
+  BookOpen01Icon,
+  Calendar01Icon,
+  Clock01Icon,
+  HourglassIcon,
+  SentIcon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useState } from "react";
 import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -17,15 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  UserGroupIcon,
-  BookOpen01Icon,
-  Clock01Icon,
-  Calendar01Icon,
-  HourglassIcon,
-  SentIcon,
-} from "@hugeicons/core-free-icons";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
@@ -104,10 +104,7 @@ function MyChildrenPage() {
     const newChild: Child = {
       id: `ch-${Date.now()}`,
       name: linkEmail.split("@")[0].replace(/[._]/g, " "),
-      initials: linkEmail
-        .split("@")[0]
-        .slice(0, 2)
-        .toUpperCase(),
+      initials: linkEmail.split("@")[0].slice(0, 2).toUpperCase(),
       email: linkEmail.trim(),
       relationship: linkRelationship,
       status: "pending",
@@ -124,25 +121,35 @@ function MyChildrenPage() {
     (id: string) =>
       setChildren((prev) =>
         prev.map((c) =>
-          c.id === id ? { ...c, status: "linked" as const, linkedDate: new Date().toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" }) } : c
-        )
+          c.id === id
+            ? {
+                ...c,
+                status: "linked" as const,
+                linkedDate: new Date().toLocaleDateString("en-NG", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                }),
+              }
+            : c,
+        ),
       ),
-    []
+    [],
   );
 
   const handleReject = useCallback(
     (id: string) =>
       setChildren((prev) =>
         prev.map((c) =>
-          c.id === id ? { ...c, status: "rejected" as const } : c
-        )
+          c.id === id ? { ...c, status: "rejected" as const } : c,
+        ),
       ),
-    []
+    [],
   );
 
   const handleRevoke = useCallback(
     (id: string) => setChildren((prev) => prev.filter((c) => c.id !== id)),
-    []
+    [],
   );
 
   return (
@@ -177,8 +184,13 @@ function MyChildrenPage() {
             </div>
             <div className="w-full sm:w-[160px] flex flex-col gap-1.5">
               <Label className="text-xs">Relationship</Label>
-              <Select value={linkRelationship} onValueChange={setLinkRelationship}>
-                <SelectTrigger className="rounded-xl h-9 text-sm"><SelectValue /></SelectTrigger>
+              <Select
+                value={linkRelationship}
+                onValueChange={setLinkRelationship}
+              >
+                <SelectTrigger className="rounded-xl h-9 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Child">Child</SelectItem>
                   <SelectItem value="Ward">Ward</SelectItem>
@@ -212,9 +224,7 @@ function MyChildrenPage() {
                   key={child.id}
                   className="p-4 sm:p-5 hover:bg-muted/20 transition-colors cursor-pointer group"
                   onClick={() =>
-                    router.push(
-                      `/dashboard/children/${child.id}?role=${role}`
-                    )
+                    router.push(`/dashboard/children/${child.id}?role=${role}`)
                   }
                 >
                   <div className="flex items-start gap-3">
@@ -299,7 +309,11 @@ function MyChildrenPage() {
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <Badge className="rounded-full text-[9px] px-1.5 py-0 h-4 bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
-                      <HugeiconsIcon icon={HourglassIcon} size={9} className="mr-1" />
+                      <HugeiconsIcon
+                        icon={HourglassIcon}
+                        size={9}
+                        className="mr-1"
+                      />
                       Awaiting approval
                     </Badge>
                     <Button

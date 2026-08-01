@@ -1,14 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowLeft02Icon,
   SidebarLeftIcon,
   SidebarRightIcon,
   Sun02Icon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface LearningTopBarProps {
   courseTitle: string;
@@ -51,15 +51,20 @@ export function LearningTopBar({
           "size-8 flex items-center justify-center rounded-lg transition-colors shrink-0",
           sidebarOpen
             ? "text-foreground bg-muted"
-            : "text-muted-foreground hover:text-foreground hover:bg-muted"
+            : "text-muted-foreground hover:text-foreground hover:bg-muted",
         )}
         aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
       >
-        <HugeiconsIcon icon={sidebarOpen ? SidebarLeftIcon : SidebarRightIcon} size={18} />
+        <HugeiconsIcon
+          icon={sidebarOpen ? SidebarLeftIcon : SidebarRightIcon}
+          size={18}
+        />
       </button>
 
       {/* Course title */}
-      <p className="text-xs sm:text-sm font-semibold truncate min-w-0">{courseTitle}</p>
+      <p className="text-xs sm:text-sm font-semibold truncate min-w-0">
+        {courseTitle}
+      </p>
 
       {/* Spacer */}
       <div className="flex-1" />
@@ -85,7 +90,7 @@ export function LearningTopBar({
           "size-8 flex items-center justify-center rounded-r-lg transition-colors shrink-0 -mr-0.5",
           zenMode
             ? "text-primary bg-primary/10"
-            : "text-muted-foreground hover:text-foreground hover:bg-muted"
+            : "text-muted-foreground hover:text-foreground hover:bg-muted",
         )}
         aria-label={zenMode ? "Exit focus mode" : "Enter focus mode"}
         title={zenMode ? "Exit focus mode" : "Focus mode"}

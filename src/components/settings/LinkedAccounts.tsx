@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  UserCheck01Icon,
   Cancel01Icon,
+  UserCheck01Icon,
   UserIcon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useCallback, useState } from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /* ---- types ---- */
@@ -141,14 +141,14 @@ function LinkRow({
                 link.status === "pending" &&
                   "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
                 link.status === "rejected" &&
-                  "bg-muted-foreground/10 text-muted-foreground"
+                  "bg-muted-foreground/10 text-muted-foreground",
               )}
             >
               {link.status === "approved"
                 ? "Linked"
                 : link.status === "pending"
-                ? "Pending"
-                : "Rejected"}
+                  ? "Pending"
+                  : "Rejected"}
             </Badge>
           </div>
           <p className="text-[11px] text-muted-foreground truncate">
@@ -158,8 +158,8 @@ function LinkRow({
             {link.status === "approved"
               ? `Linked ${timeAgo(link.createdAt)}`
               : link.status === "pending"
-              ? `Requested ${timeAgo(link.createdAt)}`
-              : `Rejected ${timeAgo(link.createdAt)}`}
+                ? `Requested ${timeAgo(link.createdAt)}`
+                : `Rejected ${timeAgo(link.createdAt)}`}
           </p>
         </div>
       </div>
@@ -172,7 +172,11 @@ function LinkRow({
               className="rounded-full h-7 text-[10px]"
               onClick={() => onApprove(link.id)}
             >
-              <HugeiconsIcon icon={UserCheck01Icon} size={11} className="mr-1" />
+              <HugeiconsIcon
+                icon={UserCheck01Icon}
+                size={11}
+                className="mr-1"
+              />
               Approve
             </Button>
             <Button
@@ -209,35 +213,35 @@ interface LinkedAccountsProps {
 }
 
 export function LinkedAccounts({ role: appRole }: LinkedAccountsProps) {
-  const role: Role = (appRole === "student" || appRole === "parent") ? appRole : "student";
+  const role: Role =
+    appRole === "student" || appRole === "parent" ? appRole : "student";
   const [links, setLinks] = useState<LinkRequest[]>(
-    role === "student" ? STUDENT_LINKED_PARENTS : PARENT_LINKED_STUDENTS
+    role === "student" ? STUDENT_LINKED_PARENTS : PARENT_LINKED_STUDENTS,
   );
 
   const handleApprove = useCallback(
     (id: string) =>
       setLinks((prev) =>
         prev.map((l) =>
-          l.id === id ? { ...l, status: "approved" as const } : l
-        )
+          l.id === id ? { ...l, status: "approved" as const } : l,
+        ),
       ),
-    []
+    [],
   );
 
   const handleReject = useCallback(
     (id: string) =>
       setLinks((prev) =>
         prev.map((l) =>
-          l.id === id ? { ...l, status: "rejected" as const } : l
-        )
+          l.id === id ? { ...l, status: "rejected" as const } : l,
+        ),
       ),
-    []
+    [],
   );
 
   const handleRevoke = useCallback(
-    (id: string) =>
-      setLinks((prev) => prev.filter((l) => l.id !== id)),
-    []
+    (id: string) => setLinks((prev) => prev.filter((l) => l.id !== id)),
+    [],
   );
 
   const approvedLinks = links.filter((l) => l.status === "approved");
@@ -245,9 +249,7 @@ export function LinkedAccounts({ role: appRole }: LinkedAccountsProps) {
   const rejectedLinks = links.filter((l) => l.status === "rejected");
   const otherLabel = role === "student" ? "Parents" : "Students";
   const emptyLabel =
-    role === "student"
-      ? "No linked parents"
-      : "No linked students";
+    role === "student" ? "No linked parents" : "No linked students";
 
   return (
     <div className="flex flex-col gap-5">

@@ -1,48 +1,48 @@
 "use client";
 
-import { useTheme } from "@/components/theme-provider";
-import { useEffect, useState } from "react";
+import {
+  Award01Icon,
+  BookOpen01Icon,
+  Building02Icon,
+  CompassIcon,
+  CreditCardIcon,
+  HistoryIcon,
+  LayoutGridIcon,
+  Logout03Icon,
+  Message01Icon,
+  Moon02Icon,
+  Settings01Icon,
+  Shield02Icon,
+  Sun02Icon,
+  UserCheck01Icon,
+  UserGroupIcon,
+  Wallet01Icon,
+} from "@hugeicons/core-free-icons";
+import type { IconSvgElement } from "@hugeicons/react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { HugeiconsIcon } from "@hugeicons/react";
-import type { IconSvgElement } from "@hugeicons/react";
+import { useEffect, useState } from "react";
+import { GlobalSearchBar } from "@/components/global-search";
+import { useTheme } from "@/components/theme-provider";
+import { TopbarActionCluster } from "@/components/topbar-action-cluster";
+import { Separator } from "@/components/ui/separator";
 import {
-  LayoutGridIcon,
-  UserGroupIcon,
-  BookOpen01Icon,
-  UserCheck01Icon,
-  Wallet01Icon,
-  CompassIcon,
-  Award01Icon,
-  CreditCardIcon,
-  Building02Icon,
-  Shield02Icon,
-  HistoryIcon,
-  Settings01Icon,
-  Message01Icon,
-  Logout03Icon,
-  Sun02Icon,
-  Moon02Icon,
-} from "@hugeicons/core-free-icons";
-import {
-  SidebarProvider,
   Sidebar,
-  SidebarHeader,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarHeader,
   SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarTrigger,
   SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
-import { GlobalSearchBar } from "@/components/global-search";
-import { TopbarActionCluster } from "@/components/topbar-action-cluster";
+import { cn } from "@/lib/utils";
 
 /* ---------------------------------------------------------------- */
 /*  Types                                                           */
@@ -60,35 +60,71 @@ type NavItem = {
 const navByRole: Record<Role, NavItem[]> = {
   instructor: [
     { label: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
-    { label: "Communities", href: "/dashboard/communities", icon: UserGroupIcon },
+    {
+      label: "Communities",
+      href: "/dashboard/communities",
+      icon: UserGroupIcon,
+    },
     { label: "Courses", href: "/dashboard/courses", icon: BookOpen01Icon },
     { label: "Members", href: "/dashboard/members", icon: UserCheck01Icon },
     { label: "Messages", href: "/dashboard/messages", icon: Message01Icon },
     { label: "Earnings", href: "/dashboard/earnings", icon: Wallet01Icon },
-    { label: "Withdrawals", href: "/dashboard/withdrawals", icon: CreditCardIcon },
+    {
+      label: "Withdrawals",
+      href: "/dashboard/withdrawals",
+      icon: CreditCardIcon,
+    },
   ],
   student: [
     { label: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
     { label: "Explore", href: "/dashboard/explore", icon: CompassIcon },
-    { label: "My Communities", href: "/dashboard/my-communities", icon: UserGroupIcon },
-    { label: "My Courses", href: "/dashboard/my-courses", icon: BookOpen01Icon },
+    {
+      label: "My Communities",
+      href: "/dashboard/my-communities",
+      icon: UserGroupIcon,
+    },
+    {
+      label: "My Courses",
+      href: "/dashboard/my-courses",
+      icon: BookOpen01Icon,
+    },
     { label: "Messages", href: "/dashboard/messages", icon: Message01Icon },
     { label: "Payments", href: "/dashboard/payments", icon: CreditCardIcon },
-    { label: "Certificates", href: "/dashboard/certificates", icon: Award01Icon },
+    {
+      label: "Certificates",
+      href: "/dashboard/certificates",
+      icon: Award01Icon,
+    },
   ],
   parent: [
     { label: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
     { label: "My Children", href: "/dashboard/children", icon: UserGroupIcon },
     { label: "Messages", href: "/dashboard/messages", icon: Message01Icon },
     { label: "Payments", href: "/dashboard/payments", icon: CreditCardIcon },
-    { label: "Certificates", href: "/dashboard/certificates", icon: Award01Icon },
+    {
+      label: "Certificates",
+      href: "/dashboard/certificates",
+      icon: Award01Icon,
+    },
   ],
   admin: [
     { label: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
     { label: "Users", href: "/dashboard/users", icon: UserGroupIcon },
-    { label: "Communities", href: "/dashboard/admin/communities", icon: Building02Icon },
-    { label: "Payments", href: "/dashboard/admin/payments", icon: CreditCardIcon },
-    { label: "Withdrawals", href: "/dashboard/withdrawals", icon: Wallet01Icon },
+    {
+      label: "Communities",
+      href: "/dashboard/admin/communities",
+      icon: Building02Icon,
+    },
+    {
+      label: "Payments",
+      href: "/dashboard/admin/payments",
+      icon: CreditCardIcon,
+    },
+    {
+      label: "Withdrawals",
+      href: "/dashboard/withdrawals",
+      icon: Wallet01Icon,
+    },
     { label: "Activity Logs", href: "/dashboard/logs", icon: HistoryIcon },
   ],
 };
@@ -114,7 +150,7 @@ function ThemeToggle() {
             "size-8 flex items-center justify-center rounded-md transition-colors",
             theme === "light"
               ? "bg-background shadow-sm text-foreground"
-              : "text-muted-foreground hover:text-foreground"
+              : "text-muted-foreground hover:text-foreground",
           )}
         >
           <HugeiconsIcon icon={Sun02Icon} size={16} />
@@ -126,7 +162,7 @@ function ThemeToggle() {
             "size-8 flex items-center justify-center rounded-md transition-colors",
             theme === "dark"
               ? "bg-background shadow-sm text-foreground"
-              : "text-muted-foreground hover:text-foreground"
+              : "text-muted-foreground hover:text-foreground",
           )}
         >
           <HugeiconsIcon icon={Moon02Icon} size={16} />
@@ -145,7 +181,7 @@ function ThemeToggle() {
           "flex flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all",
           theme === "light"
             ? "bg-background text-foreground"
-            : "text-muted-foreground"
+            : "text-muted-foreground",
         )}
       >
         <HugeiconsIcon icon={Sun02Icon} size={14} />
@@ -158,7 +194,7 @@ function ThemeToggle() {
           "flex flex-1 items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all",
           theme === "dark"
             ? "bg-background text-foreground"
-            : "text-muted-foreground"
+            : "text-muted-foreground",
         )}
       >
         <HugeiconsIcon icon={Moon02Icon} size={14} />
@@ -245,7 +281,6 @@ export function AppSidebar({ role = "student" }: { role?: Role }) {
                 <span className="text-sm font-medium">Settings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
-
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
@@ -259,7 +294,7 @@ export function AppSidebar({ role = "student" }: { role?: Role }) {
           className={cn(
             "flex items-center gap-3",
             "group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:gap-1",
-            "px-0"
+            "px-0",
           )}
         >
           <div className="size-9 rounded-full bg-muted flex items-center justify-center shrink-0 overflow-hidden">
@@ -272,19 +307,19 @@ export function AppSidebar({ role = "student" }: { role?: Role }) {
               {role === "instructor"
                 ? "Ade Okafor"
                 : role === "parent"
-                ? "Ngozi Eze"
-                : role === "admin"
-                ? "Super Admin"
-                : "Chioma Nwosu"}
+                  ? "Ngozi Eze"
+                  : role === "admin"
+                    ? "Super Admin"
+                    : "Chioma Nwosu"}
             </p>
             <p className="text-xs text-muted-foreground truncate">
               {role === "instructor"
                 ? "ade@hive.ng"
                 : role === "parent"
-                ? "ngozi@hive.ng"
-                : role === "admin"
-                ? "admin@hive.ng"
-                : "chioma@hive.ng"}
+                  ? "ngozi@hive.ng"
+                  : role === "admin"
+                    ? "admin@hive.ng"
+                    : "chioma@hive.ng"}
             </p>
           </div>
           <Link
@@ -318,42 +353,46 @@ export function DashboardLayout({
     (pathname.startsWith("/dashboard/communities/create")
       ? "Create Community"
       : pathname.startsWith("/dashboard/admin/communities")
-      ? "Communities"
-      : pathname.startsWith("/dashboard/admin/payments")
-      ? "All Payments"
-      : pathname.startsWith("/dashboard/withdrawals")
-      ? "Withdrawals"
-      : pathname.startsWith("/dashboard/logs")
-      ? "Activity Logs"
-      : pathname.match(/^\/dashboard\/users\/[^/]+$/)
-      ? "User Detail"
-      : pathname.startsWith("/dashboard/users")
-      ? "Users"
-      : pathname.startsWith("/dashboard/communities")
-      ? "Communities"
-      : pathname.startsWith("/dashboard/settings")
-      ? "Settings"
-      : pathname.startsWith("/dashboard/messages")
-      ? "Messages"
-      : pathname.startsWith("/dashboard/search")
-      ? "Search"
-      : pathname.startsWith("/dashboard/payments")
-      ? "Payments"
-      : pathname.startsWith("/dashboard/members")
-      ? "Members"
-      : pathname.startsWith("/dashboard/earnings")
-      ? "Earnings"
-      : pathname.startsWith("/dashboard/my-courses")
-      ? "My Courses"
-      : pathname.startsWith("/dashboard/courses/create")
-      ? "Create Course"
-      : pathname.startsWith("/dashboard/courses")
-      ? "Courses"
-      : pathname.startsWith("/dashboard/explore")
-      ? "Explore"
-      : pathname.startsWith("/dashboard")
-      ? "Dashboard"
-      : "");
+        ? "Communities"
+        : pathname.startsWith("/dashboard/admin/payments")
+          ? "All Payments"
+          : pathname.startsWith("/dashboard/withdrawals")
+            ? "Withdrawals"
+            : pathname.startsWith("/dashboard/logs")
+              ? "Activity Logs"
+              : pathname.match(/^\/dashboard\/users\/[^/]+$/)
+                ? "User Detail"
+                : pathname.startsWith("/dashboard/users")
+                  ? "Users"
+                  : pathname.startsWith("/dashboard/communities")
+                    ? "Communities"
+                    : pathname.startsWith("/dashboard/settings")
+                      ? "Settings"
+                      : pathname.startsWith("/dashboard/messages")
+                        ? "Messages"
+                        : pathname.startsWith("/dashboard/search")
+                          ? "Search"
+                          : pathname.startsWith("/dashboard/payments")
+                            ? "Payments"
+                            : pathname.startsWith("/dashboard/members")
+                              ? "Members"
+                              : pathname.startsWith("/dashboard/earnings")
+                                ? "Earnings"
+                                : pathname.startsWith("/dashboard/my-courses")
+                                  ? "My Courses"
+                                  : pathname.startsWith(
+                                        "/dashboard/courses/create",
+                                      )
+                                    ? "Create Course"
+                                    : pathname.startsWith("/dashboard/courses")
+                                      ? "Courses"
+                                      : pathname.startsWith(
+                                            "/dashboard/explore",
+                                          )
+                                        ? "Explore"
+                                        : pathname.startsWith("/dashboard")
+                                          ? "Dashboard"
+                                          : "");
 
   return (
     <SidebarProvider
@@ -371,15 +410,17 @@ export function DashboardLayout({
           <div className="flex items-center gap-2 rounded-2xl bg-background py-2.5">
             <div className="flex items-center gap-2">
               <SidebarTrigger />
-              <span className="text-sm font-semibold text-foreground shrink-0">{pageTitle}</span>
+              <span className="text-sm font-semibold text-foreground shrink-0">
+                {pageTitle}
+              </span>
             </div>
             <GlobalSearchBar role={role} />
             <div className="ml-auto">
-            <TopbarActionCluster
-              status="active"
-              hasUnread
-              fallback={role.charAt(0).toUpperCase()}
-            />
+              <TopbarActionCluster
+                status="active"
+                hasUnread
+                fallback={role.charAt(0).toUpperCase()}
+              />
             </div>
           </div>
         </div>

@@ -1,16 +1,16 @@
 "use client";
 
-import { useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { useGSAP } from "@gsap/react";
 import {
   Certificate01Icon,
+  CheckmarkCircle02Icon,
   Download01Icon,
   Share01Icon,
-  CheckmarkCircle02Icon,
 } from "@hugeicons/core-free-icons";
-import { useGSAP } from "@gsap/react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import gsap from "gsap";
+import { useRef } from "react";
+import { Button } from "@/components/ui/button";
 
 interface CertificateData {
   studentName: string;
@@ -44,7 +44,7 @@ export function CertificatePreview({
         ease: "back.out(1.4)",
       });
     },
-    { scope: cardRef }
+    { scope: cardRef },
   );
 
   return (
@@ -62,7 +62,11 @@ export function CertificatePreview({
 
         {/* Watermark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] dark:opacity-[0.05]">
-          <HugeiconsIcon icon={Certificate01Icon} size={180} className="sm:size-[240px]" />
+          <HugeiconsIcon
+            icon={Certificate01Icon}
+            size={180}
+            className="sm:size-[240px]"
+          />
         </div>
 
         <div className="relative z-10 flex flex-col items-center text-center gap-1 sm:gap-2">
@@ -106,11 +110,13 @@ export function CertificatePreview({
 
           <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-amber-200 dark:border-amber-800/20 w-full">
             <div className="flex items-center justify-between text-[8px] sm:text-[9px] text-muted-foreground">
-              <span>
-                Cert #{data.certificateNumber}
-              </span>
+              <span>Cert #{data.certificateNumber}</span>
               <span className="flex items-center gap-1">
-                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={10} className="text-emerald-500" />
+                <HugeiconsIcon
+                  icon={CheckmarkCircle02Icon}
+                  size={10}
+                  className="text-emerald-500"
+                />
                 Verified
               </span>
             </div>
@@ -120,19 +126,11 @@ export function CertificatePreview({
 
       {/* Actions */}
       <div className="flex items-center gap-3">
-        <Button
-          variant="outline"
-          className="rounded-full"
-          onClick={onDownload}
-        >
+        <Button variant="outline" className="rounded-full" onClick={onDownload}>
           <HugeiconsIcon icon={Download01Icon} size={15} className="mr-2" />
           Download PDF
         </Button>
-        <Button
-          variant="outline"
-          className="rounded-full"
-          onClick={onShare}
-        >
+        <Button variant="outline" className="rounded-full" onClick={onShare}>
           <HugeiconsIcon icon={Share01Icon} size={15} className="mr-2" />
           Share
         </Button>

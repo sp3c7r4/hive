@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  PlayIcon,
+  CheckmarkCircle02Icon,
+  CollapseIcon,
+  FullScreenIcon,
   PauseIcon,
+  PlayIcon,
   VolumeHighIcon,
   VolumeMuteIcon,
-  FullScreenIcon,
-  CollapseIcon,
-  CheckmarkCircle02Icon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import type { Lesson } from "./types";
 
 interface VideoPlayerProps {
@@ -34,7 +34,8 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const saveIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const videoSrc = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+  const videoSrc =
+    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
   const togglePlay = useCallback(() => {
     const v = videoRef.current;
@@ -88,7 +89,7 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
       if (v && !v.paused) {
         localStorage.setItem(
           `hive-video-progress-${lesson.id}`,
-          JSON.stringify({ time: v.currentTime, duration: v.duration })
+          JSON.stringify({ time: v.currentTime, duration: v.duration }),
         );
       }
     }, 12000);
@@ -104,7 +105,9 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
         const { time } = JSON.parse(saved);
         const v = videoRef.current;
         if (v && time > 0) v.currentTime = time;
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
   }, [lesson.id]);
 
@@ -162,7 +165,11 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
             className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity"
           >
             <div className="size-12 sm:size-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg hover:bg-primary transition-colors hover:scale-105">
-              <HugeiconsIcon icon={PlayIcon} size={22} className="sm:size-[28px] text-primary-foreground ml-0.5" />
+              <HugeiconsIcon
+                icon={PlayIcon}
+                size={22}
+                className="sm:size-[28px] text-primary-foreground ml-0.5"
+              />
             </div>
           </button>
         )}
@@ -186,7 +193,11 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
               onClick={togglePlay}
               className="text-white hover:text-primary transition-colors shrink-0"
             >
-              <HugeiconsIcon icon={playing ? PauseIcon : PlayIcon} size={16} className="sm:size-[20px]" />
+              <HugeiconsIcon
+                icon={playing ? PauseIcon : PlayIcon}
+                size={16}
+                className="sm:size-[20px]"
+              />
             </button>
 
             {/* Time */}
@@ -201,7 +212,10 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
             <div className="relative hidden xs:block">
               <button
                 type="button"
-                onClick={() => { setShowSpeedMenu((v) => !v); setShowQualityMenu(false); }}
+                onClick={() => {
+                  setShowSpeedMenu((v) => !v);
+                  setShowQualityMenu(false);
+                }}
                 className="text-[10px] sm:text-xs text-white/80 hover:text-white px-1 sm:px-1.5 py-0.5 rounded"
               >
                 {playbackRate}x
@@ -226,7 +240,10 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
             <div className="relative hidden xs:block">
               <button
                 type="button"
-                onClick={() => { setShowQualityMenu((v) => !v); setShowSpeedMenu(false); }}
+                onClick={() => {
+                  setShowQualityMenu((v) => !v);
+                  setShowSpeedMenu(false);
+                }}
                 className="text-[10px] sm:text-xs text-white/80 hover:text-white px-1 sm:px-1.5 py-0.5 rounded"
               >
                 {quality}
@@ -237,7 +254,10 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
                     <button
                       key={q}
                       type="button"
-                      onClick={() => { setQuality(q); setShowQualityMenu(false); }}
+                      onClick={() => {
+                        setQuality(q);
+                        setShowQualityMenu(false);
+                      }}
                       className={`block w-full text-left px-3 py-1.5 text-xs hover:bg-muted transition-colors ${quality === q ? "text-primary font-semibold" : "text-foreground"}`}
                     >
                       {q}
@@ -253,7 +273,11 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
               onClick={toggleMute}
               className="text-white/80 hover:text-white transition-colors shrink-0"
             >
-              <HugeiconsIcon icon={muted ? VolumeMuteIcon : VolumeHighIcon} size={14} className="sm:size-[18px]" />
+              <HugeiconsIcon
+                icon={muted ? VolumeMuteIcon : VolumeHighIcon}
+                size={14}
+                className="sm:size-[18px]"
+              />
             </button>
 
             {/* Fullscreen */}
@@ -262,7 +286,11 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
               onClick={toggleFullscreen}
               className="text-white/80 hover:text-white transition-colors shrink-0"
             >
-              <HugeiconsIcon icon={fullscreen ? CollapseIcon : FullScreenIcon} size={14} className="sm:size-[18px]" />
+              <HugeiconsIcon
+                icon={fullscreen ? CollapseIcon : FullScreenIcon}
+                size={14}
+                className="sm:size-[18px]"
+              />
             </button>
           </div>
         </div>
@@ -271,8 +299,12 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
       {/* Lesson info */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
         <div className="flex-1 min-w-0">
-          <p className="text-[11px] sm:text-xs text-muted-foreground mb-0.5">Video Lesson</p>
-          <h2 className="text-base sm:text-lg font-bold leading-snug">{lesson.title}</h2>
+          <p className="text-[11px] sm:text-xs text-muted-foreground mb-0.5">
+            Video Lesson
+          </p>
+          <h2 className="text-base sm:text-lg font-bold leading-snug">
+            {lesson.title}
+          </h2>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
             Duration: {lesson.duration}
           </p>
@@ -282,10 +314,17 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
             <Button
               size="sm"
               variant="outline"
-              onClick={() => { setCompleted(true); onComplete(); }}
+              onClick={() => {
+                setCompleted(true);
+                onComplete();
+              }}
               className="rounded-full w-full sm:w-auto"
             >
-              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} className="mr-1.5" />
+              <HugeiconsIcon
+                icon={CheckmarkCircle02Icon}
+                size={14}
+                className="mr-1.5"
+              />
               <span className="text-xs">Mark Complete</span>
             </Button>
           ) : (
@@ -300,14 +339,23 @@ export function VideoPlayer({ lesson, onComplete }: VideoPlayerProps) {
       {/* Attachments / description */}
       <div className="border-t border-border/60 pt-4">
         <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-          In this lesson, we cover the fundamentals of {lesson.title.toLowerCase()}. 
-          Follow along with the video and take notes on key concepts.
+          In this lesson, we cover the fundamentals of{" "}
+          {lesson.title.toLowerCase()}. Follow along with the video and take
+          notes on key concepts.
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Button variant="outline" size="sm" className="rounded-full text-xs h-7 sm:h-8">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-full text-xs h-7 sm:h-8"
+          >
             Download Slides
           </Button>
-          <Button variant="outline" size="sm" className="rounded-full text-xs h-7 sm:h-8">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-full text-xs h-7 sm:h-8"
+          >
             Download Notes
           </Button>
         </div>

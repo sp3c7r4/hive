@@ -1,16 +1,12 @@
 "use client";
 
+import { Flag03Icon, StarIcon, ThumbsUpIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  StarIcon,
-  ThumbsUpIcon,
-  Flag03Icon,
-} from "@hugeicons/core-free-icons";
+import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { CourseReview } from "./types";
 
@@ -48,9 +44,7 @@ export function ReviewCard({ review, onMarkHelpful, onFlag }: ReviewCardProps) {
         </Avatar>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-sm font-semibold">
-              {review.author.name}
-            </span>
+            <span className="text-sm font-semibold">{review.author.name}</span>
             <span className="text-[11px] text-muted-foreground">
               {timeAgo(review.createdAt)}
             </span>
@@ -66,7 +60,7 @@ export function ReviewCard({ review, onMarkHelpful, onFlag }: ReviewCardProps) {
                 className={cn(
                   s <= review.rating
                     ? "text-amber-400 fill-amber-400"
-                    : "text-muted-foreground/20"
+                    : "text-muted-foreground/20",
                 )}
               />
             ))}
@@ -88,11 +82,12 @@ export function ReviewCard({ review, onMarkHelpful, onFlag }: ReviewCardProps) {
               onClick={onMarkHelpful}
               className={cn(
                 "rounded-full h-7 px-2.5 text-[10px] gap-1",
-                review.markedHelpful && "text-primary"
+                review.markedHelpful && "text-primary",
               )}
             >
               <HugeiconsIcon icon={ThumbsUpIcon} size={12} />
-              Helpful{review.helpfulCount > 0 ? ` (${review.helpfulCount})` : ""}
+              Helpful
+              {review.helpfulCount > 0 ? ` (${review.helpfulCount})` : ""}
             </Button>
             <Button
               variant="ghost"

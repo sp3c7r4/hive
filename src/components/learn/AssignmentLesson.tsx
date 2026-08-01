@@ -1,21 +1,21 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  ArrowRight02Icon,
   AssignmentsIcon,
+  Cancel01Icon,
   CheckmarkCircle02Icon,
-  Upload01Icon,
   Clock01Icon,
   File01Icon,
-  Cancel01Icon,
-  ArrowRight02Icon,
+  Upload01Icon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useCallback, useRef, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import type { Lesson } from "./types";
 
 /* ---------------------------------------------------------------- */
@@ -27,7 +27,10 @@ interface AssignmentLessonProps {
   onComplete: () => void;
 }
 
-export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) {
+export function AssignmentLesson({
+  lesson,
+  onComplete,
+}: AssignmentLessonProps) {
   const [started, setStarted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -35,17 +38,21 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
   const [notes, setNotes] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.files;
-    if (!selected) return;
-    const newFiles = Array.from(selected).map((f) => ({
-      name: f.name,
-      size: f.size > 1024 * 1024
-        ? `${(f.size / (1024 * 1024)).toFixed(1)} MB`
-        : `${Math.round(f.size / 1024)} KB`,
-    }));
-    setFiles((prev) => [...prev, ...newFiles]);
-  }, []);
+  const handleFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const selected = e.target.files;
+      if (!selected) return;
+      const newFiles = Array.from(selected).map((f) => ({
+        name: f.name,
+        size:
+          f.size > 1024 * 1024
+            ? `${(f.size / (1024 * 1024)).toFixed(1)} MB`
+            : `${Math.round(f.size / 1024)} KB`,
+      }));
+      setFiles((prev) => [...prev, ...newFiles]);
+    },
+    [],
+  );
 
   const removeFile = useCallback((name: string) => {
     setFiles((prev) => prev.filter((f) => f.name !== name));
@@ -66,9 +73,15 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
       <div className="flex flex-col gap-4 max-w-2xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
         <div className="text-center">
           <div className="size-16 sm:size-20 rounded-2xl bg-violet-50 dark:bg-violet-950/20 flex items-center justify-center mx-auto mb-4">
-            <HugeiconsIcon icon={AssignmentsIcon} size={32} className="sm:size-[40px] text-violet-500" />
+            <HugeiconsIcon
+              icon={AssignmentsIcon}
+              size={32}
+              className="sm:size-[40px] text-violet-500"
+            />
           </div>
-          <p className="text-[11px] sm:text-xs text-muted-foreground mb-1">Assignment</p>
+          <p className="text-[11px] sm:text-xs text-muted-foreground mb-1">
+            Assignment
+          </p>
           <h2 className="text-lg sm:text-xl font-bold">{lesson.title}</h2>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 mb-6 max-w-sm mx-auto">
             Estimated time: {lesson.duration}
@@ -80,10 +93,10 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
                 <h3 className="text-sm font-semibold mb-1.5">Brief</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                   Build a personal design portfolio page using React components.
-                  Your portfolio should include a hero section, a project gallery
-                  with at least 4 projects, and a contact form. Apply the concepts
-                  covered in the &quot;Components &amp; Props&quot; and
-                  &quot;State &amp; Events&quot; lessons.
+                  Your portfolio should include a hero section, a project
+                  gallery with at least 4 projects, and a contact form. Apply
+                  the concepts covered in the &quot;Components &amp; Props&quot;
+                  and &quot;State &amp; Events&quot; lessons.
                 </p>
               </div>
 
@@ -112,9 +125,17 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
             </Card>
           </div>
 
-          <Button className="rounded-full" size="lg" onClick={() => setStarted(true)}>
+          <Button
+            className="rounded-full"
+            size="lg"
+            onClick={() => setStarted(true)}
+          >
             Start Assignment
-            <HugeiconsIcon icon={ArrowRight02Icon} size={16} className="ml-1.5" />
+            <HugeiconsIcon
+              icon={ArrowRight02Icon}
+              size={16}
+              className="ml-1.5"
+            />
           </Button>
         </div>
       </div>
@@ -127,9 +148,15 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
       <div className="flex flex-col gap-4 max-w-2xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
         <div className="text-center">
           <div className="size-16 sm:size-20 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 flex items-center justify-center mx-auto mb-4">
-            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={36} className="sm:size-[44px] text-emerald-500" />
+            <HugeiconsIcon
+              icon={CheckmarkCircle02Icon}
+              size={36}
+              className="sm:size-[44px] text-emerald-500"
+            />
           </div>
-          <h2 className="text-lg sm:text-xl font-bold">Assignment Submitted!</h2>
+          <h2 className="text-lg sm:text-xl font-bold">
+            Assignment Submitted!
+          </h2>
           <p className="text-sm text-muted-foreground mt-1 mb-2 max-w-sm mx-auto">
             Your assignment has been submitted successfully. The instructor will
             review it and provide feedback.
@@ -143,7 +170,9 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
               </Badge>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">Files submitted</span>
+              <span className="text-xs text-muted-foreground">
+                Files submitted
+              </span>
               <span className="text-sm font-bold">{files.length}</span>
             </div>
             <div className="flex items-center justify-between">
@@ -153,7 +182,11 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
           </Card>
 
           <Button className="rounded-full" onClick={handleComplete}>
-            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={15} className="mr-1.5" />
+            <HugeiconsIcon
+              icon={CheckmarkCircle02Icon}
+              size={15}
+              className="mr-1.5"
+            />
             Mark as Complete
           </Button>
         </div>
@@ -167,7 +200,11 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
       <div className="flex flex-col gap-4 max-w-2xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
         <div className="text-center">
           <div className="size-16 sm:size-20 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 flex items-center justify-center mx-auto mb-4">
-            <HugeiconsIcon icon={CheckmarkCircle02Icon} size={36} className="sm:size-[44px] text-emerald-500" />
+            <HugeiconsIcon
+              icon={CheckmarkCircle02Icon}
+              size={36}
+              className="sm:size-[44px] text-emerald-500"
+            />
           </div>
           <h2 className="text-lg sm:text-xl font-bold">Assignment Complete</h2>
           <p className="text-sm text-muted-foreground mt-1">
@@ -184,13 +221,24 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
       {/* Header */}
       <div className="flex items-center gap-2.5">
         <div className="size-8 sm:size-9 rounded-lg bg-violet-50 dark:bg-violet-950/20 flex items-center justify-center shrink-0">
-          <HugeiconsIcon icon={AssignmentsIcon} size={15} className="sm:size-[17px] text-violet-500" />
+          <HugeiconsIcon
+            icon={AssignmentsIcon}
+            size={15}
+            className="sm:size-[17px] text-violet-500"
+          />
         </div>
         <div className="min-w-0">
-          <p className="text-[11px] sm:text-xs text-muted-foreground">Assignment</p>
-          <h2 className="text-sm sm:text-base font-bold truncate">{lesson.title}</h2>
+          <p className="text-[11px] sm:text-xs text-muted-foreground">
+            Assignment
+          </p>
+          <h2 className="text-sm sm:text-base font-bold truncate">
+            {lesson.title}
+          </h2>
         </div>
-        <Badge variant="secondary" className="rounded-full text-[10px] px-2 py-0 h-5 ml-auto shrink-0">
+        <Badge
+          variant="secondary"
+          className="rounded-full text-[10px] px-2 py-0 h-5 ml-auto shrink-0"
+        >
           <HugeiconsIcon icon={Clock01Icon} size={10} className="mr-1" />
           {lesson.duration}
         </Badge>
@@ -230,7 +278,11 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
           onClick={() => fileInputRef.current?.click()}
           className="w-full border-2 border-dashed border-border rounded-xl p-6 sm:p-8 text-center hover:border-violet-300 hover:bg-violet-50/30 dark:hover:bg-violet-950/10 transition-colors cursor-pointer"
         >
-          <HugeiconsIcon icon={Upload01Icon} size={24} className="text-muted-foreground mx-auto mb-2" />
+          <HugeiconsIcon
+            icon={Upload01Icon}
+            size={24}
+            className="text-muted-foreground mx-auto mb-2"
+          />
           <p className="text-sm font-medium">Click to upload files</p>
           <p className="text-[11px] text-muted-foreground mt-1">
             ZIP, PDF, images, or code files (max 50MB)
@@ -253,7 +305,11 @@ export function AssignmentLesson({ lesson, onComplete }: AssignmentLessonProps) 
                 key={f.name}
                 className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-muted/50 text-xs"
               >
-                <HugeiconsIcon icon={File01Icon} size={13} className="text-violet-500 shrink-0" />
+                <HugeiconsIcon
+                  icon={File01Icon}
+                  size={13}
+                  className="text-violet-500 shrink-0"
+                />
                 <span className="flex-1 truncate font-medium">{f.name}</span>
                 <span className="text-muted-foreground shrink-0">{f.size}</span>
                 <button

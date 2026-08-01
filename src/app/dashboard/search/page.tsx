@@ -1,19 +1,19 @@
 "use client";
 
-import { Suspense, useState, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  UserGroupIcon,
   BookOpen01Icon,
   UserCheck01Icon,
+  UserGroupIcon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useMemo, useState } from "react";
+import { DashboardLayout } from "@/components/app-sidebar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 /* ---------------------------------------------------------------- */
 /*  Types & data                                                    */
@@ -31,18 +31,90 @@ type ResultItem = {
 };
 
 const ALL_RESULTS: ResultItem[] = [
-  { id: "c1", type: "community", label: "Frontend Devs", sub: "1.2k members · 48 online", href: "/dashboard/communities/frontend-devs/manage" },
-  { id: "c2", type: "community", label: "UI/UX Critique Circle", sub: "860 members · 12 online", href: "/dashboard/communities/uiux-critique/manage" },
-  { id: "c3", type: "community", label: "Backend Engineers", sub: "2.1k members · 31 online", href: "/dashboard/communities/backend-engineers/manage" },
-  { id: "c4", type: "community", label: "Data Science Hub", sub: "940 members · 6 online", href: "/dashboard/communities/data-science/manage" },
-  { id: "cr1", type: "course", label: "Frontend with React", sub: "Intermediate · 12 weeks · ₦45,000", href: "/dashboard/courses/react-frontend" },
-  { id: "cr2", type: "course", label: "Data Analysis with Excel", sub: "Beginner · 6 weeks · ₦25,000", href: "/dashboard/courses/data-analysis" },
-  { id: "cr3", type: "course", label: "UI/UX Fundamentals", sub: "Beginner · 8 weeks · ₦35,000", href: "/dashboard/courses/uiux-fundamentals" },
-  { id: "cr4", type: "course", label: "Node.js Masterclass", sub: "Advanced · 10 weeks · ₦60,000", href: "/dashboard/courses/nodejs-masterclass" },
-  { id: "p1", type: "person", label: "Ade Okafor", sub: "Instructor · Frontend", href: "/dashboard/profile/ade" },
-  { id: "p2", type: "person", label: "Dr. Okonkwo", sub: "Instructor · Data Science", href: "/dashboard/profile/okonkwo" },
-  { id: "p3", type: "person", label: "Kelechi Nwosu", sub: "Student · Cohort 4", href: "/dashboard/profile/kelechi" },
-  { id: "p4", type: "person", label: "Amara Obi", sub: "Student · Cohort 5", href: "/dashboard/profile/amara" },
+  {
+    id: "c1",
+    type: "community",
+    label: "Frontend Devs",
+    sub: "1.2k members · 48 online",
+    href: "/dashboard/communities/frontend-devs/manage",
+  },
+  {
+    id: "c2",
+    type: "community",
+    label: "UI/UX Critique Circle",
+    sub: "860 members · 12 online",
+    href: "/dashboard/communities/uiux-critique/manage",
+  },
+  {
+    id: "c3",
+    type: "community",
+    label: "Backend Engineers",
+    sub: "2.1k members · 31 online",
+    href: "/dashboard/communities/backend-engineers/manage",
+  },
+  {
+    id: "c4",
+    type: "community",
+    label: "Data Science Hub",
+    sub: "940 members · 6 online",
+    href: "/dashboard/communities/data-science/manage",
+  },
+  {
+    id: "cr1",
+    type: "course",
+    label: "Frontend with React",
+    sub: "Intermediate · 12 weeks · ₦45,000",
+    href: "/dashboard/courses/react-frontend",
+  },
+  {
+    id: "cr2",
+    type: "course",
+    label: "Data Analysis with Excel",
+    sub: "Beginner · 6 weeks · ₦25,000",
+    href: "/dashboard/courses/data-analysis",
+  },
+  {
+    id: "cr3",
+    type: "course",
+    label: "UI/UX Fundamentals",
+    sub: "Beginner · 8 weeks · ₦35,000",
+    href: "/dashboard/courses/uiux-fundamentals",
+  },
+  {
+    id: "cr4",
+    type: "course",
+    label: "Node.js Masterclass",
+    sub: "Advanced · 10 weeks · ₦60,000",
+    href: "/dashboard/courses/nodejs-masterclass",
+  },
+  {
+    id: "p1",
+    type: "person",
+    label: "Ade Okafor",
+    sub: "Instructor · Frontend",
+    href: "/dashboard/profile/ade",
+  },
+  {
+    id: "p2",
+    type: "person",
+    label: "Dr. Okonkwo",
+    sub: "Instructor · Data Science",
+    href: "/dashboard/profile/okonkwo",
+  },
+  {
+    id: "p3",
+    type: "person",
+    label: "Kelechi Nwosu",
+    sub: "Student · Cohort 4",
+    href: "/dashboard/profile/kelechi",
+  },
+  {
+    id: "p4",
+    type: "person",
+    label: "Amara Obi",
+    sub: "Student · Cohort 5",
+    href: "/dashboard/profile/amara",
+  },
 ];
 
 const TABS: { key: ResultTab; label: string }[] = [
@@ -53,9 +125,12 @@ const TABS: { key: ResultTab; label: string }[] = [
 ];
 
 const typeBadge = {
-  community: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" as const,
-  course: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" as const,
-  person: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400" as const,
+  community:
+    "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" as const,
+  course:
+    "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" as const,
+  person:
+    "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400" as const,
 };
 
 const typeLabel = {
@@ -80,8 +155,7 @@ function SearchPage() {
     const q = query.toLowerCase();
     let filtered = ALL_RESULTS.filter(
       (r) =>
-        r.label.toLowerCase().includes(q) ||
-        r.sub.toLowerCase().includes(q)
+        r.label.toLowerCase().includes(q) || r.sub.toLowerCase().includes(q),
     );
     if (tab !== "all") filtered = filtered.filter((r) => r.type === tab);
     return filtered;
@@ -146,8 +220,8 @@ function SearchPage() {
                         item.type === "community"
                           ? UserGroupIcon
                           : item.type === "course"
-                          ? BookOpen01Icon
-                          : UserCheck01Icon
+                            ? BookOpen01Icon
+                            : UserCheck01Icon
                       }
                       size={16}
                       className="text-muted-foreground/40"

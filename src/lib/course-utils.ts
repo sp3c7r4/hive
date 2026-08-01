@@ -58,7 +58,8 @@ export const COURSES_DATA: CourseCatalogueEntry[] = [
       rank: "Top Instructor",
     },
     enrollmentCount: 342,
-    subtitle: "Learn React fundamentals through hands-on design projects — from components to hooks, no prior JavaScript experience needed.",
+    subtitle:
+      "Learn React fundamentals through hands-on design projects — from components to hooks, no prior JavaScript experience needed.",
     certificate: true,
     communitySlug: "frontend-devs",
     communityName: "Frontend Devs",
@@ -79,7 +80,8 @@ export const COURSES_DATA: CourseCatalogueEntry[] = [
       rank: "Top Instructor",
     },
     enrollmentCount: 128,
-    subtitle: "Master generics, decorators, and conditional types for production-grade TypeScript.",
+    subtitle:
+      "Master generics, decorators, and conditional types for production-grade TypeScript.",
     certificate: true,
     communitySlug: "frontend-devs",
     communityName: "Frontend Devs",
@@ -187,29 +189,73 @@ export function resolveFullCourse(slug: string) {
     ...data,
     enrolled: false,
     completed: false,
-    certRequirements: { completion: "80%", quizScore: "70%", attendance: "60%" },
+    certRequirements: {
+      completion: "80%",
+      quizScore: "70%",
+      attendance: "60%",
+    },
     curriculum: [
       {
         title: "Getting Started",
         lessons: [
-          { title: "Welcome & Course Overview", type: "video" as const, duration: "4:32", freePreview: true },
-          { title: "Setting Up Your Environment", type: "video" as const, duration: "8:15", freePreview: false },
-          { title: "How the Web Works", type: "pdf" as const, duration: "12 min read", freePreview: false },
+          {
+            title: "Welcome & Course Overview",
+            type: "video" as const,
+            duration: "4:32",
+            freePreview: true,
+          },
+          {
+            title: "Setting Up Your Environment",
+            type: "video" as const,
+            duration: "8:15",
+            freePreview: false,
+          },
+          {
+            title: "How the Web Works",
+            type: "pdf" as const,
+            duration: "12 min read",
+            freePreview: false,
+          },
         ],
       },
       {
         title: "Core Concepts",
         lessons: [
-          { title: "Components & Props", type: "video" as const, duration: "15:20", freePreview: false },
-          { title: "State & Events", type: "video" as const, duration: "18:45", freePreview: false },
-          { title: "Knowledge Check", type: "quiz" as const, duration: "10 questions", freePreview: false },
+          {
+            title: "Components & Props",
+            type: "video" as const,
+            duration: "15:20",
+            freePreview: false,
+          },
+          {
+            title: "State & Events",
+            type: "video" as const,
+            duration: "18:45",
+            freePreview: false,
+          },
+          {
+            title: "Knowledge Check",
+            type: "quiz" as const,
+            duration: "10 questions",
+            freePreview: false,
+          },
         ],
       },
       {
         title: "Building Projects",
         lessons: [
-          { title: "Project: Hands-on Build", type: "assignment" as const, duration: "2-3 hours", freePreview: false },
-          { title: "Live Code Review", type: "live" as const, duration: "60 min", freePreview: false },
+          {
+            title: "Project: Hands-on Build",
+            type: "assignment" as const,
+            duration: "2-3 hours",
+            freePreview: false,
+          },
+          {
+            title: "Live Code Review",
+            type: "live" as const,
+            duration: "60 min",
+            freePreview: false,
+          },
         ],
       },
     ],
@@ -219,12 +265,14 @@ export function resolveFullCourse(slug: string) {
         author: { name: "Kelechi Okonkwo", initials: "KO" },
         rating: 5,
         title: "Game-changing course",
-        comment: "This course completely changed how I approach the field. The instructor explains complex concepts in a way that just clicks.",
+        comment:
+          "This course completely changed how I approach the field. The instructor explains complex concepts in a way that just clicks.",
         createdAt: new Date(Date.now() - 1209600000).toISOString(),
         helpfulCount: 42,
         markedHelpful: false,
         instructorReply: {
-          comment: "Thank you! Your project was one of the best I've seen. Keep building!",
+          comment:
+            "Thank you! Your project was one of the best I've seen. Keep building!",
           createdAt: new Date(Date.now() - 1036800000).toISOString(),
         },
       },
@@ -233,7 +281,8 @@ export function resolveFullCourse(slug: string) {
         author: { name: "Tunde Balogun", initials: "TB" },
         rating: 4,
         title: "Great practical approach",
-        comment: "Love the hands-on projects. Would love more advanced content in future updates.",
+        comment:
+          "Love the hands-on projects. Would love more advanced content in future updates.",
         createdAt: new Date(Date.now() - 2592000000).toISOString(),
         helpfulCount: 18,
         markedHelpful: false,

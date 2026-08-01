@@ -1,26 +1,70 @@
 "use client";
 
-import { Suspense, useState, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import {
+  BookOpen01Icon,
+  CompassIcon,
+  PlayIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useMemo, useState } from "react";
 import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { BookOpen01Icon, PlayIcon, CompassIcon } from "@hugeicons/core-free-icons";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 type FilterTab = "all" | "in-progress" | "completed" | "expired";
 
 const COURSES = [
-  { id:"1", title:"React for Designers", instructor:"Ade Okafor", community:"Frontend Devs", progress:62, lastAccessed:"2 hours ago", status:"in-progress" as const },
-  { id:"2", title:"UI/UX Research Methods", instructor:"Dr. Okonkwo", community:"UI/UX Critique Circle", progress:100, lastAccessed:"3 days ago", status:"completed" as const },
-  { id:"3", title:"Advanced TypeScript Patterns", instructor:"Prof. Adeyemi", community:"Frontend Devs", progress:28, lastAccessed:"1 week ago", status:"in-progress" as const },
-  { id:"4", title:"Data Visualization with D3", instructor:"Kelechi Okonkwo", community:"Data Science Lab", progress:0, lastAccessed:"—", status:"expired" as const },
-  { id:"5", title:"Product Strategy 101", instructor:"Amara Obi", community:"Product Hub", progress:45, lastAccessed:"5 hours ago", status:"in-progress" as const },
+  {
+    id: "1",
+    title: "React for Designers",
+    instructor: "Ade Okafor",
+    community: "Frontend Devs",
+    progress: 62,
+    lastAccessed: "2 hours ago",
+    status: "in-progress" as const,
+  },
+  {
+    id: "2",
+    title: "UI/UX Research Methods",
+    instructor: "Dr. Okonkwo",
+    community: "UI/UX Critique Circle",
+    progress: 100,
+    lastAccessed: "3 days ago",
+    status: "completed" as const,
+  },
+  {
+    id: "3",
+    title: "Advanced TypeScript Patterns",
+    instructor: "Prof. Adeyemi",
+    community: "Frontend Devs",
+    progress: 28,
+    lastAccessed: "1 week ago",
+    status: "in-progress" as const,
+  },
+  {
+    id: "4",
+    title: "Data Visualization with D3",
+    instructor: "Kelechi Okonkwo",
+    community: "Data Science Lab",
+    progress: 0,
+    lastAccessed: "—",
+    status: "expired" as const,
+  },
+  {
+    id: "5",
+    title: "Product Strategy 101",
+    instructor: "Amara Obi",
+    community: "Product Hub",
+    progress: 45,
+    lastAccessed: "5 hours ago",
+    status: "in-progress" as const,
+  },
 ];
 
 function MyCoursesPage() {
@@ -38,7 +82,6 @@ function MyCoursesPage() {
   return (
     <DashboardLayout role={role}>
       <div className="w-full min-w-0 flex flex-col gap-5">
-
         {/* Header */}
         <div>
           <h1 className="text-xl font-bold tracking-tight">My Courses</h1>
@@ -75,14 +118,22 @@ function MyCoursesPage() {
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center gap-4">
             <div className="size-14 rounded-full bg-muted flex items-center justify-center">
-              <HugeiconsIcon icon={BookOpen01Icon} size={24} className="text-muted-foreground" />
+              <HugeiconsIcon
+                icon={BookOpen01Icon}
+                size={24}
+                className="text-muted-foreground"
+              />
             </div>
             <p className="text-sm text-muted-foreground">No courses found</p>
             <Button
               className="rounded-full"
               render={
                 <Link href={`/dashboard/explore?role=${role}`}>
-                  <HugeiconsIcon icon={CompassIcon} size={15} className="mr-1.5" />
+                  <HugeiconsIcon
+                    icon={CompassIcon}
+                    size={15}
+                    className="mr-1.5"
+                  />
                   Explore Courses
                 </Link>
               }
@@ -100,18 +151,26 @@ function MyCoursesPage() {
                   <div className="flex items-start justify-between">
                     <div className="size-10 rounded-xl bg-muted flex items-center justify-center">
                       <HugeiconsIcon
-                        icon={c.status === "completed" ? BookOpen01Icon : PlayIcon}
+                        icon={
+                          c.status === "completed" ? BookOpen01Icon : PlayIcon
+                        }
                         size={18}
                         className="text-muted-foreground"
                       />
                     </div>
                     {c.status === "completed" && (
-                      <Badge variant="secondary" className="rounded-full text-[10px] px-2 py-0 h-5">
+                      <Badge
+                        variant="secondary"
+                        className="rounded-full text-[10px] px-2 py-0 h-5"
+                      >
                         Done
                       </Badge>
                     )}
                     {c.status === "expired" && (
-                      <Badge variant="secondary" className="rounded-full text-[10px] px-2 py-0 h-5 text-muted-foreground">
+                      <Badge
+                        variant="secondary"
+                        className="rounded-full text-[10px] px-2 py-0 h-5 text-muted-foreground"
+                      >
                         Expired
                       </Badge>
                     )}
@@ -119,7 +178,9 @@ function MyCoursesPage() {
 
                   {/* Info */}
                   <div className="flex-1">
-                    <p className="text-sm font-semibold leading-snug">{c.title}</p>
+                    <p className="text-sm font-semibold leading-snug">
+                      {c.title}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       {c.instructor} &middot; {c.community}
                     </p>

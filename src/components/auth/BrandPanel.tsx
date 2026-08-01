@@ -29,7 +29,8 @@ export default function BrandPanel() {
           Your community-driven learning marketplace.
         </h2>
         <p className="text-sm text-white/50 leading-relaxed">
-          Hive is where instructors build academies, students master skills, and knowledge creates opportunity, all in one place.
+          Hive is where instructors build academies, students master skills, and
+          knowledge creates opportunity, all in one place.
         </p>
       </div>
     </div>

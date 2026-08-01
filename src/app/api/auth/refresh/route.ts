@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import {
+  clearAuthCookies,
   getRefreshTokenCookie,
   setAuthCookies,
-  clearAuthCookies,
 } from "../cookies";
 
 const BACKEND = process.env.NEXT_PUBLIC_API_URL!;
@@ -13,7 +13,7 @@ export async function POST() {
   if (!refreshToken) {
     return NextResponse.json(
       { error: { message: "No refresh token" } },
-      { status: 401 }
+      { status: 401 },
     );
   }
 

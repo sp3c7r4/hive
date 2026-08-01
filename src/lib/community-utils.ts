@@ -54,7 +54,8 @@ export const COMMUNITIES_DATA: CommunityCatalogueEntry[] = [
     courseCount: 3,
     rating: 4.6,
     reviewCount: 52,
-    description: "Weekly design critiques, portfolio reviews, and UX discussions. Bring your work and get honest, constructive feedback.",
+    description:
+      "Weekly design critiques, portfolio reviews, and UX discussions. Bring your work and get honest, constructive feedback.",
     price: "Free",
     requiresApproval: false,
     instructor: {
@@ -73,7 +74,8 @@ export const COMMUNITIES_DATA: CommunityCatalogueEntry[] = [
     courseCount: 4,
     rating: 4.5,
     reviewCount: 31,
-    description: "Collaborative data science projects, Kaggle competitions, and peer learning.",
+    description:
+      "Collaborative data science projects, Kaggle competitions, and peer learning.",
     price: "₦5,000/mo",
     requiresApproval: true,
     instructor: {
@@ -92,7 +94,8 @@ export const COMMUNITIES_DATA: CommunityCatalogueEntry[] = [
     courseCount: 2,
     rating: 4.9,
     reviewCount: 23,
-    description: "For creatives navigating freelance life — pricing, contracts, and client management.",
+    description:
+      "For creatives navigating freelance life — pricing, contracts, and client management.",
     price: "Free",
     requiresApproval: true,
     instructor: {
@@ -111,7 +114,8 @@ export const COMMUNITIES_DATA: CommunityCatalogueEntry[] = [
     courseCount: 8,
     rating: 4.7,
     reviewCount: 104,
-    description: "Node.js, Python, Go — all things backend. Design patterns, databases, APIs, and system design.",
+    description:
+      "Node.js, Python, Go — all things backend. Design patterns, databases, APIs, and system design.",
     price: "Free",
     requiresApproval: false,
     instructor: {
@@ -130,7 +134,8 @@ export const COMMUNITIES_DATA: CommunityCatalogueEntry[] = [
     courseCount: 3,
     rating: 4.4,
     reviewCount: 41,
-    description: "PM frameworks, case studies, and mentorship. From junior PM to Head of Product.",
+    description:
+      "PM frameworks, case studies, and mentorship. From junior PM to Head of Product.",
     price: "₦3,000/mo",
     requiresApproval: false,
     instructor: {

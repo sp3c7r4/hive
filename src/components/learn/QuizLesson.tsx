@@ -1,19 +1,19 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  CircleQuestionMarkIcon,
-  CheckmarkCircle02Icon,
-  Cancel01Icon,
   ArrowRight02Icon,
+  Cancel01Icon,
+  CheckmarkCircle02Icon,
+  CircleQuestionMarkIcon,
   RefreshIcon,
   Tick01Icon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useCallback, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import type { Lesson } from "./types";
 
 /* ---------------------------------------------------------------- */
@@ -115,7 +115,7 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
       if (submitted || completed) return;
       setAnswers((prev) => ({ ...prev, [questionId]: optionIndex }));
     },
-    [submitted, completed]
+    [submitted, completed],
   );
 
   const handleSubmit = useCallback(() => {
@@ -150,24 +150,38 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
       <div className="flex flex-col gap-4 max-w-2xl mx-auto px-3 sm:px-4 py-6 sm:py-10">
         <div className="text-center">
           <div className="size-16 sm:size-20 rounded-2xl bg-amber-50 dark:bg-amber-950/20 flex items-center justify-center mx-auto mb-4">
-            <HugeiconsIcon icon={CircleQuestionMarkIcon} size={32} className="sm:size-[40px] text-amber-500" />
+            <HugeiconsIcon
+              icon={CircleQuestionMarkIcon}
+              size={32}
+              className="sm:size-[40px] text-amber-500"
+            />
           </div>
-          <p className="text-[11px] sm:text-xs text-muted-foreground mb-1">Quiz</p>
+          <p className="text-[11px] sm:text-xs text-muted-foreground mb-1">
+            Quiz
+          </p>
           <h2 className="text-lg sm:text-xl font-bold">{lesson.title}</h2>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1.5 mb-6 max-w-sm mx-auto">
-            Test your knowledge with {DEMO_QUESTIONS.length} questions.
-            You need {passThreshold} correct answers ({Math.round((passThreshold / DEMO_QUESTIONS.length) * 100)}%) to pass.
+            Test your knowledge with {DEMO_QUESTIONS.length} questions. You need{" "}
+            {passThreshold} correct answers (
+            {Math.round((passThreshold / DEMO_QUESTIONS.length) * 100)}%) to
+            pass.
           </p>
 
           <div className="flex flex-col items-center gap-3">
             <Card className="p-4 sm:p-5 w-full max-w-xs">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-muted-foreground">Questions</span>
-                <span className="text-sm font-bold">{DEMO_QUESTIONS.length}</span>
+                <span className="text-sm font-bold">
+                  {DEMO_QUESTIONS.length}
+                </span>
               </div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-muted-foreground">Pass threshold</span>
-                <span className="text-sm font-bold">{Math.round((passThreshold / DEMO_QUESTIONS.length) * 100)}%</span>
+                <span className="text-xs text-muted-foreground">
+                  Pass threshold
+                </span>
+                <span className="text-sm font-bold">
+                  {Math.round((passThreshold / DEMO_QUESTIONS.length) * 100)}%
+                </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">Duration</span>
@@ -175,9 +189,17 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
               </div>
             </Card>
 
-            <Button className="rounded-full" size="lg" onClick={() => setStarted(true)}>
+            <Button
+              className="rounded-full"
+              size="lg"
+              onClick={() => setStarted(true)}
+            >
               Start Quiz
-              <HugeiconsIcon icon={ArrowRight02Icon} size={16} className="ml-1.5" />
+              <HugeiconsIcon
+                icon={ArrowRight02Icon}
+                size={16}
+                className="ml-1.5"
+              />
             </Button>
           </div>
         </div>
@@ -231,13 +253,25 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5">
             {!passed && (
-              <Button variant="outline" className="rounded-full" onClick={handleRetry}>
-                <HugeiconsIcon icon={RefreshIcon} size={15} className="mr-1.5" />
+              <Button
+                variant="outline"
+                className="rounded-full"
+                onClick={handleRetry}
+              >
+                <HugeiconsIcon
+                  icon={RefreshIcon}
+                  size={15}
+                  className="mr-1.5"
+                />
                 Retry Quiz
               </Button>
             )}
             <Button className="rounded-full" onClick={handleComplete}>
-              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={15} className="mr-1.5" />
+              <HugeiconsIcon
+                icon={CheckmarkCircle02Icon}
+                size={15}
+                className="mr-1.5"
+              />
               Mark as Complete
             </Button>
           </div>
@@ -270,8 +304,16 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       Your answer:{" "}
-                      <span className={isCorrect ? "text-emerald-600 font-medium" : "text-rose-600 font-medium"}>
-                        {userAnswer != null ? q.options[userAnswer] : "Not answered"}
+                      <span
+                        className={
+                          isCorrect
+                            ? "text-emerald-600 font-medium"
+                            : "text-rose-600 font-medium"
+                        }
+                      >
+                        {userAnswer != null
+                          ? q.options[userAnswer]
+                          : "Not answered"}
                       </span>
                     </p>
                     {!isCorrect && (
@@ -301,14 +343,21 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <div className="size-8 rounded-lg bg-amber-50 dark:bg-amber-950/20 flex items-center justify-center shrink-0">
-            <HugeiconsIcon icon={CircleQuestionMarkIcon} size={15} className="text-amber-500" />
+            <HugeiconsIcon
+              icon={CircleQuestionMarkIcon}
+              size={15}
+              className="text-amber-500"
+            />
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Quiz</p>
             <h2 className="text-sm font-bold">{lesson.title}</h2>
           </div>
         </div>
-        <Badge variant="secondary" className="rounded-full text-[10px] px-2 py-0 h-5">
+        <Badge
+          variant="secondary"
+          className="rounded-full text-[10px] px-2 py-0 h-5"
+        >
           {currentQuestion + 1} of {DEMO_QUESTIONS.length}
         </Badge>
       </div>
@@ -317,7 +366,9 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
       <div className="relative flex h-1.5 w-full items-center overflow-x-hidden rounded-full bg-muted">
         <div
           className="h-full bg-amber-500 rounded-full transition-all duration-300"
-          style={{ width: `${((currentQuestion + 1) / DEMO_QUESTIONS.length) * 100}%` }}
+          style={{
+            width: `${((currentQuestion + 1) / DEMO_QUESTIONS.length) * 100}%`,
+          }}
         />
       </div>
 
@@ -331,7 +382,8 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
           {q.options.map((option, oi) => {
             const isSelected = answers[q.id] === oi;
             const isCorrectOption = submitted && oi === q.correctIndex;
-            const isWrongSelection = submitted && isSelected && !isCorrectOption;
+            const isWrongSelection =
+              submitted && isSelected && !isCorrectOption;
 
             return (
               <button
@@ -343,10 +395,10 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
                   isCorrectOption
                     ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/20"
                     : isWrongSelection
-                    ? "border-rose-500 bg-rose-50 dark:bg-rose-950/20"
-                    : isSelected
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-muted-foreground/30 hover:bg-muted/30"
+                      ? "border-rose-500 bg-rose-50 dark:bg-rose-950/20"
+                      : isSelected
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-muted-foreground/30 hover:bg-muted/30"
                 } ${submitted ? "cursor-default" : "cursor-pointer"}`}
               >
                 <div className="flex items-center gap-3">
@@ -355,10 +407,10 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
                       isCorrectOption
                         ? "border-emerald-500 bg-emerald-500 text-white"
                         : isWrongSelection
-                        ? "border-rose-500 bg-rose-500 text-white"
-                        : isSelected
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-muted-foreground/30 text-muted-foreground"
+                          ? "border-rose-500 bg-rose-500 text-white"
+                          : isSelected
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-muted-foreground/30 text-muted-foreground"
                     }`}
                   >
                     {isCorrectOption || isWrongSelection ? (
@@ -370,7 +422,13 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
                       String.fromCharCode(65 + oi)
                     )}
                   </span>
-                  <span className={isCorrectOption ? "font-semibold text-emerald-700 dark:text-emerald-300" : ""}>
+                  <span
+                    className={
+                      isCorrectOption
+                        ? "font-semibold text-emerald-700 dark:text-emerald-300"
+                        : ""
+                    }
+                  >
                     {option}
                   </span>
                 </div>
@@ -418,8 +476,8 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
                 qi === currentQuestion
                   ? "bg-amber-500 scale-125"
                   : answers[DEMO_QUESTIONS[qi].id] != null
-                  ? "bg-primary/60"
-                  : "bg-muted-foreground/25"
+                    ? "bg-primary/60"
+                    : "bg-muted-foreground/25"
               }`}
               aria-label={`Go to question ${qi + 1}`}
             />
@@ -457,7 +515,11 @@ export function QuizLesson({ lesson, onComplete }: QuizLessonProps) {
           onClick={handleSubmit}
           size="lg"
         >
-          <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} className="mr-1.5" />
+          <HugeiconsIcon
+            icon={CheckmarkCircle02Icon}
+            size={16}
+            className="mr-1.5"
+          />
           Submit Quiz
         </Button>
       )}

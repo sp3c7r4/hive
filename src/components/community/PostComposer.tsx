@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Image01Icon,
   Attachment01Icon,
   Cancel01Icon,
+  Image01Icon,
   SentIcon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useCallback, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import type { Post } from "./types";
 
 interface PostComposerProps {
@@ -50,14 +50,14 @@ export function PostComposer({ author, onSubmit }: PostComposerProps) {
         ...Array.from(files).map((f) => f.name),
       ]);
     },
-    []
+    [],
   );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmit();
     },
-    [handleSubmit]
+    [handleSubmit],
   );
 
   if (!expanded) {
@@ -90,7 +90,11 @@ export function PostComposer({ author, onSubmit }: PostComposerProps) {
               key={name}
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted text-[11px]"
             >
-              <HugeiconsIcon icon={Attachment01Icon} size={11} className="text-muted-foreground" />
+              <HugeiconsIcon
+                icon={Attachment01Icon}
+                size={11}
+                className="text-muted-foreground"
+              />
               {name}
               <button
                 type="button"

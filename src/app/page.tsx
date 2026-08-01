@@ -36,14 +36,19 @@ async function fetchPortrait(query: string): Promise<string | null> {
 /*  Page                                                                */
 /* ------------------------------------------------------------------ */
 export default async function Home() {
-  const [webDesign, motionDesign, digitalMarketing, designSystem, webDevelopment] =
-    await Promise.all([
-      fetchPortrait("professional web designer portrait smiling"),
-      fetchPortrait("motion designer portrait professional"),
-      fetchPortrait("digital marketer professional portrait"),
-      fetchPortrait("graphic designer professional portrait"),
-      fetchPortrait("woman web developer portrait smiling professional"),
-    ]);
+  const [
+    webDesign,
+    motionDesign,
+    digitalMarketing,
+    designSystem,
+    webDevelopment,
+  ] = await Promise.all([
+    fetchPortrait("professional web designer portrait smiling"),
+    fetchPortrait("motion designer portrait professional"),
+    fetchPortrait("digital marketer professional portrait"),
+    fetchPortrait("graphic designer professional portrait"),
+    fetchPortrait("woman web developer portrait smiling professional"),
+  ]);
 
   const images: GridImages = {
     webDesign: webDesign ?? FALLBACKS.webDesign,

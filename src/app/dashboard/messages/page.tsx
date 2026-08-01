@@ -1,51 +1,51 @@
 "use client";
 
-import { Suspense, useRef, useState, useMemo, useCallback } from "react";
+import { Menu } from "@base-ui/react/menu";
+import {
+  ArrowLeft02Icon,
+  ArrowUp01Icon,
+  AtSignIcon,
+  Attachment01Icon,
+  Camera01Icon,
+  CheckmarkCircle01Icon,
+  CheckmarkCircle02Icon,
+  Copy01Icon,
+  Delete01Icon,
+  FavouriteIcon,
+  File01Icon,
+  Folder01Icon,
+  HandPrayerIcon,
+  Image01Icon,
+  LaughingIcon,
+  Message01Icon,
+  MessageAdd01Icon,
+  MoreHorizontalIcon,
+  MuteIcon,
+  NotificationOff01Icon,
+  PinIcon,
+  SadIcon,
+  SurpriseIcon,
+  ThumbsUpIcon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useMemo, useRef, useState } from "react";
 import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { Menu } from "@base-ui/react/menu";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Message01Icon,
-  MessageAdd01Icon,
-  ArrowUp01Icon,
-  ArrowLeft02Icon,
-  Attachment01Icon,
-  Image01Icon,
-  File01Icon,
-  CheckmarkCircle01Icon,
-  CheckmarkCircle02Icon,
-  Camera01Icon,
-  Folder01Icon,
-  PinIcon,
-  MuteIcon,
-  Delete01Icon,
-  MoreHorizontalIcon,
-  Copy01Icon,
-  NotificationOff01Icon,
-  UserGroupIcon,
-  AtSignIcon,
-  ThumbsUpIcon,
-  FavouriteIcon,
-  LaughingIcon,
-  SurpriseIcon,
-  SadIcon,
-  HandPrayerIcon,
-} from "@hugeicons/core-free-icons";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 
 /* ---------------------------------------------------------------- */
 /*  Types & demo data                                               */
@@ -107,8 +107,20 @@ const INITIAL_CONVERSATIONS: Conversation[] = [
     timestamp: "2m ago",
     unread: 2,
     messages: [
-      { id: "m1", sender: "them", text: "Hi Chioma, I reviewed your submission.", time: "10:30 AM", status: "read" },
-      { id: "m2", sender: "them", text: "Great work on the last assignment! Keep it up.", time: "10:31 AM", status: "read" },
+      {
+        id: "m1",
+        sender: "them",
+        text: "Hi Chioma, I reviewed your submission.",
+        time: "10:30 AM",
+        status: "read",
+      },
+      {
+        id: "m2",
+        sender: "them",
+        text: "Great work on the last assignment! Keep it up.",
+        time: "10:31 AM",
+        status: "read",
+      },
     ],
   },
   {
@@ -119,9 +131,27 @@ const INITIAL_CONVERSATIONS: Conversation[] = [
     timestamp: "1h ago",
     unread: 0,
     messages: [
-      { id: "m3", sender: "them", text: "Hey! Are you free this weekend?", time: "9:15 AM", status: "read" },
-      { id: "m4", sender: "me", text: "Yeah, what's up?", time: "9:20 AM", status: "read" },
-      { id: "m5", sender: "them", text: "Can we schedule a study group this weekend?", time: "9:21 AM", status: "read" },
+      {
+        id: "m3",
+        sender: "them",
+        text: "Hey! Are you free this weekend?",
+        time: "9:15 AM",
+        status: "read",
+      },
+      {
+        id: "m4",
+        sender: "me",
+        text: "Yeah, what's up?",
+        time: "9:20 AM",
+        status: "read",
+      },
+      {
+        id: "m5",
+        sender: "them",
+        text: "Can we schedule a study group this weekend?",
+        time: "9:21 AM",
+        status: "read",
+      },
     ],
     typing: true,
   },
@@ -135,11 +165,45 @@ const INITIAL_CONVERSATIONS: Conversation[] = [
     timestamp: "5m ago",
     unread: 4,
     messages: [
-      { id: "cm1", sender: "them", senderName: "Tunde", text: "Has anyone tried the new React Server Components pattern yet?", time: "9:30 AM", status: "read" },
-      { id: "cm2", sender: "them", senderName: "Amara", text: "Yes! Using it in production — it's been great for our landing pages.", time: "9:35 AM", status: "read" },
-      { id: "cm3", sender: "system", text: "Kelechi joined the community", time: "9:40 AM", isSystem: true },
-      { id: "cm4", sender: "them", senderName: "Tunde", text: "I just shipped a new UI library — @Amara you might find it useful for that dashboard project", time: "10:00 AM", status: "read" },
-      { id: "cm5", sender: "them", senderName: "Amara", text: "@chioma check out the new Figma plugin I shared — makes auto-layout way faster", time: "10:10 AM", status: "read" },
+      {
+        id: "cm1",
+        sender: "them",
+        senderName: "Tunde",
+        text: "Has anyone tried the new React Server Components pattern yet?",
+        time: "9:30 AM",
+        status: "read",
+      },
+      {
+        id: "cm2",
+        sender: "them",
+        senderName: "Amara",
+        text: "Yes! Using it in production — it's been great for our landing pages.",
+        time: "9:35 AM",
+        status: "read",
+      },
+      {
+        id: "cm3",
+        sender: "system",
+        text: "Kelechi joined the community",
+        time: "9:40 AM",
+        isSystem: true,
+      },
+      {
+        id: "cm4",
+        sender: "them",
+        senderName: "Tunde",
+        text: "I just shipped a new UI library — @Amara you might find it useful for that dashboard project",
+        time: "10:00 AM",
+        status: "read",
+      },
+      {
+        id: "cm5",
+        sender: "them",
+        senderName: "Amara",
+        text: "@chioma check out the new Figma plugin I shared — makes auto-layout way faster",
+        time: "10:10 AM",
+        status: "read",
+      },
     ],
   },
   {
@@ -151,10 +215,37 @@ const INITIAL_CONVERSATIONS: Conversation[] = [
     timestamp: "1h ago",
     unread: 0,
     messages: [
-      { id: "cx1", sender: "them", senderName: "Dr. Okonkwo", text: "Reminder: portfolio review session this Friday at 6pm. Bring your best work!", time: "8:00 AM", status: "read" },
-      { id: "cx2", sender: "them", senderName: "Ifeanyi", text: "I'll be sharing my new case study — would love feedback on the user research section.", time: "8:15 AM", status: "read" },
-      { id: "cx3", sender: "me", text: "Count me in! I have two projects I'd like to run by everyone.", time: "8:30 AM", status: "read" },
-      { id: "cx4", sender: "them", senderName: "Dr. Okonkwo", text: "Portfolio review session this Friday at 6pm!", time: "9:00 AM", status: "read" },
+      {
+        id: "cx1",
+        sender: "them",
+        senderName: "Dr. Okonkwo",
+        text: "Reminder: portfolio review session this Friday at 6pm. Bring your best work!",
+        time: "8:00 AM",
+        status: "read",
+      },
+      {
+        id: "cx2",
+        sender: "them",
+        senderName: "Ifeanyi",
+        text: "I'll be sharing my new case study — would love feedback on the user research section.",
+        time: "8:15 AM",
+        status: "read",
+      },
+      {
+        id: "cx3",
+        sender: "me",
+        text: "Count me in! I have two projects I'd like to run by everyone.",
+        time: "8:30 AM",
+        status: "read",
+      },
+      {
+        id: "cx4",
+        sender: "them",
+        senderName: "Dr. Okonkwo",
+        text: "Portfolio review session this Friday at 6pm!",
+        time: "9:00 AM",
+        status: "read",
+      },
     ],
     pinned: true,
   },
@@ -167,9 +258,27 @@ const INITIAL_CONVERSATIONS: Conversation[] = [
     timestamp: "Yesterday",
     unread: 0,
     messages: [
-      { id: "m9", sender: "me", text: "Here are the notes from last lecture.", time: "4:00 PM", status: "read" },
-      { id: "m10", sender: "me", attachment: { type: "image", name: "whiteboard-scan.jpg" }, time: "4:01 PM", status: "read" },
-      { id: "m11", sender: "them", text: "Thanks for sharing the notes!", time: "4:15 PM", status: "read" },
+      {
+        id: "m9",
+        sender: "me",
+        text: "Here are the notes from last lecture.",
+        time: "4:00 PM",
+        status: "read",
+      },
+      {
+        id: "m10",
+        sender: "me",
+        attachment: { type: "image", name: "whiteboard-scan.jpg" },
+        time: "4:01 PM",
+        status: "read",
+      },
+      {
+        id: "m11",
+        sender: "them",
+        text: "Thanks for sharing the notes!",
+        time: "4:15 PM",
+        status: "read",
+      },
     ],
   },
   {
@@ -180,8 +289,20 @@ const INITIAL_CONVERSATIONS: Conversation[] = [
     timestamp: "2d ago",
     unread: 0,
     messages: [
-      { id: "m12", sender: "them", text: "Midterm grades will be posted by Friday.", time: "Mon 3:00 PM", status: "read" },
-      { id: "m13", sender: "me", text: "Thanks for letting us know, Professor.", time: "Mon 3:30 PM", status: "delivered" },
+      {
+        id: "m12",
+        sender: "them",
+        text: "Midterm grades will be posted by Friday.",
+        time: "Mon 3:00 PM",
+        status: "read",
+      },
+      {
+        id: "m13",
+        sender: "me",
+        text: "Thanks for letting us know, Professor.",
+        time: "Mon 3:30 PM",
+        status: "delivered",
+      },
     ],
   },
 ];
@@ -220,10 +341,12 @@ function highlightMentions(text: string): React.ReactNode {
   const parts = text.split(/(@\w+)/g);
   return parts.map((part, i) =>
     part.startsWith("@") ? (
-      <span key={i} className="text-primary font-medium">{part}</span>
+      <span key={i} className="text-primary font-medium">
+        {part}
+      </span>
     ) : (
       <span key={i}>{part}</span>
-    )
+    ),
   );
 }
 
@@ -246,7 +369,8 @@ function NewMessageDialog({
     if (!query.trim()) return [];
     const q = query.toLowerCase();
     return searchableUsers.filter(
-      (u) => u.name.toLowerCase().includes(q) || u.role.toLowerCase().includes(q)
+      (u) =>
+        u.name.toLowerCase().includes(q) || u.role.toLowerCase().includes(q),
     );
   }, [query]);
 
@@ -257,23 +381,39 @@ function NewMessageDialog({
           <DialogTitle className="text-base">New Message</DialogTitle>
         </DialogHeader>
         <div className="px-4 pt-3 pb-1">
-          <Input placeholder="Search by name or role..." value={query} onChange={(e) => setQuery(e.target.value)} className="rounded-full" autoFocus />
+          <Input
+            placeholder="Search by name or role..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="rounded-full"
+            autoFocus
+          />
         </div>
         <div className="px-4 pb-4 pt-2 max-h-64 overflow-y-auto scrollbar-hide">
           {query.trim() === "" ? (
-            <p className="text-xs text-muted-foreground text-center py-6">Type a name to find people</p>
+            <p className="text-xs text-muted-foreground text-center py-6">
+              Type a name to find people
+            </p>
           ) : results.length === 0 ? (
-            <p className="text-xs text-muted-foreground text-center py-6">No one found matching &ldquo;{query}&rdquo;</p>
+            <p className="text-xs text-muted-foreground text-center py-6">
+              No one found matching &ldquo;{query}&rdquo;
+            </p>
           ) : (
             <div className="flex flex-col gap-0.5">
               {results.map((u, i) => (
                 <button
                   key={`${u.name}-${i}`}
                   type="button"
-                  onClick={() => { onSelect(u); setQuery(""); onClose(); }}
+                  onClick={() => {
+                    onSelect(u);
+                    setQuery("");
+                    onClose();
+                  }}
                   className="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-muted transition-colors text-left"
                 >
-                  <Avatar className="size-9 shrink-0"><AvatarFallback>{u.initials}</AvatarFallback></Avatar>
+                  <Avatar className="size-9 shrink-0">
+                    <AvatarFallback>{u.initials}</AvatarFallback>
+                  </Avatar>
                   <div className="min-w-0">
                     <p className="text-sm font-medium truncate">{u.name}</p>
                     <p className="text-xs text-muted-foreground">{u.role}</p>
@@ -313,8 +453,19 @@ function DeleteConfirmDialog({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" className="rounded-full" onClick={onClose}>Cancel</Button>
-          <Button variant="destructive" className="rounded-full" onClick={() => { onConfirm(); onClose(); }}>Delete</Button>
+          <Button variant="outline" className="rounded-full" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            className="rounded-full"
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
+          >
+            Delete
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -351,11 +502,19 @@ function ConversationItem({
           isActive ? "bg-muted" : "hover:bg-muted/50"
         }`}
       >
-        <button type="button" onClick={onClick} className="flex items-start gap-3 flex-1 min-w-0">
+        <button
+          type="button"
+          onClick={onClick}
+          className="flex items-start gap-3 flex-1 min-w-0"
+        >
           <div className="relative shrink-0">
             {isCommunity ? (
               <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <HugeiconsIcon icon={UserGroupIcon} size={18} className="text-primary" />
+                <HugeiconsIcon
+                  icon={UserGroupIcon}
+                  size={18}
+                  className="text-primary"
+                />
               </div>
             ) : (
               <Avatar className="size-10">
@@ -369,21 +528,53 @@ function ConversationItem({
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 min-w-0">
-                {conversation.pinned && <HugeiconsIcon icon={PinIcon} size={12} className="text-muted-foreground shrink-0" />}
-                <p className={`text-sm truncate ${conversation.unread > 0 ? "font-semibold" : "font-medium"}`}>
-                  {isCommunity ? conversation.communityName : conversation.user!.name}
+                {conversation.pinned && (
+                  <HugeiconsIcon
+                    icon={PinIcon}
+                    size={12}
+                    className="text-muted-foreground shrink-0"
+                  />
+                )}
+                <p
+                  className={`text-sm truncate ${conversation.unread > 0 ? "font-semibold" : "font-medium"}`}
+                >
+                  {isCommunity
+                    ? conversation.communityName
+                    : conversation.user!.name}
                 </p>
               </div>
-              <span className="text-[10px] text-muted-foreground shrink-0 tabular-nums">{conversation.timestamp}</span>
+              <span className="text-[10px] text-muted-foreground shrink-0 tabular-nums">
+                {conversation.timestamp}
+              </span>
             </div>
             <div className="flex items-center gap-1 mt-0.5">
-              {conversation.muted && <HugeiconsIcon icon={NotificationOff01Icon} size={11} className="text-muted-foreground shrink-0" />}
-              {isCommunity && <span className="text-[10px] text-muted-foreground shrink-0">{conversation.memberCount} members</span>}
-              {conversation.lastAttachment && <HugeiconsIcon icon={Attachment01Icon} size={12} className="text-muted-foreground shrink-0" />}
+              {conversation.muted && (
+                <HugeiconsIcon
+                  icon={NotificationOff01Icon}
+                  size={11}
+                  className="text-muted-foreground shrink-0"
+                />
+              )}
+              {isCommunity && (
+                <span className="text-[10px] text-muted-foreground shrink-0">
+                  {conversation.memberCount} members
+                </span>
+              )}
+              {conversation.lastAttachment && (
+                <HugeiconsIcon
+                  icon={Attachment01Icon}
+                  size={12}
+                  className="text-muted-foreground shrink-0"
+                />
+              )}
               {conversation.typing ? (
-                <span className="text-xs text-primary font-medium animate-pulse">typing&hellip;</span>
+                <span className="text-xs text-primary font-medium animate-pulse">
+                  typing&hellip;
+                </span>
               ) : (
-                <p className="text-xs text-muted-foreground truncate">{conversation.lastMessage}</p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {conversation.lastMessage}
+                </p>
               )}
             </div>
           </div>
@@ -397,20 +588,38 @@ function ConversationItem({
           <Menu.Portal>
             <Menu.Positioner sideOffset={4} align="end">
               <Menu.Popup className="min-w-[140px] rounded-xl border bg-popover p-1.5 shadow-lg origin-top-right">
-                <Menu.Item className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-muted outline-none" onClick={onPin}>
-                  <HugeiconsIcon icon={PinIcon} size={15} className="text-muted-foreground" />
+                <Menu.Item
+                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-muted outline-none"
+                  onClick={onPin}
+                >
+                  <HugeiconsIcon
+                    icon={PinIcon}
+                    size={15}
+                    className="text-muted-foreground"
+                  />
                   {conversation.pinned ? "Unpin" : "Pin"}
                 </Menu.Item>
-                <Menu.Item className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-muted outline-none" onClick={onMute}>
-                  <HugeiconsIcon icon={MuteIcon} size={15} className="text-muted-foreground" />
+                <Menu.Item
+                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-muted outline-none"
+                  onClick={onMute}
+                >
+                  <HugeiconsIcon
+                    icon={MuteIcon}
+                    size={15}
+                    className="text-muted-foreground"
+                  />
                   {conversation.muted ? "Unmute" : "Mute"}
                 </Menu.Item>
                 <Menu.Separator className="my-1 h-px bg-border" />
                 <Menu.Item
                   className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-destructive/10 text-destructive outline-none"
-                  onClick={() => { setMenuOpen(false); setDeleteOpen(true); }}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    setDeleteOpen(true);
+                  }}
                 >
-                  <HugeiconsIcon icon={Delete01Icon} size={15} />Delete
+                  <HugeiconsIcon icon={Delete01Icon} size={15} />
+                  Delete
                 </Menu.Item>
               </Menu.Popup>
             </Menu.Positioner>
@@ -436,10 +645,22 @@ function ConversationItem({
 function ReadReceipt({ status }: { status?: MessageStatus }) {
   if (!status) return null;
   if (status === "read")
-    return <span className="inline-flex items-center ml-1.5 text-primary shrink-0"><HugeiconsIcon icon={CheckmarkCircle01Icon} size={14} /></span>;
+    return (
+      <span className="inline-flex items-center ml-1.5 text-primary shrink-0">
+        <HugeiconsIcon icon={CheckmarkCircle01Icon} size={14} />
+      </span>
+    );
   if (status === "delivered")
-    return <span className="inline-flex items-center ml-1.5 text-muted-foreground shrink-0"><HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} /></span>;
-  return <span className="inline-flex items-center ml-1.5 text-muted-foreground/40 shrink-0"><HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} /></span>;
+    return (
+      <span className="inline-flex items-center ml-1.5 text-muted-foreground shrink-0">
+        <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} />
+      </span>
+    );
+  return (
+    <span className="inline-flex items-center ml-1.5 text-muted-foreground/40 shrink-0">
+      <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} />
+    </span>
+  );
 }
 
 /* ---------------------------------------------------------------- */
@@ -463,16 +684,47 @@ function ReactionPicker({
   return (
     <div className="absolute -top-10 left-0 flex items-center gap-0.5 bg-popover border rounded-full px-1.5 py-1 shadow-lg z-10 animate-in fade-in zoom-in-95 origin-bottom-left">
       {REACTIONS.map((r) => (
-        <button key={r.label} type="button" onClick={(e) => { e.stopPropagation(); onReact(r.label); }} className="size-7 flex items-center justify-center rounded-full hover:bg-muted transition-colors" title={r.label}>
+        <button
+          key={r.label}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onReact(r.label);
+          }}
+          className="size-7 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+          title={r.label}
+        >
           <HugeiconsIcon icon={r.icon} size={15} className={r.color} />
         </button>
       ))}
-      <button type="button" onClick={(e) => { e.stopPropagation(); onCopy(); }} className="size-7 flex items-center justify-center rounded-full hover:bg-muted transition-colors ml-0.5">
-        <HugeiconsIcon icon={Copy01Icon} size={13} className="text-muted-foreground" />
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onCopy();
+        }}
+        className="size-7 flex items-center justify-center rounded-full hover:bg-muted transition-colors ml-0.5"
+      >
+        <HugeiconsIcon
+          icon={Copy01Icon}
+          size={13}
+          className="text-muted-foreground"
+        />
       </button>
       {isOwn && (
-        <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(); }} className="size-7 flex items-center justify-center rounded-full hover:bg-destructive/10 transition-colors">
-          <HugeiconsIcon icon={Delete01Icon} size={13} className="text-destructive" />
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          className="size-7 flex items-center justify-center rounded-full hover:bg-destructive/10 transition-colors"
+        >
+          <HugeiconsIcon
+            icon={Delete01Icon}
+            size={13}
+            className="text-destructive"
+          />
         </button>
       )}
     </div>
@@ -524,12 +776,18 @@ function AttachmentCard({
         ) : (
           <div className="aspect-video bg-gradient-to-br from-muted/80 via-muted/40 to-muted/80 flex items-center justify-center rounded-xl">
             <div className="flex flex-col items-center gap-1.5">
-              <HugeiconsIcon icon={Image01Icon} size={28} className="text-muted-foreground/50" />
+              <HugeiconsIcon
+                icon={Image01Icon}
+                size={28}
+                className="text-muted-foreground/50"
+              />
               <span className="text-[10px] text-muted-foreground/60 max-w-[180px] truncate px-3 text-center">
                 {attachment.name}
               </span>
               {attachment.size && (
-                <span className="text-[10px] text-muted-foreground/40">{attachment.size}</span>
+                <span className="text-[10px] text-muted-foreground/40">
+                  {attachment.size}
+                </span>
               )}
             </div>
           </div>
@@ -543,9 +801,13 @@ function AttachmentCard({
   const extColor = fileTypeColors[ext] ?? fileTypeColors.TXT;
 
   return (
-    <div className={`mb-2 rounded-xl overflow-hidden ${isMe ? "bg-primary-foreground/10" : "bg-background/60"}`}>
+    <div
+      className={`mb-2 rounded-xl overflow-hidden ${isMe ? "bg-primary-foreground/10" : "bg-background/60"}`}
+    >
       <div className="flex items-center gap-3 px-3 py-3">
-        <div className={`size-11 rounded-xl flex items-center justify-center shrink-0 text-[11px] font-bold tracking-tight ${extColor}`}>
+        <div
+          className={`size-11 rounded-xl flex items-center justify-center shrink-0 text-[11px] font-bold tracking-tight ${extColor}`}
+        >
           {ext.slice(0, 3)}
         </div>
         <div className="min-w-0 flex-1">
@@ -581,7 +843,9 @@ function MessageBubble({
   if (isSystem) {
     return (
       <div className="flex justify-center py-1">
-        <span className="text-[11px] text-muted-foreground bg-muted/50 rounded-full px-3 py-1">{msg.text}</span>
+        <span className="text-[11px] text-muted-foreground bg-muted/50 rounded-full px-3 py-1">
+          {msg.text}
+        </span>
       </div>
     );
   }
@@ -590,24 +854,40 @@ function MessageBubble({
   const [showPicker, setShowPicker] = useState(false);
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handlePointerDown = () => { longPressRef.current = setTimeout(() => setShowPicker(true), 500); };
-  const handlePointerUp = () => { if (longPressRef.current) { clearTimeout(longPressRef.current); longPressRef.current = null; } };
-  const handleContextMenu = (e: React.MouseEvent) => { e.preventDefault(); setShowPicker((prev) => !prev); };
+  const handlePointerDown = () => {
+    longPressRef.current = setTimeout(() => setShowPicker(true), 500);
+  };
+  const handlePointerUp = () => {
+    if (longPressRef.current) {
+      clearTimeout(longPressRef.current);
+      longPressRef.current = null;
+    }
+  };
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowPicker((prev) => !prev);
+  };
 
   return (
     <div className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
-      <div className={`flex gap-2 max-w-[85%] sm:max-w-[65%] ${isMe ? "flex-row-reverse" : "flex-row"}`}>
+      <div
+        className={`flex gap-2 max-w-[85%] sm:max-w-[65%] ${isMe ? "flex-row-reverse" : "flex-row"}`}
+      >
         {/* Sender avatar (community only, others' messages) */}
         {isCommunity && !isMe && (
           <Avatar className="size-7 shrink-0 mt-1">
-            <AvatarFallback className="text-[10px]">{msg.senderName?.charAt(0) ?? "?"}</AvatarFallback>
+            <AvatarFallback className="text-[10px]">
+              {msg.senderName?.charAt(0) ?? "?"}
+            </AvatarFallback>
           </Avatar>
         )}
 
         <div className="min-w-0">
           {/* Sender name (community only) */}
           {isCommunity && !isMe && msg.senderName && (
-            <p className="text-[11px] font-medium text-muted-foreground mb-0.5 ml-1">{msg.senderName}</p>
+            <p className="text-[11px] font-medium text-muted-foreground mb-0.5 ml-1">
+              {msg.senderName}
+            </p>
           )}
 
           <div
@@ -624,9 +904,19 @@ function MessageBubble({
             <ReactionPicker
               open={showPicker}
               isOwn={isMe}
-              onReact={(emoji) => { setShowPicker(false); onReact(emoji); }}
-              onCopy={() => { setShowPicker(false); if (msg.text) navigator.clipboard.writeText(msg.text).catch(() => {}); }}
-              onDelete={() => { setShowPicker(false); onDeleteMsg(); }}
+              onReact={(emoji) => {
+                setShowPicker(false);
+                onReact(emoji);
+              }}
+              onCopy={() => {
+                setShowPicker(false);
+                if (msg.text)
+                  navigator.clipboard.writeText(msg.text).catch(() => {});
+              }}
+              onDelete={() => {
+                setShowPicker(false);
+                onDeleteMsg();
+              }}
             />
 
             {/* Attachment */}
@@ -635,18 +925,41 @@ function MessageBubble({
             )}
 
             {/* Text */}
-            {msg.text && <p className="text-sm leading-relaxed select-text break-words whitespace-pre-wrap">{isCommunity ? highlightMentions(msg.text) : msg.text}</p>}
+            {msg.text && (
+              <p className="text-sm leading-relaxed select-text break-words whitespace-pre-wrap">
+                {isCommunity ? highlightMentions(msg.text) : msg.text}
+              </p>
+            )}
 
             {/* Time + Read receipt */}
-            <div className={`flex items-center gap-1 mt-1 ${isMe ? "justify-end" : "justify-start"}`}>
-              <p className={`text-[10px] ${isMe ? "text-primary-foreground/60" : "text-muted-foreground"}`}>{msg.time}</p>
+            <div
+              className={`flex items-center gap-1 mt-1 ${isMe ? "justify-end" : "justify-start"}`}
+            >
+              <p
+                className={`text-[10px] ${isMe ? "text-primary-foreground/60" : "text-muted-foreground"}`}
+              >
+                {msg.time}
+              </p>
               {isMe && <ReadReceipt status={msg.status} />}
             </div>
 
             {/* Reaction badge */}
             {msg.reaction && (
-              <span className={`absolute -bottom-2 ${isMe ? "-left-2" : "-right-2"} bg-popover border rounded-full px-2 py-0.5 shadow-sm flex items-center gap-0.5`}>
-                {(() => { const r = REACTIONS.find(x => x.label === msg.reaction); return r ? <HugeiconsIcon icon={r.icon} size={11} className={r.color} /> : msg.reaction; })()}
+              <span
+                className={`absolute -bottom-2 ${isMe ? "-left-2" : "-right-2"} bg-popover border rounded-full px-2 py-0.5 shadow-sm flex items-center gap-0.5`}
+              >
+                {(() => {
+                  const r = REACTIONS.find((x) => x.label === msg.reaction);
+                  return r ? (
+                    <HugeiconsIcon
+                      icon={r.icon}
+                      size={11}
+                      className={r.color}
+                    />
+                  ) : (
+                    msg.reaction
+                  );
+                })()}
               </span>
             )}
           </div>
@@ -667,10 +980,19 @@ function TypingIndicator({ name }: { name: string }) {
         <div className="flex items-center gap-1.5">
           <span className="flex gap-1">
             {[0, 1, 2].map((i) => (
-              <span key={i} className="size-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style={{ animationDelay: `${i * 0.15}s`, animationDuration: "0.8s" }} />
+              <span
+                key={i}
+                className="size-1.5 rounded-full bg-muted-foreground/50 animate-bounce"
+                style={{
+                  animationDelay: `${i * 0.15}s`,
+                  animationDuration: "0.8s",
+                }}
+              />
             ))}
           </span>
-          <span className="text-xs text-muted-foreground">{name} is typing</span>
+          <span className="text-xs text-muted-foreground">
+            {name} is typing
+          </span>
         </div>
       </div>
     </div>
@@ -681,7 +1003,11 @@ function TypingIndicator({ name }: { name: string }) {
 /*  Attachment menu                                                 */
 /* ---------------------------------------------------------------- */
 
-function AttachmentMenu({ onSelect }: { onSelect: (type: "camera" | "gallery" | "document") => void }) {
+function AttachmentMenu({
+  onSelect,
+}: {
+  onSelect: (type: "camera" | "gallery" | "document") => void;
+}) {
   return (
     <Menu.Root>
       <Menu.Trigger className="size-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors shrink-0">
@@ -690,16 +1016,43 @@ function AttachmentMenu({ onSelect }: { onSelect: (type: "camera" | "gallery" | 
       <Menu.Portal>
         <Menu.Positioner side="top" align="start" sideOffset={8}>
           <Menu.Popup className="min-w-[180px] rounded-xl border bg-popover p-1.5 shadow-lg origin-bottom-left">
-            <Menu.Item className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm cursor-pointer hover:bg-muted outline-none" onClick={() => onSelect("camera")}>
-              <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0"><HugeiconsIcon icon={Camera01Icon} size={16} className="text-muted-foreground" /></div>
+            <Menu.Item
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm cursor-pointer hover:bg-muted outline-none"
+              onClick={() => onSelect("camera")}
+            >
+              <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                <HugeiconsIcon
+                  icon={Camera01Icon}
+                  size={16}
+                  className="text-muted-foreground"
+                />
+              </div>
               Camera
             </Menu.Item>
-            <Menu.Item className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm cursor-pointer hover:bg-muted outline-none" onClick={() => onSelect("gallery")}>
-              <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0"><HugeiconsIcon icon={Image01Icon} size={16} className="text-muted-foreground" /></div>
+            <Menu.Item
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm cursor-pointer hover:bg-muted outline-none"
+              onClick={() => onSelect("gallery")}
+            >
+              <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                <HugeiconsIcon
+                  icon={Image01Icon}
+                  size={16}
+                  className="text-muted-foreground"
+                />
+              </div>
               Photo Library
             </Menu.Item>
-            <Menu.Item className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm cursor-pointer hover:bg-muted outline-none" onClick={() => onSelect("document")}>
-              <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0"><HugeiconsIcon icon={Folder01Icon} size={16} className="text-muted-foreground" /></div>
+            <Menu.Item
+              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm cursor-pointer hover:bg-muted outline-none"
+              onClick={() => onSelect("document")}
+            >
+              <div className="size-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                <HugeiconsIcon
+                  icon={Folder01Icon}
+                  size={16}
+                  className="text-muted-foreground"
+                />
+              </div>
               Document
             </Menu.Item>
           </Menu.Popup>
@@ -726,20 +1079,29 @@ function ChatView({
   const [msgs, setMsgs] = useState(conversation.messages);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [fileAccept, setFileAccept] = useState("image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.pptx");
+  const [fileAccept, setFileAccept] = useState(
+    "image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.pptx",
+  );
   const [deleteMsgOpen, setDeleteMsgOpen] = useState<string | null>(null);
   const isCommunity = conversation.type === "community";
 
   const scrollToBottom = useCallback(() => {
     requestAnimationFrame(() => {
-      if (scrollRef.current) scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+      if (scrollRef.current)
+        scrollRef.current.scrollTo({
+          top: scrollRef.current.scrollHeight,
+          behavior: "smooth",
+        });
     });
   }, []);
 
-  const addMessage = useCallback((msg: Message) => {
-    setMsgs((prev) => [...prev, msg]);
-    scrollToBottom();
-  }, [scrollToBottom]);
+  const addMessage = useCallback(
+    (msg: Message) => {
+      setMsgs((prev) => [...prev, msg]);
+      scrollToBottom();
+    },
+    [scrollToBottom],
+  );
 
   const handleSendText = useCallback(() => {
     const trimmed = newMessage.trim();
@@ -749,70 +1111,107 @@ function ChatView({
       sender: "me",
       senderName: isCommunity ? "You" : undefined,
       text: trimmed,
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      time: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
       status: "sent",
     };
     addMessage(msg);
     setNewMessage("");
     setTimeout(() => {
-      setMsgs((prev) => prev.map((m) => (m.id === msg.id ? { ...m, status: "delivered" as MessageStatus } : m)));
+      setMsgs((prev) =>
+        prev.map((m) =>
+          m.id === msg.id ? { ...m, status: "delivered" as MessageStatus } : m,
+        ),
+      );
     }, 1200);
   }, [newMessage, addMessage, isCommunity]);
 
-  const handleAttachmentSelect = useCallback((type: "camera" | "gallery" | "document") => {
-    if (type === "camera") setFileAccept("image/*;capture=camera");
-    else if (type === "gallery") setFileAccept("image/*");
-    else setFileAccept(".pdf,.doc,.docx,.txt,.csv,.xlsx,.pptx,.zip");
-    setTimeout(() => fileInputRef.current?.click(), 100);
-  }, []);
+  const handleAttachmentSelect = useCallback(
+    (type: "camera" | "gallery" | "document") => {
+      if (type === "camera") setFileAccept("image/*;capture=camera");
+      else if (type === "gallery") setFileAccept("image/*");
+      else setFileAccept(".pdf,.doc,.docx,.txt,.csv,.xlsx,.pptx,.zip");
+      setTimeout(() => fileInputRef.current?.click(), 100);
+    },
+    [],
+  );
 
-  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const isImage = file.type.startsWith("image/");
-    const attachment: Attachment = {
-      type: isImage ? "image" : "file",
-      name: file.name,
-      size: file.size > 1024 * 1024 ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` : `${Math.round(file.size / 1024)} KB`,
-      url: isImage ? URL.createObjectURL(file) : undefined,
-    };
-    addMessage({
-      id: `m${Date.now()}`,
-      sender: "me",
-      senderName: isCommunity ? "You" : undefined,
-      attachment,
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      status: "sent",
-    });
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  }, [addMessage, isCommunity]);
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const isImage = file.type.startsWith("image/");
+      const attachment: Attachment = {
+        type: isImage ? "image" : "file",
+        name: file.name,
+        size:
+          file.size > 1024 * 1024
+            ? `${(file.size / (1024 * 1024)).toFixed(1)} MB`
+            : `${Math.round(file.size / 1024)} KB`,
+        url: isImage ? URL.createObjectURL(file) : undefined,
+      };
+      addMessage({
+        id: `m${Date.now()}`,
+        sender: "me",
+        senderName: isCommunity ? "You" : undefined,
+        attachment,
+        time: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        status: "sent",
+      });
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    },
+    [addMessage, isCommunity],
+  );
 
   const handleReact = useCallback((msgId: string, emoji: string) => {
-    setMsgs((prev) => prev.map((m) => (m.id === msgId ? { ...m, reaction: m.reaction ? "" : emoji } : m)));
+    setMsgs((prev) =>
+      prev.map((m) =>
+        m.id === msgId ? { ...m, reaction: m.reaction ? "" : emoji } : m,
+      ),
+    );
   }, []);
 
   const handleDeleteMsg = useCallback((msgId: string) => {
     setMsgs((prev) => prev.filter((m) => m.id !== msgId));
   }, []);
 
-  const headerTitle = isCommunity ? conversation.communityName! : conversation.user!.name;
-  const headerSub = isCommunity ? `${conversation.memberCount} members` : conversation.user!.role;
+  const headerTitle = isCommunity
+    ? conversation.communityName!
+    : conversation.user!.name;
+  const headerSub = isCommunity
+    ? `${conversation.memberCount} members`
+    : conversation.user!.role;
 
   return (
     <div className="flex flex-col h-full min-w-0">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b shrink-0">
         {onBack && (
-          <button type="button" onClick={onBack} className="size-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors shrink-0 sm:hidden">
+          <button
+            type="button"
+            onClick={onBack}
+            className="size-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors shrink-0 sm:hidden"
+          >
             <HugeiconsIcon icon={ArrowLeft02Icon} size={18} />
           </button>
         )}
         {isCommunity ? (
           <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-            <HugeiconsIcon icon={UserGroupIcon} size={18} className="text-primary" />
+            <HugeiconsIcon
+              icon={UserGroupIcon}
+              size={18}
+              className="text-primary"
+            />
           </div>
         ) : (
-          <Avatar className="size-9 shrink-0"><AvatarFallback>{conversation.user!.initials}</AvatarFallback></Avatar>
+          <Avatar className="size-9 shrink-0">
+            <AvatarFallback>{conversation.user!.initials}</AvatarFallback>
+          </Avatar>
         )}
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold truncate">{headerTitle}</p>
@@ -821,7 +1220,10 @@ function ChatView({
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-hide px-4 py-4 flex flex-col gap-2 min-h-0">
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto scrollbar-hide px-4 py-4 flex flex-col gap-2 min-h-0"
+      >
         {msgs.map((msg) => (
           <MessageBubble
             key={msg.id}
@@ -831,22 +1233,42 @@ function ChatView({
             onDeleteMsg={() => setDeleteMsgOpen(msg.id)}
           />
         ))}
-        {conversation.typing && <TypingIndicator name={headerTitle.split(" ")[0]} />}
+        {conversation.typing && (
+          <TypingIndicator name={headerTitle.split(" ")[0]} />
+        )}
       </div>
 
       {/* Input */}
       <div className="px-4 py-3 border-t shrink-0">
         <div className="flex items-center gap-2">
-          <input ref={fileInputRef} type="file" onChange={handleFileChange} className="hidden" accept={fileAccept} />
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleFileChange}
+            className="hidden"
+            accept={fileAccept}
+          />
           <AttachmentMenu onSelect={handleAttachmentSelect} />
           <Input
-            placeholder={isCommunity ? "Message the community..." : "Type a message..."}
+            placeholder={
+              isCommunity ? "Message the community..." : "Type a message..."
+            }
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendText(); } }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSendText();
+              }
+            }}
             className="flex-1 rounded-full"
           />
-          <Button size="icon" className="size-9 rounded-full shrink-0" onClick={handleSendText} disabled={!newMessage.trim()}>
+          <Button
+            size="icon"
+            className="size-9 rounded-full shrink-0"
+            onClick={handleSendText}
+            disabled={!newMessage.trim()}
+          >
             <HugeiconsIcon icon={ArrowUp01Icon} size={18} />
           </Button>
         </div>
@@ -856,7 +1278,10 @@ function ChatView({
       <DeleteConfirmDialog
         open={deleteMsgOpen !== null}
         onClose={() => setDeleteMsgOpen(null)}
-        onConfirm={() => { if (deleteMsgOpen) handleDeleteMsg(deleteMsgOpen); setDeleteMsgOpen(null); }}
+        onConfirm={() => {
+          if (deleteMsgOpen) handleDeleteMsg(deleteMsgOpen);
+          setDeleteMsgOpen(null);
+        }}
         title="Delete message"
         description="This message will be permanently deleted. This action cannot be undone."
       />
@@ -872,7 +1297,9 @@ function MessagesPage() {
   const searchParams = useSearchParams();
   const role = (searchParams.get("role") as Role) || "student";
 
-  const [conversations, setConversations] = useState<Conversation[]>(INITIAL_CONVERSATIONS);
+  const [conversations, setConversations] = useState<Conversation[]>(
+    INITIAL_CONVERSATIONS,
+  );
   const [activeId, setActiveId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "chat">("list");
   const [newMsgOpen, setNewMsgOpen] = useState(false);
@@ -881,7 +1308,8 @@ function MessagesPage() {
   const filteredConversations = useMemo(() => {
     let list = [...conversations];
     if (filter === "messages") list = list.filter((c) => c.type === "direct");
-    if (filter === "communities") list = list.filter((c) => c.type === "community");
+    if (filter === "communities")
+      list = list.filter((c) => c.type === "community");
     list.sort((a, b) => {
       if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
       return 0;
@@ -889,38 +1317,72 @@ function MessagesPage() {
     return list;
   }, [conversations, filter]);
 
-  const activeConversation = conversations.find((c) => c.id === activeId) ?? null;
+  const activeConversation =
+    conversations.find((c) => c.id === activeId) ?? null;
 
-  const openConversation = useCallback((id: string) => { setActiveId(id); setViewMode("chat"); }, []);
-  const handleBack = useCallback(() => { setViewMode("list"); }, []);
+  const openConversation = useCallback((id: string) => {
+    setActiveId(id);
+    setViewMode("chat");
+  }, []);
+  const handleBack = useCallback(() => {
+    setViewMode("list");
+  }, []);
 
   const handlePin = useCallback((id: string) => {
-    setConversations((prev) => prev.map((c) => (c.id === id ? { ...c, pinned: !c.pinned } : c)));
+    setConversations((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, pinned: !c.pinned } : c)),
+    );
   }, []);
 
   const handleMute = useCallback((id: string) => {
-    setConversations((prev) => prev.map((c) => (c.id === id ? { ...c, muted: !c.muted } : c)));
+    setConversations((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, muted: !c.muted } : c)),
+    );
   }, []);
 
-  const handleDelete = useCallback((id: string) => {
-    setConversations((prev) => prev.filter((c) => c.id !== id));
-    if (activeId === id) { setActiveId(null); setViewMode("list"); }
-  }, [activeId]);
+  const handleDelete = useCallback(
+    (id: string) => {
+      setConversations((prev) => prev.filter((c) => c.id !== id));
+      if (activeId === id) {
+        setActiveId(null);
+        setViewMode("list");
+      }
+    },
+    [activeId],
+  );
 
-  const handleNewConversation = useCallback((user: ConversationUser) => {
-    const existing = conversations.find((c) => c.type === "direct" && c.user?.name === user.name);
-    if (existing) { openConversation(existing.id); return; }
-    const newConv: Conversation = {
-      id: `new-${Date.now()}`, type: "direct", user, lastMessage: "Start a conversation",
-      timestamp: "Now", unread: 0, messages: [],
-    };
-    setConversations((prev) => [newConv, ...prev]);
-    openConversation(newConv.id);
-  }, [conversations, openConversation]);
+  const handleNewConversation = useCallback(
+    (user: ConversationUser) => {
+      const existing = conversations.find(
+        (c) => c.type === "direct" && c.user?.name === user.name,
+      );
+      if (existing) {
+        openConversation(existing.id);
+        return;
+      }
+      const newConv: Conversation = {
+        id: `new-${Date.now()}`,
+        type: "direct",
+        user,
+        lastMessage: "Start a conversation",
+        timestamp: "Now",
+        unread: 0,
+        messages: [],
+      };
+      setConversations((prev) => [newConv, ...prev]);
+      openConversation(newConv.id);
+    },
+    [conversations, openConversation],
+  );
 
-  const handleUpdateMessages = useCallback((id: string, fn: (prev: Message[]) => Message[]) => {
-    setConversations((prev) => prev.map((c) => (c.id === id ? { ...c, messages: fn(c.messages) } : c)));
-  }, []);
+  const handleUpdateMessages = useCallback(
+    (id: string, fn: (prev: Message[]) => Message[]) => {
+      setConversations((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, messages: fn(c.messages) } : c)),
+      );
+    },
+    [],
+  );
 
   const totalUnread = conversations.reduce((sum, c) => sum + c.unread, 0);
 
@@ -928,15 +1390,29 @@ function MessagesPage() {
     <DashboardLayout role={role}>
       <div className="h-[calc(100dvh-6rem)] flex rounded-2xl border bg-card overflow-hidden -mx-1 sm:mx-0">
         {/* ---- Conversation List Panel ---- */}
-        <div className={`shrink-0 w-full sm:w-80 border-r flex flex-col ${viewMode === "chat" ? "hidden sm:flex" : "flex"}`}>
+        <div
+          className={`shrink-0 w-full sm:w-80 border-r flex flex-col ${viewMode === "chat" ? "hidden sm:flex" : "flex"}`}
+        >
           {/* Header */}
           <div className="px-4 py-3 border-b shrink-0 space-y-2.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <h2 className="text-sm font-semibold">Messages</h2>
-                {totalUnread > 0 && <Badge variant="secondary" className="rounded-full text-[10px] px-1.5 py-0 h-5">{totalUnread}</Badge>}
+                {totalUnread > 0 && (
+                  <Badge
+                    variant="secondary"
+                    className="rounded-full text-[10px] px-1.5 py-0 h-5"
+                  >
+                    {totalUnread}
+                  </Badge>
+                )}
               </div>
-              <Button size="icon" variant="ghost" className="size-8 rounded-full" onClick={() => setNewMsgOpen(true)}>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="size-8 rounded-full"
+                onClick={() => setNewMsgOpen(true)}
+              >
                 <HugeiconsIcon icon={MessageAdd01Icon} size={18} />
               </Button>
             </div>
@@ -949,7 +1425,9 @@ function MessagesPage() {
                     type="button"
                     onClick={() => setFilter(key)}
                     className={`text-[11px] px-2.5 py-1 rounded-full transition-colors whitespace-nowrap ${
-                      filter === key ? "bg-foreground text-background font-medium" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      filter === key
+                        ? "bg-foreground text-background font-medium"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     }`}
                   >
                     {label}
@@ -964,14 +1442,35 @@ function MessagesPage() {
             {filteredConversations.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center gap-3 px-4">
                 <div className="size-12 rounded-full bg-muted flex items-center justify-center">
-                  <HugeiconsIcon icon={Message01Icon} size={22} className="text-muted-foreground" />
+                  <HugeiconsIcon
+                    icon={Message01Icon}
+                    size={22}
+                    className="text-muted-foreground"
+                  />
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {filter === "communities" ? "No community chats yet" : filter === "messages" ? "No direct messages yet" : "No messages yet"}
+                  {filter === "communities"
+                    ? "No community chats yet"
+                    : filter === "messages"
+                      ? "No direct messages yet"
+                      : "No messages yet"}
                 </p>
                 {filter !== "communities" && (
-                  <Button size="sm" variant="outline" className="rounded-full" onClick={() => setNewMsgOpen(true)}
-                    render={<span><HugeiconsIcon icon={MessageAdd01Icon} size={14} className="mr-1.5 inline" />New Message</span>}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-full"
+                    onClick={() => setNewMsgOpen(true)}
+                    render={
+                      <span>
+                        <HugeiconsIcon
+                          icon={MessageAdd01Icon}
+                          size={14}
+                          className="mr-1.5 inline"
+                        />
+                        New Message
+                      </span>
+                    }
                   />
                 )}
               </div>
@@ -992,32 +1491,58 @@ function MessagesPage() {
         </div>
 
         {/* ---- Chat Panel ---- */}
-        <div className={`flex-1 flex flex-col min-w-0 ${viewMode === "list" ? "hidden sm:flex" : "flex"}`}>
+        <div
+          className={`flex-1 flex flex-col min-w-0 ${viewMode === "list" ? "hidden sm:flex" : "flex"}`}
+        >
           {activeConversation ? (
             <ChatView
               key={activeConversation.id}
               conversation={activeConversation}
               onBack={handleBack}
-              onUpdateMessages={(fn) => handleUpdateMessages(activeConversation.id, fn)}
+              onUpdateMessages={(fn) =>
+                handleUpdateMessages(activeConversation.id, fn)
+              }
             />
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center gap-4 px-6">
               <div className="size-16 rounded-full bg-muted flex items-center justify-center">
-                <HugeiconsIcon icon={Message01Icon} size={28} className="text-muted-foreground" />
+                <HugeiconsIcon
+                  icon={Message01Icon}
+                  size={28}
+                  className="text-muted-foreground"
+                />
               </div>
               <div>
                 <p className="text-sm font-medium">Your Messages</p>
-                <p className="text-xs text-muted-foreground mt-1 max-w-xs">Select a conversation or start a new one to begin messaging</p>
+                <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                  Select a conversation or start a new one to begin messaging
+                </p>
               </div>
-              <Button variant="outline" className="rounded-full" onClick={() => setNewMsgOpen(true)}
-                render={<span><HugeiconsIcon icon={MessageAdd01Icon} size={15} className="mr-1.5 inline" />New Message</span>}
+              <Button
+                variant="outline"
+                className="rounded-full"
+                onClick={() => setNewMsgOpen(true)}
+                render={
+                  <span>
+                    <HugeiconsIcon
+                      icon={MessageAdd01Icon}
+                      size={15}
+                      className="mr-1.5 inline"
+                    />
+                    New Message
+                  </span>
+                }
               />
             </div>
           )}
         </div>
       </div>
 
-      <NewMessageDialog open={newMsgOpen} onClose={() => setNewMsgOpen(false)} onSelect={handleNewConversation} />
+      <NewMessageDialog
+        open={newMsgOpen}
+        onClose={() => setNewMsgOpen(false)}
+        onSelect={handleNewConversation}
+      />
     </DashboardLayout>
   );
 }

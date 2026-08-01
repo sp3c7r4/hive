@@ -1,21 +1,17 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Card } from "@/components/ui/card";
+import { Megaphone01Icon, PinIcon, SentIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useCallback, useState } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Megaphone01Icon,
-  PinIcon,
-  SentIcon,
-} from "@hugeicons/core-free-icons";
 import { cn } from "@/lib/utils";
-import { PostActions } from "./PostActions";
 import { CommentThread } from "./CommentThread";
-import type { Post, Comment } from "./types";
+import { PostActions } from "./PostActions";
+import type { Comment, Post } from "./types";
 
 interface PostCardProps {
   post: Post;
@@ -65,7 +61,8 @@ export function PostCard({
       className={cn(
         "p-4 sm:p-5 transition-colors",
         post.isPinned && "bg-muted/50 border-muted-foreground/20",
-        post.isAnnouncement && "border-l-[3px] border-l-amber-400 bg-amber-50/30 dark:bg-amber-950/10"
+        post.isAnnouncement &&
+          "border-l-[3px] border-l-amber-400 bg-amber-50/30 dark:bg-amber-950/10",
       )}
     >
       {/* Header */}

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getRefreshTokenCookie, clearAuthCookies } from "../cookies";
+import { clearAuthCookies, getRefreshTokenCookie } from "../cookies";
 
 const BACKEND = process.env.NEXT_PUBLIC_API_URL!;
 

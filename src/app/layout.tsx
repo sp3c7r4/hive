@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Figtree } from "next/font/google";
+import { Figtree, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -39,7 +39,7 @@ export default function RootLayout({
         "h-full antialiased",
         geistMono.variable,
         "font-sans",
-        figtree.variable
+        figtree.variable,
       )}
     >
       <body className="min-h-full flex flex-col">

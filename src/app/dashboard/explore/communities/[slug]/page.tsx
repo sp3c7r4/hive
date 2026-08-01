@@ -1,32 +1,32 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useSearchParams, useParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import { DashboardLayout } from "@/components/app-sidebar";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { CommunityFeed } from "@/components/community/CommunityFeed";
-import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowLeft02Icon,
-  UserGroupIcon,
+  BookOpen01Icon,
+  BubbleChatIcon,
+  CourseIcon,
   Globe02Icon,
+  InformationCircleIcon,
   LockIcon,
   Mail01Icon,
   StarIcon,
-  CourseIcon,
-  BookOpen01Icon,
-  BubbleChatIcon,
-  InformationCircleIcon,
+  UserGroupIcon,
 } from "@hugeicons/core-free-icons";
-import { cn } from "@/lib/utils";
+import { HugeiconsIcon } from "@hugeicons/react";
+import Link from "next/link";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+import { DashboardLayout } from "@/components/app-sidebar";
+import { CommunityFeed } from "@/components/community/CommunityFeed";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { resolveCommunity } from "@/lib/community-utils";
 import { COURSES_DATA } from "@/lib/course-utils";
+import { cn } from "@/lib/utils";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 type Tab = "feed" | "about";
@@ -69,17 +69,34 @@ function CommunityLandingPage() {
       <DashboardLayout role={role}>
         <div className="flex flex-col items-center justify-center py-24 text-center gap-4 min-w-0">
           <div className="size-14 rounded-full bg-muted flex items-center justify-center">
-            <HugeiconsIcon icon={UserGroupIcon} size={24} className="text-muted-foreground" />
+            <HugeiconsIcon
+              icon={UserGroupIcon}
+              size={24}
+              className="text-muted-foreground"
+            />
           </div>
           <h2 className="text-lg font-semibold">Community not found</h2>
-          <p className="text-sm text-muted-foreground max-w-sm">The community you&apos;re looking for doesn&apos;t exist or may have been removed.</p>
-          <Button variant="outline" className="rounded-full" render={<Link href={`/dashboard/explore?role=${role}`}>Browse Communities</Link>} />
+          <p className="text-sm text-muted-foreground max-w-sm">
+            The community you&apos;re looking for doesn&apos;t exist or may have
+            been removed.
+          </p>
+          <Button
+            variant="outline"
+            className="rounded-full"
+            render={
+              <Link href={`/dashboard/explore?role=${role}`}>
+                Browse Communities
+              </Link>
+            }
+          />
         </div>
       </DashboardLayout>
     );
   }
 
-  const communityCourses = COURSES_DATA.filter((c) => c.communitySlug === community.slug);
+  const communityCourses = COURSES_DATA.filter(
+    (c) => c.communitySlug === community.slug,
+  );
   const vm = visMeta[community.visibility as keyof typeof visMeta];
 
   const joinCta = (() => {
@@ -93,15 +110,13 @@ function CommunityLandingPage() {
       return {
         label: "Request to Join",
         disabled: false,
-        action: () =>
-          router.push(`/dashboard/payments?success=1&role=${role}`),
+        action: () => router.push(`/dashboard/payments?success=1&role=${role}`),
       };
     if (community.price !== "Free")
       return {
         label: `Join for ${community.price}/month`,
         disabled: false,
-        action: () =>
-          router.push(`/dashboard/payments?success=1&role=${role}`),
+        action: () => router.push(`/dashboard/payments?success=1&role=${role}`),
       };
     return {
       label: "Join Now",
@@ -167,7 +182,11 @@ function CommunityLandingPage() {
                   {community.rating} ({community.reviewCount} reviews)
                 </span>
                 <span>
-                  <HugeiconsIcon icon={UserGroupIcon} size={14} className="inline mr-1" />
+                  <HugeiconsIcon
+                    icon={UserGroupIcon}
+                    size={14}
+                    className="inline mr-1"
+                  />
                   {community.memberCount.toLocaleString()} members
                 </span>
                 <span>
@@ -194,7 +213,7 @@ function CommunityLandingPage() {
                       "flex items-center gap-1.5 px-3.5 py-1.5 rounded-[10px] text-sm font-medium transition-colors",
                       tab === t.key
                         ? "bg-background shadow-sm text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
+                        : "text-muted-foreground hover:text-foreground",
                     )}
                   >
                     <HugeiconsIcon icon={Icon} size={14} />
@@ -212,9 +231,7 @@ function CommunityLandingPage() {
                 isMember={isMember}
                 onJoinRequest={() => {
                   setIsMember(true);
-                  router.push(
-                    `/dashboard/payments?success=1&role=${role}`
-                  );
+                  router.push(`/dashboard/payments?success=1&role=${role}`);
                 }}
               />
             )}

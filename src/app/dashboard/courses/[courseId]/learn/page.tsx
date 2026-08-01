@@ -1,14 +1,14 @@
 "use client";
 
-import { Suspense, useState, useCallback, useMemo, useEffect } from "react";
-import { useSearchParams, useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { CourseComplete } from "@/components/learn/CourseComplete";
 import { LearningSidebar } from "@/components/learn/LearningSidebar";
 import { LearningTopBar } from "@/components/learn/LearningTopBar";
 import { LessonContent } from "@/components/learn/LessonContent";
 import { LessonNavigation } from "@/components/learn/LessonNavigation";
-import { CourseComplete } from "@/components/learn/CourseComplete";
-import { Skeleton } from "@/components/ui/skeleton";
 import type { Lesson, Module } from "@/components/learn/types";
+import { Skeleton } from "@/components/ui/skeleton";
 
 /* ---------------------------------------------------------------- */
 /*  Demo curriculum data                                            */
@@ -19,35 +19,102 @@ const DEMO_MODULES: Module[] = [
     id: "m1",
     title: "Getting Started",
     lessons: [
-      { id: "l1", title: "Welcome & Course Overview", type: "video", duration: "4:32", status: "completed" },
-      { id: "l2", title: "Setting Up Your Environment", type: "video", duration: "8:15", status: "completed" },
-      { id: "l3", title: "How the Web Works", type: "pdf", duration: "12 min read", status: "current" },
+      {
+        id: "l1",
+        title: "Welcome & Course Overview",
+        type: "video",
+        duration: "4:32",
+        status: "completed",
+      },
+      {
+        id: "l2",
+        title: "Setting Up Your Environment",
+        type: "video",
+        duration: "8:15",
+        status: "completed",
+      },
+      {
+        id: "l3",
+        title: "How the Web Works",
+        type: "pdf",
+        duration: "12 min read",
+        status: "current",
+      },
     ],
   },
   {
     id: "m2",
     title: "React Fundamentals",
     lessons: [
-      { id: "l4", title: "Components & Props", type: "video", duration: "15:20", status: "current" },
-      { id: "l5", title: "State & Events", type: "video", duration: "18:45", status: "current" },
-      { id: "l6", title: "React Fundamentals Quiz", type: "quiz", duration: "10 questions", status: "current" },
+      {
+        id: "l4",
+        title: "Components & Props",
+        type: "video",
+        duration: "15:20",
+        status: "current",
+      },
+      {
+        id: "l5",
+        title: "State & Events",
+        type: "video",
+        duration: "18:45",
+        status: "current",
+      },
+      {
+        id: "l6",
+        title: "React Fundamentals Quiz",
+        type: "quiz",
+        duration: "10 questions",
+        status: "current",
+      },
     ],
   },
   {
     id: "m3",
     title: "Building Projects",
     lessons: [
-      { id: "l7", title: "Project: Design Portfolio", type: "assignment", duration: "2-3 hours", status: "current" },
-      { id: "l8", title: "Live Code Review", type: "live", duration: "60 min", status: "current", scheduledTime: "2025-08-15T14:00:00" },
+      {
+        id: "l7",
+        title: "Project: Design Portfolio",
+        type: "assignment",
+        duration: "2-3 hours",
+        status: "current",
+      },
+      {
+        id: "l8",
+        title: "Live Code Review",
+        type: "live",
+        duration: "60 min",
+        status: "current",
+        scheduledTime: "2025-08-15T14:00:00",
+      },
     ],
   },
   {
     id: "m4",
     title: "Advanced Patterns",
     lessons: [
-      { id: "l9", title: "Higher-Order Components", type: "video", duration: "22:10", status: "locked" },
-      { id: "l10", title: "Custom Hooks Deep Dive", type: "video", duration: "19:30", status: "locked" },
-      { id: "l11", title: "Final Project Brief", type: "pdf", duration: "8 min read", status: "locked" },
+      {
+        id: "l9",
+        title: "Higher-Order Components",
+        type: "video",
+        duration: "22:10",
+        status: "locked",
+      },
+      {
+        id: "l10",
+        title: "Custom Hooks Deep Dive",
+        type: "video",
+        duration: "19:30",
+        status: "locked",
+      },
+      {
+        id: "l11",
+        title: "Final Project Brief",
+        type: "pdf",
+        duration: "8 min read",
+        status: "locked",
+      },
     ],
   },
 ];
@@ -75,7 +142,7 @@ function computeProgress(modules: Module[]): number {
 
 function getAdjacentLessons(
   modules: Module[],
-  currentId: string
+  currentId: string,
 ): { prev: Lesson | null; next: Lesson | null; nextLocked: boolean } {
   const flat = flattenLessons(modules);
   const idx = flat.findIndex((l) => l.id === currentId);
@@ -103,13 +170,13 @@ function LearningViewPage() {
   /* Derived */
   const currentLesson = useMemo(
     () => flattenLessons(modules).find((l) => l.id === currentLessonId) ?? null,
-    [modules, currentLessonId]
+    [modules, currentLessonId],
   );
 
   const progress = useMemo(() => computeProgress(modules), [modules]);
   const { prev, next, nextLocked } = useMemo(
     () => getAdjacentLessons(modules, currentLessonId),
-    [modules, currentLessonId]
+    [modules, currentLessonId],
   );
 
   /* Mark a lesson complete */
@@ -121,7 +188,7 @@ function LearningViewPage() {
           if (l.id !== lessonId) return l;
           return { ...l, status: "completed" as const };
         }),
-      }))
+      })),
     );
   }, []);
 
@@ -137,7 +204,7 @@ function LearningViewPage() {
             if (l.id === next.id) return { ...l, status: "current" as const };
             return l;
           }),
-        }))
+        })),
       );
     }
   }, [modules, currentLessonId, next]);
@@ -202,7 +269,10 @@ function LearningViewPage() {
           progress={progress}
           open={sidebarOpen}
           zenMode={zenMode}
-          onSelectLesson={(id) => { navigateToLesson(id); setSidebarOpen(false); }}
+          onSelectLesson={(id) => {
+            navigateToLesson(id);
+            setSidebarOpen(false);
+          }}
           onClose={() => setSidebarOpen(false)}
         />
 
@@ -224,7 +294,9 @@ function LearningViewPage() {
             nextLocked={nextLocked}
             onPrev={goPrev}
             onNext={goNext}
-            onMarkComplete={currentLesson ? () => markComplete(currentLesson.id) : undefined}
+            onMarkComplete={
+              currentLesson ? () => markComplete(currentLesson.id) : undefined
+            }
             currentCompleted={currentLesson?.status === "completed"}
           />
         </main>
