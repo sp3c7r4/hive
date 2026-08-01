@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 const VALID_ROLES = ["instructor", "student", "parent", "admin"] as const;
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Admin login — no guard needed

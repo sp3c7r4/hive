@@ -80,7 +80,7 @@ export default function AuthPage() {
         )}
 
         {/* Demo credentials */}
-        {screen === "login" && (
+        {/*{screen === "login" && (
           <div className="mt-6 p-4 rounded-xl bg-muted/30 border border-muted-foreground/10">
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-3">
               Demo Credentials
@@ -106,7 +106,7 @@ export default function AuthPage() {
               </a>
             </p>
           </div>
-        )}
+        )}*/}
         </div>
       </div>
     </div>
