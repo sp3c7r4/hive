@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/auth.store";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -22,6 +23,7 @@ const navLinks = [
 
 export default function LandingPageHeader() {
   const router = useRouter();
+  const { isAuthenticated, user } = useAuthStore();
 
   return (
     <header className="w-full bg-background sticky top-0 z-50">
@@ -63,12 +65,23 @@ export default function LandingPageHeader() {
 
         {/* Right: CTA (desktop) + Hamburger (mobile) */}
         <div className="flex items-center gap-3">
-          <Button
-            className="hidden lg:inline-flex rounded-full bg-foreground text-background hover:bg-foreground/90 font-bold"
-            onClick={() => router.push("/auth")}
-          >
-            Get Started
-          </Button>
+          {isAuthenticated ? (
+            <Button
+              className="hidden lg:inline-flex rounded-full bg-foreground text-background hover:bg-foreground/90 font-bold"
+              onClick={() =>
+                router.push(`/dashboard?role=${user?.role ?? "student"}`)
+              }
+            >
+              Go to Dashboard
+            </Button>
+          ) : (
+            <Button
+              className="hidden lg:inline-flex rounded-full bg-foreground text-background hover:bg-foreground/90 font-bold"
+              onClick={() => router.push("/auth")}
+            >
+              Get Started
+            </Button>
+          )}
 
           {/* Mobile menu */}
           <Sheet>
@@ -116,12 +129,25 @@ export default function LandingPageHeader() {
                 </nav>
 
                 <div className="p-6 border-t border-border">
-                  <Button
-                    className="w-full rounded-full bg-foreground text-background hover:bg-foreground/90 font-bold"
-                    onClick={() => router.push("/auth")}
-                  >
-                    Get Started
-                  </Button>
+                  {isAuthenticated ? (
+                    <Button
+                      className="w-full rounded-full bg-foreground text-background hover:bg-foreground/90 font-bold"
+                      onClick={() =>
+                        router.push(
+                          `/dashboard?role=${user?.role ?? "student"}`
+                        )
+                      }
+                    >
+                      Go to Dashboard
+                    </Button>
+                  ) : (
+                    <Button
+                      className="w-full rounded-full bg-foreground text-background hover:bg-foreground/90 font-bold"
+                      onClick={() => router.push("/auth")}
+                    >
+                      Get Started
+                    </Button>
+                  )}
                 </div>
               </div>
             </SheetContent>

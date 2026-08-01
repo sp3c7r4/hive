@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
@@ -32,6 +32,8 @@ import {
   UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
 import { ActivityFeed } from "@/components/activity-feed";
+import { useCoursesStore } from "@/stores/courses.store";
+import { useEnrollmentsStore } from "@/stores/enrollments.store";
 
 type Role = "instructor" | "student" | "parent" | "admin";
 
@@ -234,6 +236,24 @@ function StudentDashboard() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activityFilter, setActivityFilter] = useState<string>("all");
 
+  const { courses, fetchCourses, isLoading: coursesLoading } = useCoursesStore();
+  const { enrollments, fetchEnrollments, isLoading: enrollmentsLoading } = useEnrollmentsStore();
+
+  useEffect(() => {
+    fetchCourses();
+    fetchEnrollments();
+  }, [fetchCourses, fetchEnrollments]);
+
+  const derivedContinueLearning = courses.length > 0
+    ? courses.map((c) => ({
+        id: c.id,
+        title: c.title,
+        instructor: "Instructor",
+        progress: 0,
+        cover: "/images/course-placeholder.jpg",
+      }))
+    : continueLearning;
+
   useGSAP(
     () => {
       gsap.from(".dash-widget", {
@@ -299,7 +319,7 @@ function StudentDashboard() {
         <h2 className="text-sm font-semibold mb-4">Continue Learning</h2>
         <ScrollArea className="w-full min-w-0 whitespace-nowrap -mx-4 overflow-y-visible [&>[data-slot=scroll-area-viewport]]:scrollbar-hide [&>[data-slot=scroll-area-viewport]]:overflow-y-visible">
           <div className="flex gap-4 pb-2 pt-1 px-4">
-            {continueLearning.map((c) => (
+            {derivedContinueLearning.map((c) => (
               <Card key={c.id} className="w-64 shrink-0 p-4">
                 <div className="h-24 rounded-lg bg-muted mb-3 flex items-center justify-center overflow-hidden">
                   <span className="text-xs text-muted-foreground">
